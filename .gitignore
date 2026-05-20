@@ -1,0 +1,19 @@
+# Maestro framework — gitignore
+
+# Sessions: gitignored by default (personal working artifacts)
+# To share sessions with team, set [project] share_sessions = true in maestro.toml
+# and remove this line. See docs for team workflow options.
+sessions/
+
+# Notes: personal scratch space
+notes/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python (for setup/server.py)
+__pycache__/
+*.pyc
+*.pyo
+setup/__pycache__/

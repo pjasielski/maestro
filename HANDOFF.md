@@ -1,12 +1,41 @@
 # HANDOFF.md — Maestro Framework
 
 ## Current Status
-- **Phase:** bootstrap → packaging (v0.3)
-- **Last worked on:** 2026-04-22 — command review, explore overhaul, user/team profiles, utility command consolidation
-- **Next priorities:** Test on a real project, create public repo, build Symphony app (lightweight version)
+- **Phase:** bootstrap → multi-tool support (v0.4 dev)
+- **Last worked on:** 2026-05-20 — multi-tool support, setup wizard, output tiers, .gitignore
+- **Active branch:** `dev` (work here; merge to `main` when stable)
+- **Archive:** `archive/v0.3` preserves state before these changes
+- **Next priorities (session 003):** See below
 - **Blockers:** None
 
-## Recent Changes (2026-04-22)
+## Next Priorities (from poc session 003-framework-evolution)
+
+### Immediate (dev branch)
+1. **`.maestro/commands/` Phase 1** — commands still in `.claude/commands/`, need to populate `.maestro/commands/` and make `.claude/commands/` thin wrappers. install.sh does this for new installs; existing installs need migration.
+2. **Output tiers in MAESTRO.md** ✓ done — standard/-v/-c
+3. **Cursor setup** — install.sh now generates `.cursor/rules/` ✓
+4. **mae-review references template** — verify `.claude/commands/mae-review.md` references `templates/review.md`
+5. **Setup wizard** ✓ done — `setup/index.html` + `setup/server.py`
+
+### Soon
+6. **mae-init tool selection** — update `/mae-init` command to ask which tools during interactive init (matching new install.sh flow)
+7. **README update** — document Cursor and Codex setup options
+8. **Test on real project** — use Maestro + Cursor at work project
+
+### Medium term
+9. **Python CLI** (`uvx maestro init`) — replaces install.sh for non-technical users
+10. **GitHub Pages** — host `setup/index.html` at maestro.tools/setup
+11. **Symphony app** — web UI vision
+
+## Recent Changes (2026-05-20)
+- Added `.gitignore` (sessions/ gitignored)
+- Added output tiers (-v/-c) to MAESTRO.md
+- Rewrote install.sh: interactive prompts, Cursor + Codex support, --quick and --preconfigured modes
+- Created `setup/index.html` — static HTML wizard + `setup/server.py` — local browser-based setup
+- Updated MAESTRO.md: `.maestro/commands/` reference, output tiers
+- Created `archive/v0.3` branch; working on `dev`
+
+## Previous Changes (2026-04-22)
 - Rewrote explore command: readiness signals (replace artifact count), context scanning, `ask` sub-command, questions as first-class output
 - Created explore-lite variant for A/B testing (questions encouraged vs mandatory)
 - Updated PRD command: prioritize final explore report, gap checking, user stories emphasis
