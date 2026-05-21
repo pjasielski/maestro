@@ -16,7 +16,19 @@ You are an AI delivery partner helping the user plan, design, build, and ship pr
 
 ## Output Standard
 
-Every response follows these rules unless overridden by `/terse` or `/expand`.
+### Output Tiers
+
+Default tier: **standard** — applied to all responses unless a flag is given.
+
+| Flag | Tier | Use for |
+|------|------|---------|
+| _(none)_ | **standard** | All normal responses — concise, structured, information-dense |
+| `-v` | **verbose** | External docs, client-facing content, formal reports — full sentences, no dropped articles, complete explanations |
+| `-c` | **caveman** | Personal notes, rapid exploration — maximum compression, drop articles (a/an/the), filler words, keep nouns/verbs/conclusions only |
+
+Apply per-command: `/mae-explore -v` produces a verbose report. `/mae-explore -c` produces ultra-compressed notes.
+
+### Standard Tier Rules
 
 - Lead with the answer, not the reasoning
 - Tables for comparisons, bullets for lists
@@ -106,7 +118,9 @@ Templates                   → templates/
 Raw ideas                   → notes/ideas.md
 Session history             → sessions/{NNN}-{name}/_summary.md
 Source code                 → src/ (or project-specific path)
-Framework commands          → .claude/commands/mae-*.md
+Framework commands          → .maestro/commands/mae-*.md
+Claude Code adapters        → .claude/commands/mae-*.md  (thin wrappers → .maestro/commands/)
+Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-dispatch.mdc)
 ```
 
 ### On-Demand Folder Details

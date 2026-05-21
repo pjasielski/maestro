@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maestro Setup</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f1117;
+      color: #e1e4e8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 620px;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #58a6ff;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.5px;
+    }
+    .subtitle {
+      color: #8b949e;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+    h2 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8b949e;
+      margin: 1.5rem 0 0.75rem;
+    }
+    h2:first-of-type { margin-top: 0; }
+    label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+      color: #c9d1d9;
+    }
+    input[type="text"] {
+      width: 100%;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #e1e4e8;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input[type="text"]:focus { border-color: #58a6ff; }
+    .radio-group, .check-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .radio-group label, .check-group label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      cursor: pointer;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .radio-group label:hover, .check-group label:hover {
+      border-color: #58a6ff;
+      background: #1c2333;
+    }
+    .radio-group input, .check-group input { margin-top: 2px; }
+    .label-text { flex: 1; }
+    .label-title { font-size: 0.9rem; color: #e1e4e8; }
+    .label-desc { font-size: 0.78rem; color: #8b949e; margin-top: 1px; }
+    .divider {
+      border: none;
+      border-top: 1px solid #21262d;
+      margin: 1.75rem 0;
+    }
+    .btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: #238636;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 1.5rem;
+    }
+    .btn:hover { background: #2ea043; }
+    .btn-secondary {
+      background: #21262d;
+      border: 1px solid #30363d;
+      margin-top: 0.75rem;
+    }
+    .btn-secondary:hover { background: #30363d; }
+    #output { display: none; }
+    #output h2 { color: #3fb950; font-size: 1rem; text-transform: none; letter-spacing: 0; margin-bottom: 1rem; }
+    .code-block {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 1rem;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-all;
+      color: #79c0ff;
+      margin-bottom: 0.75rem;
+    }
+    .note { font-size: 0.82rem; color: #8b949e; line-height: 1.5; }
+    .copy-btn {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      border-radius: 4px;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      float: right;
+      margin-top: -0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .copy-btn:hover { background: #30363d; }
+    .step { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; align-items: flex-start; }
+    .step-num {
+      background: #1f6feb;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-text { font-size: 0.88rem; color: #c9d1d9; line-height: 1.5; }
+    .back-btn { background: none; border: none; color: #58a6ff; cursor: pointer; font-size: 0.85rem; margin-bottom: 1rem; padding: 0; }
+    .back-btn:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <!-- FORM -->
+  <div id="form-section">
+    <div class="logo">Maestro</div>
+    <div class="subtitle">AI-Assisted Project Delivery Framework</div>
+
+    <h2>Project</h2>
+    <label for="project-name">Project name</label>
+    <input type="text" id="project-name" placeholder="my-project" />
+
+    <hr class="divider">
+
+    <h2>Mode</h2>
+    <div class="radio-group">
+      <label>
+        <input type="radio" name="mode" value="solo" checked>
+        <span class="label-text">
+          <span class="label-title">Solo</span>
+          <span class="label-desc">One person. Sessions committed to git.</span>
+        </span>
+      </label>
+      <label>
+        <input type="radio" name="mode" value="team">
+        <span class="label-text">
+          <span class="label-title">Team</span>
+          <span class="label-desc">Multiple people. Sessions gitignored by default.</span>
+        </span>
+      </label>
+    </div>
+
+    <hr class="divider">
+
+    <h2>AI Tools</h2>
+    <div class="check-group">
+      <label>
+        <input type="checkbox" name="tools" value="claude-code" checked>
+        <span class="label-text">
+          <span class="label-title">Claude Code</span>
+          <span class="label-desc">VS Code extension or CLI. Best parity with Maestro.</span>
+        </span>
+      </label>
+      <label>
+        <input type="checkbox" name="tools" value="cursor">
+        <span class="label-text">
+          <span class="label-title">Cursor</span>
+          <span class="label-desc">AI-native IDE. Commands via /mae-* in chat.</span>
+        </span>
+      </label>
+      <label>
+        <input type="checkbox" name="tools" value="codex">
+        <span class="label-text">
+          <span class="label-title">Codex (OpenAI)</span>
+          <span class="label-desc">Cloud-based coding agent. Reads repo instructions automatically.</span>
+        </span>
+      </label>
+    </div>
+
+    <hr class="divider">
+
+    <h2>Delivery folders</h2>
+    <div class="radio-group">
+      <label>
+        <input type="radio" name="scope" value="core" checked>
+        <span class="label-text">
+          <span class="label-title">Core — recommended</span>
+          <span class="label-desc">explore, prd, design, plan/tasks</span>
+        </span>
+      </label>
+      <label>
+        <input type="radio" name="scope" value="full">
+        <span class="label-text">
+          <span class="label-title">Full</span>
+          <span class="label-desc">Core + review, test, deploy, maintenance</span>
+        </span>
+      </label>
+      <label>
+        <input type="radio" name="scope" value="minimal">
+        <span class="label-text">
+          <span class="label-title">Minimal</span>
+          <span class="label-desc">No delivery folders. Session-based only.</span>
+        </span>
+      </label>
+    </div>
+
+    <button class="btn" onclick="generate()">Generate Setup Script</button>
+  </div>
+
+  <!-- OUTPUT -->
+  <div id="output">
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <h2>✓ Your setup script is ready</h2>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">Save the script below as <code>maestro-setup.sh</code> in your project folder (or Downloads).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">Open Terminal, navigate to your project, and run:</div>
+    </div>
+
+    <button class="copy-btn" onclick="copyScript()">Copy</button>
+    <div class="code-block" id="script-output"></div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text" id="next-step-text">Open your AI tool and type <code>/mae-explore</code> to begin.</div>
+    </div>
+
+    <hr class="divider">
+    <p class="note">
+      The script copies Maestro files into your project and configures it for your selected tools.
+      It never overwrites existing files. Edit <code>CLAUDE.md</code> after setup to describe your project.
+    </p>
+
+    <button class="btn btn-secondary" onclick="downloadScript()">Download Script</button>
+  </div>
+
+</div>
+
+<script>
+  function generate() {
+    const name = document.getElementById('project-name').value.trim() || 'my-project';
+    const mode = document.querySelector('input[name="mode"]:checked').value;
+    const tools = [...document.querySelectorAll('input[name="tools"]:checked')].map(i => i.value);
+    const scope = document.querySelector('input[name="scope"]:checked').value;
+
+    if (tools.length === 0) {
+      alert('Please select at least one AI tool.');
+      return;
+    }
+
+    const toolFlags = tools.includes('claude-code') && tools.includes('cursor') && tools.includes('codex')
+      ? '4'
+      : tools.map(t => t === 'claude-code' ? '1' : t === 'cursor' ? '2' : '3').join(' ');
+
+    const scopeNum = scope === 'core' ? '1' : scope === 'full' ? '2' : '3';
+
+    const script = generateScript(name, mode, toolFlags, scopeNum, tools);
+    document.getElementById('script-output').textContent = script;
+
+    const nextStepTool = tools.includes('cursor') ? 'Cursor' : tools.includes('claude-code') ? 'Claude Code' : 'Codex';
+    document.getElementById('next-step-text').innerHTML =
+      `Open ${nextStepTool} in your project and type <code>/mae-explore</code> to begin.`;
+
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('output').style.display = 'block';
+  }
+
+  function generateScript(name, mode, tools, scope, toolList) {
+    const scopeFlag = scope === '3' ? '' : '';
+    return `#!/bin/bash
+# Maestro setup — ${name}
+# Generated by maestro.tools/setup
+
+set -e
+
+# --- Download and run Maestro installer ---
+MAESTRO_URL="https://raw.githubusercontent.com/pjasielski/maestro/main"
+TMP_DIR="$(mktemp -d)"
+
+echo "Downloading Maestro..."
+curl -fsSL "$MAESTRO_URL/install.sh" -o "$TMP_DIR/install.sh"
+curl -fsSL "$MAESTRO_URL/MAESTRO.md" -o "$TMP_DIR/MAESTRO.md"
+
+# Download command files
+mkdir -p "$TMP_DIR/.claude/commands"
+for cmd in mae-explore mae-prd mae-design mae-plan mae-do mae-review mae-checkpoint mae-init mae-explore-lite status decide sync md; do
+  curl -fsSL "$MAESTRO_URL/.claude/commands/$cmd.md" -o "$TMP_DIR/.claude/commands/$cmd.md" 2>/dev/null || true
+done
+
+# Download templates
+mkdir -p "$TMP_DIR/templates"
+for tmpl in prd sdd explore task summary report review; do
+  curl -fsSL "$MAESTRO_URL/templates/$tmpl.md" -o "$TMP_DIR/templates/$tmpl.md" 2>/dev/null || true
+done
+
+chmod +x "$TMP_DIR/install.sh"
+
+# --- Run with pre-configured answers ---
+PROJECT_NAME="${name}" \\
+MODE="${mode}" \\
+TOOLS="${tools}" \\
+SCOPE="${scope}" \\
+bash "$TMP_DIR/install.sh" "." --preconfigured
+
+rm -rf "$TMP_DIR"
+echo "✓ Maestro ready. Edit CLAUDE.md, then open your AI tool."`;
+  }
+
+  function copyScript() {
+    const text = document.getElementById('script-output').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+
+  function downloadScript() {
+    const text = document.getElementById('script-output').textContent;
+    const blob = new Blob([text], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'maestro-setup.sh';
+    a.click();
+  }
+
+  function goBack() {
+    document.getElementById('form-section').style.display = 'block';
+    document.getElementById('output').style.display = 'none';
+  }
+</script>
+</body>
+</html>

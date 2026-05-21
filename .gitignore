@@ -1,0 +1,21 @@
+# Maestro framework — gitignore
+
+# Sessions: gitignored by default (personal working artifacts)
+# Both folder name conventions supported.
+# To share with team, remove these lines and commit sessions/ to git.
+sessions/
+.sessions/
+
+# Notes: personal scratch space
+notes/
+.notes/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python (for setup/server.py)
+__pycache__/
+*.pyc
+*.pyo
+setup/__pycache__/
