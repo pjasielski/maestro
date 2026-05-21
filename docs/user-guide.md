@@ -4,14 +4,11 @@
 
 ### Installation
 
-Install Maestro into your project:
-
 ```bash
-git clone https://github.com/pjasielski/maestro.git /tmp/maestro
-/tmp/maestro/install.sh /path/to/your-project
+curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 ```
 
-This creates the full framework structure: delivery folders, tracking files, templates, and commands. The install script never overwrites existing files.
+→ **[Full installation guide](installation.md)** — browser wizard, Cursor/Codex setup, team setup, troubleshooting
 
 ### First Steps
 
