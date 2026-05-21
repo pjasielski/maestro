@@ -109,24 +109,23 @@ if [ "$QUICK_MODE" = "--quick" ]; then
   PROJECT_NAME="$(basename "$TARGET")"
   MODE="solo"
   TOOLS="1"     # Claude Code only
-  SCOPE="1"     # Core folders only
+  SCOPE="2"     # Core folders only
   echo "Quick mode: Claude Code, solo, core folders."
 elif [ -n "$PRECONFIGURED_MODE" ]; then
   # Settings passed via environment variables from setup wizard
   PROJECT_NAME="${PROJECT_NAME:-$(basename "$TARGET")}"
   MODE="${MODE:-solo}"
   TOOLS="${TOOLS:-1}"
-  SCOPE="${SCOPE:-1}"
+  SCOPE="${SCOPE:-1}"   # 1=Full, 2=Core, 3=Minimal
   echo "Preconfigured mode: $PROJECT_NAME, $MODE"
 else
   # ─────────────────────────────────────────────
   # Interactive setup
   # ─────────────────────────────────────────────
 
-  section "Project"
-  PROJECT_NAME=$(ask "Project name" "$(basename "$TARGET")")
+  PROJECT_NAME="$(basename "$TARGET")"
 
-  echo ""
+  section "Project"
   MODE_CHOICE=$(ask_choice "Mode:" "Solo (one person)" "Team (multiple people)")
   if [ "$MODE_CHOICE" = "2" ]; then
     MODE="team"
@@ -143,8 +142,8 @@ else
 
   echo ""
   SCOPE_CHOICE=$(ask_choice "Delivery folder scope:" \
-    "Core — explore, prd, design, plan  (recommended)" \
-    "Full — core + review, test, deploy, maintenance" \
+    "Full — explore, prd, design, plan, review, test, deploy, maintenance  (recommended)" \
+    "Core — explore, prd, design, plan only" \
     "Minimal — no delivery folders (session-based only)")
   SCOPE="$SCOPE_CHOICE"
 fi
@@ -191,8 +190,8 @@ if [ "$SCOPE" != "3" ]; then
   echo "  Created: delivery/ (core)"
 fi
 
-# Full delivery folders
-if [ "$SCOPE" = "2" ]; then
+# Full delivery folders (scope = 1)
+if [ "$SCOPE" = "1" ]; then
   mkdir -p "$TARGET/delivery/05-review"
   mkdir -p "$TARGET/delivery/06-test"
   mkdir -p "$TARGET/delivery/07-deploy"
