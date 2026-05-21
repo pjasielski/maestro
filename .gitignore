@@ -1,12 +1,14 @@
 # Maestro framework — gitignore
 
 # Sessions: gitignored by default (personal working artifacts)
-# To share sessions with team, set [project] share_sessions = true in maestro.toml
-# and remove this line. See docs for team workflow options.
+# Both folder name conventions supported.
+# To share with team, remove these lines and commit sessions/ to git.
 sessions/
+.sessions/
 
 # Notes: personal scratch space
 notes/
+.notes/
 
 # OS files
 .DS_Store

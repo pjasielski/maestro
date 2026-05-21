@@ -199,7 +199,13 @@ if [ "$SCOPE" = "2" ]; then
   echo "  Created: delivery/05-08 (full)"
 fi
 
-mkdir -p "$TARGET/sessions"
+# Sessions folder: use .sessions if it already exists, otherwise sessions/
+if [ -d "$TARGET/.sessions" ]; then
+  SESSIONS_DIR=".sessions"
+else
+  SESSIONS_DIR="sessions"
+fi
+mkdir -p "$TARGET/$SESSIONS_DIR"
 mkdir -p "$TARGET/notes"
 mkdir -p "$TARGET/templates"
 mkdir -p "$TARGET/.maestro/commands"
