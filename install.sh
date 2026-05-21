@@ -10,6 +10,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET="${1:-.}"
+mkdir -p "$TARGET"
 TARGET="$(cd "$TARGET" && pwd)"
 QUICK_MODE="${2:-}"
 
@@ -36,10 +37,10 @@ ask() {
   local default="$2"
   local answer
   if [ -n "$default" ]; then
-    read -r -p "$prompt [$default]: " answer
+    read -r -p "$prompt [$default]: " answer </dev/tty
     echo "${answer:-$default}"
   else
-    read -r -p "$prompt: " answer
+    read -r -p "$prompt: " answer </dev/tty
     echo "$answer"
   fi
 }
@@ -48,12 +49,12 @@ ask_choice() {
   local prompt="$1"
   shift
   local options=("$@")
-  echo "$prompt"
+  echo "$prompt" >&2
   for i in "${!options[@]}"; do
-    echo "  $((i+1))) ${options[$i]}"
+    echo "  $((i+1))) ${options[$i]}" >&2
   done
   local choice
-  read -r -p "Choice [1]: " choice
+  read -r -p "Choice [1]: " choice </dev/tty
   echo "${choice:-1}"
 }
 
@@ -61,13 +62,13 @@ ask_multichoice() {
   local prompt="$1"
   shift
   local options=("$@")
-  echo "$prompt"
-  echo "  (enter numbers separated by spaces, e.g. 1 2)"
+  echo "$prompt" >&2
+  echo "  (enter numbers separated by spaces, e.g. 1 2)" >&2
   for i in "${!options[@]}"; do
-    echo "  $((i+1))) ${options[$i]}"
+    echo "  $((i+1))) ${options[$i]}" >&2
   done
   local choices
-  read -r -p "Choices [1]: " choices
+  read -r -p "Choices [1]: " choices </dev/tty
   echo "${choices:-1}"
 }
 
@@ -227,7 +228,7 @@ cp "$SCRIPT_DIR/MAESTRO.md" "$TARGET/MAESTRO.md"
 echo "  Copied: MAESTRO.md"
 
 # Copy command specs to .maestro/commands/ (single source of truth)
-for cmd in "$SCRIPT_DIR/.claude/commands/"*.md; do
+for cmd in "$SCRIPT_DIR/.maestro/commands/"*.md; do
   [ -f "$cmd" ] || continue
   BASENAME="$(basename "$cmd")"
   cp "$cmd" "$TARGET/.maestro/commands/$BASENAME"
