@@ -4,6 +4,8 @@
 
 See `MAESTRO.md` for all delivery framework behavior, commands, output standards, and conventions. MAESTRO.md is the canonical framework reference.
 
+Always save substantive responses (> 80 words) as a numbered file in the current session folder. Chat output = brief summary only.
+
 ## Project
 
 - **Framework:** Maestro (command prefix: `mae-`)
@@ -21,6 +23,4 @@ See `MAESTRO.md` for all delivery framework behavior, commands, output standards
 
 ## Active Context
 
-- **Session folder:** `sessions/001-framework-bootstrap/`
-- **Implementation plan:** `sessions/001-framework-bootstrap/05_implementation_plan.md`
-- **Key analysis files:** 01_command_architecture.md, 03_framework_evolution_plan.md, 04_design_decisions_followup.md
+- **Session folder:** `.sessions/004-multi-tool-implementation/`
