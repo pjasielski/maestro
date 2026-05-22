@@ -25,43 +25,38 @@ You need:
 
 ## Option A — Browser Setup Wizard
 
-The easiest option. Opens a form in your web browser — no terminal knowledge required beyond running one command to start it.
+The easiest option. Opens a form in your web browser — no terminal required.
 
-### Step 1 — Open a terminal
+### Step 1 — Download the setup wizard
 
-**Mac:** Press `Cmd + Space`, type `Terminal`, press Enter.
-**Windows:** Press `Win + R`, type `cmd`, press Enter.
+Download this file: [setup/index.html](https://raw.githubusercontent.com/pjasielski/maestro/main/setup/index.html)
 
-### Step 2 — Navigate to your project folder
+(Right-click the link → Save As → save anywhere on your computer.)
 
-```bash
-cd /path/to/your-project
-```
+### Step 2 — Open it in your browser
 
-**Example on Mac:** `cd ~/Documents/my-work-project`
-**Example on Windows:** `cd C:\Users\YourName\my-work-project`
+Double-click the downloaded `index.html` file. A setup form will open.
 
-### Step 3 — Start the setup wizard
-
-```bash
-python3 -c "$(curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/setup/server.py)"
-```
-
-Your browser will open automatically with a setup form. Fill in the details and click **Install**.
-
-> **Don't have Python?** Use [Option B](#option-b--one-line-install) instead.
-> **Can't run curl?** See [Downloading the wizard manually](#downloading-the-wizard-manually).
-
-### Step 4 — Fill in the form
+### Step 3 — Fill in the form
 
 The form asks:
 
-1. **Project name** — what is this project called?
-2. **Mode** — Solo (just you) or Team (multiple people)?
-3. **AI tool** — which tool will you use? You can pick more than one.
-4. **Delivery folders** — Core is recommended for most projects.
+1. **Mode** — Solo (just you) or Team (multiple people)?
+2. **AI tool** — which tool(s) will you use? You can pick more than one.
+3. **Delivery folders** — Full is recommended for most projects.
 
-Click **Install** when done. Your browser will show a confirmation page with instructions for your chosen tool.
+Click **Generate Setup Script** when done.
+
+### Step 4 — Run the downloaded script
+
+The wizard downloads a `maestro-setup.sh` script. Open a terminal, navigate to your project folder, then run it:
+
+```bash
+cd /path/to/your-project
+bash ~/Downloads/maestro-setup.sh
+```
+
+Your browser will show a confirmation with tool-specific next steps.
 
 ---
 
@@ -81,7 +76,7 @@ cd /path/to/your-project
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 ```
 
-The installer will ask a few questions (project name, mode, which tools). Answer each and press Enter.
+The installer will ask a few questions (mode, which tools, delivery scope). Answer each and press Enter.
 
 **Skip the questions (use defaults):**
 
@@ -230,21 +225,6 @@ alwaysApply: true
 When user types /mae-X in chat, read .maestro/commands/mae-X.md and follow its protocol.
 Commands: mae-explore, mae-prd, mae-design, mae-plan, mae-do, mae-review,
           mae-checkpoint, mae-init, status, decide, sync, md
-```
-
----
-
-## Downloading the Wizard Manually
-
-If the one-liner above doesn't work:
-
-1. Download `setup/index.html` from the [Maestro repository](https://github.com/pjasielski/maestro)
-2. Open it in your browser (double-click the file)
-3. Fill in the form and click **Generate Setup Script**
-4. Run the downloaded script in your project folder:
-
-```bash
-bash ~/Downloads/maestro-setup.sh
 ```
 
 ---
