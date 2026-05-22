@@ -326,10 +326,10 @@ echo "Downloading Maestro..."
 curl -fsSL "$MAESTRO_URL/install.sh" -o "$TMP_DIR/install.sh"
 curl -fsSL "$MAESTRO_URL/MAESTRO.md" -o "$TMP_DIR/MAESTRO.md"
 
-# Download command files
-mkdir -p "$TMP_DIR/.claude/commands"
+# Download command files (.maestro/commands/ is the source of truth)
+mkdir -p "$TMP_DIR/.maestro/commands"
 for cmd in mae-explore mae-prd mae-design mae-plan mae-do mae-review mae-checkpoint mae-init mae-explore-lite status decide sync md; do
-  curl -fsSL "$MAESTRO_URL/.claude/commands/$cmd.md" -o "$TMP_DIR/.claude/commands/$cmd.md" 2>/dev/null || true
+  curl -fsSL "$MAESTRO_URL/.maestro/commands/$cmd.md" -o "$TMP_DIR/.maestro/commands/$cmd.md" 2>/dev/null || true
 done
 
 # Download templates
@@ -341,7 +341,6 @@ done
 chmod +x "$TMP_DIR/install.sh"
 
 # --- Run with pre-configured answers ---
-PROJECT_NAME="${name}" \\
 MODE="${mode}" \\
 TOOLS="${tools}" \\
 SCOPE="${scope}" \\
