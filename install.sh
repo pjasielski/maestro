@@ -8,7 +8,8 @@
 
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MAESTRO_URL="${MAESTRO_URL:-https://raw.githubusercontent.com/pjasielski/maestro/main}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-/dev/null}")" 2>/dev/null && pwd || pwd)"
 TARGET="${1:-.}"
 mkdir -p "$TARGET"
 TARGET="$(cd "$TARGET" && pwd)"
@@ -17,6 +18,28 @@ QUICK_MODE="${2:-}"
 # --preconfigured: read settings from env vars (used by setup/server.py and setup/index.html)
 PRECONFIGURED_MODE=""
 [ "$QUICK_MODE" = "--preconfigured" ] && PRECONFIGURED_MODE="yes"
+
+# ─────────────────────────────────────────────
+# Self-download when running via curl (no local source files)
+# ─────────────────────────────────────────────
+
+_CLEANUP_SOURCE=false
+if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
+  echo "Downloading framework files..."
+  SOURCE_DIR="$(mktemp -d)"
+  _CLEANUP_SOURCE=true
+  curl -fsSL "$MAESTRO_URL/MAESTRO.md" -o "$SOURCE_DIR/MAESTRO.md"
+  mkdir -p "$SOURCE_DIR/.maestro/commands"
+  for _cmd in mae-explore mae-prd mae-design mae-plan mae-do mae-review mae-checkpoint mae-init mae-explore-lite status decide sync md; do
+    curl -fsSL "$MAESTRO_URL/.maestro/commands/$_cmd.md" -o "$SOURCE_DIR/.maestro/commands/$_cmd.md" 2>/dev/null || true
+  done
+  mkdir -p "$SOURCE_DIR/templates"
+  for _tmpl in prd sdd explore task summary report review; do
+    curl -fsSL "$MAESTRO_URL/templates/$_tmpl.md" -o "$SOURCE_DIR/templates/$_tmpl.md" 2>/dev/null || true
+  done
+else
+  SOURCE_DIR="$SCRIPT_DIR"
+fi
 
 # ─────────────────────────────────────────────
 # Helpers
@@ -93,10 +116,7 @@ section() {
 # ─────────────────────────────────────────────
 
 if [ -f "$TARGET/HANDOFF.md" ] && [ -f "$TARGET/MAESTRO.md" ]; then
-  echo "⚠️  Maestro already initialized in this directory."
-  echo "   To re-run setup: delete HANDOFF.md and MAESTRO.md first."
-  echo "   To add a new tool: run /mae-init tools in Claude Code."
-  exit 0
+  echo "ℹ️  Maestro already initialized — running in update mode (existing files will be skipped)."
 fi
 
 print_header
@@ -223,11 +243,11 @@ echo "  Created: sessions/, notes/, templates/, .maestro/commands/"
 
 section "Copying framework files"
 
-cp "$SCRIPT_DIR/MAESTRO.md" "$TARGET/MAESTRO.md"
+cp "$SOURCE_DIR/MAESTRO.md" "$TARGET/MAESTRO.md"
 echo "  Copied: MAESTRO.md"
 
 # Copy command specs to .maestro/commands/ (single source of truth)
-for cmd in "$SCRIPT_DIR/.maestro/commands/"*.md; do
+for cmd in "$SOURCE_DIR/.maestro/commands/"*.md; do
   [ -f "$cmd" ] || continue
   BASENAME="$(basename "$cmd")"
   cp "$cmd" "$TARGET/.maestro/commands/$BASENAME"
@@ -235,7 +255,7 @@ done
 echo "  Copied: .maestro/commands/ ($(ls "$TARGET/.maestro/commands/" | wc -l | tr -d ' ') command files)"
 
 # Copy templates
-for tmpl in "$SCRIPT_DIR/templates/"*.md; do
+for tmpl in "$SOURCE_DIR/templates/"*.md; do
   [ -f "$tmpl" ] || continue
   BASENAME="$(basename "$tmpl")"
   cp "$tmpl" "$TARGET/templates/$BASENAME"
@@ -546,3 +566,6 @@ echo "  /mae-checkpoint Save project state snapshot"
 echo ""
 echo "Edit CLAUDE.md with your project details, then run /mae-explore."
 echo ""
+
+# Clean up temp source dir if we downloaded it
+$_CLEANUP_SOURCE && rm -rf "$SOURCE_DIR"
