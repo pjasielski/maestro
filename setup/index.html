@@ -223,16 +223,16 @@
     <h2>Delivery folders</h2>
     <div class="radio-group">
       <label>
-        <input type="radio" name="scope" value="core" checked>
+        <input type="radio" name="scope" value="core">
         <span class="label-text">
-          <span class="label-title">Core — recommended</span>
+          <span class="label-title">Core</span>
           <span class="label-desc">explore, prd, design, plan/tasks</span>
         </span>
       </label>
       <label>
-        <input type="radio" name="scope" value="full">
+        <input type="radio" name="scope" value="full" checked>
         <span class="label-text">
-          <span class="label-title">Full</span>
+          <span class="label-title">Full — recommended</span>
           <span class="label-desc">Core + review, test, deploy, maintenance</span>
         </span>
       </label>
@@ -297,7 +297,7 @@
       ? '4'
       : tools.map(t => t === 'claude-code' ? '1' : t === 'cursor' ? '2' : '3').join(' ');
 
-    const scopeNum = scope === 'core' ? '1' : scope === 'full' ? '2' : '3';
+    const scopeNum = scope === 'full' ? '1' : scope === 'core' ? '2' : '3';
 
     const script = generateScript(name, mode, toolFlags, scopeNum, tools);
     document.getElementById('script-output').textContent = script;
