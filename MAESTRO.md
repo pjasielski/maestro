@@ -59,11 +59,11 @@ Apply per-command: `/mae-explore -v` produces a verbose report. `/mae-explore -c
 ### New Chat Protocol
 
 1. Read `HANDOFF.md`
-2. Check `sessions/` for the highest-numbered session folder
+2. Check `.sessions/` for the highest-numbered session folder
 3. Greet: "I've read the handoff. Last session was **{NNN}-{name}**. Current phase: **{phase}**. What would you like to work on?"
 4. Wait for the user to provide a session title (e.g., `"003-api-design"`)
-5. Create folder: `sessions/{NNN}-{title}/`
-6. Create file: `sessions/{NNN}-{title}/_summary.md` using `templates/summary.md`
+5. Create folder: `.sessions/{NNN}-{title}/`
+6. Create file: `.sessions/{NNN}-{title}/_summary.md` using `templates/summary.md`
 7. Begin work
 
 If the user doesn't provide a title and jumps into work, ask: "Should I open a session for this? What should I call it?"
@@ -116,7 +116,7 @@ Maintenance & bugs          → delivery/08-maintenance/  (created on demand)
 
 Templates                   → templates/
 Raw ideas                   → notes/ideas.md
-Session history             → sessions/{NNN}-{name}/_summary.md
+Session history             → .sessions/{NNN}-{name}/_summary.md
 Source code                 → src/ (or project-specific path)
 Framework commands          → .maestro/commands/mae-*.md
 Claude Code adapters        → .claude/commands/mae-*.md  (thin wrappers → .maestro/commands/)
@@ -141,7 +141,7 @@ Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-disp
 - NEVER change established architecture decisions without user approval
 - When you spot an inconsistency between code and SDD, flag it: `CONSISTENCY: [details]`
 - Treat `delivery/` artifacts as canonical truth for requirements and design
-- `sessions/` and `notes/` are working material, NOT canonical
+- `.sessions/` and `notes/` are working material, NOT canonical
 
 ### Code Standards
 
@@ -169,7 +169,7 @@ Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-disp
 **Free zone (no permission needed):**
 
 - Creating new files anywhere
-- Editing anything inside `sessions/`
+- Editing anything inside `.sessions/`
 - Editing anything inside `notes/`
 - Appending to WORKLOG.md
 - Appending to DECISIONS.md
@@ -312,7 +312,7 @@ Session (workbench)                     Delivery (confirmed)
   → task files                    ──────────→  delivery/04-plan/tasks/
 ```
 
-All commands save to `sessions/` first. User reviews, then promotes to `delivery/` when ready.
+All commands save to `.sessions/` first. User reviews, then promotes to `delivery/` when ready.
 Exception: `/mae-plan` saves tasks directly to delivery/ (they're immediately actionable).
 
 ---
@@ -331,7 +331,7 @@ Exception: `/mae-plan` saves tasks directly to delivery/ (they're immediately ac
 ### Session Structure
 
 ```
-sessions/
+.sessions/
 ├── 000-handoff/              ← migrated from prior tools
 ├── 001-framework-bootstrap/
 │   ├── _summary.md
@@ -393,20 +393,23 @@ Tasks are markdown files in `delivery/04-plan/tasks/`. Each file IS the ticket.
 
 ---
 
-## Solo vs Team Mode
+## Session Visibility
 
-| Aspect     | Solo             | Team                        |
+Controls whether `.sessions/` is committed to git or gitignored.
+
+| Setting | `.sessions/` | When to use |
 | ---------- | ---------------- | --------------------------- |
-| Sessions   | Committed to git | Gitignored                  |
-| WORKLOG.md | No "Who" column  | "Who" column added          |
-| `/sync`  | Optional         | Required to share decisions |
+| `"committed"` | In git | Solo projects, or teams that want session history in the repo |
+| `"gitignored"` | Gitignored | Teams where sessions are personal working material |
 
-Toggle via `maestro.toml`:
+Set in `maestro.toml`:
 
 ```toml
 [project]
-mode = "solo"  # or "team"
+session_visibility = "committed"  # or "gitignored"
 ```
+
+**Team features** are inferred from the presence of `[[team.members]]` in `maestro.toml`. No separate mode toggle needed — if team members are defined, team behaviors activate (e.g., "Who" column in WORKLOG.md, `/sync` required to share decisions).
 
 ---
 
@@ -414,7 +417,7 @@ mode = "solo"  # or "team"
 
 Optional. Configured in `maestro.toml`. Helps the agent adapt its assistance to the practitioner's expertise.
 
-**Solo mode:**
+**Individual profile:**
 
 ```toml
 [user]
@@ -423,7 +426,7 @@ strengths = ["backend", "python", "system-design"]
 needs_help = ["frontend", "ux"]
 ```
 
-**Team mode:**
+**Team profiles** (presence of `[[team.members]]` activates team behaviors):
 
 ```toml
 [[team.members]]
@@ -448,7 +451,7 @@ When a profile exists, the agent adjusts:
 - **Question targeting:** Fewer questions in strength areas, more in weakness areas
 - **Artifact detail:** More scaffolding in sections the user will rely on
 
-In team mode, the agent asks "Who am I working with?" at session start and adapts to that member.
+When `[[team.members]]` is defined, the agent asks "Who am I working with?" at session start and adapts to that member.
 
 If no profile is configured, the agent behaves generically (no adaptation). This is fully optional.
 

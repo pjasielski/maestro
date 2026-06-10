@@ -3,7 +3,8 @@
 #
 # Usage:
 #   ./install.sh [target-directory]          # interactive setup
-#   ./install.sh [target-directory] --quick  # skip prompts, Claude Code only, core folders
+#   ./install.sh [target-directory] --quick  # skip prompts, defaults
+#   ./install.sh [target-directory] --preconfigured  # read settings from env vars
 #   curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 
 set -e
@@ -14,7 +15,6 @@ mkdir -p "$TARGET"
 TARGET="$(cd "$TARGET" && pwd)"
 QUICK_MODE="${2:-}"
 
-# --preconfigured: read settings from env vars (used by setup/server.py and setup/index.html)
 PRECONFIGURED_MODE=""
 [ "$QUICK_MODE" = "--preconfigured" ] && PRECONFIGURED_MODE="yes"
 
@@ -32,19 +32,6 @@ print_header() {
   echo ""
 }
 
-ask() {
-  local prompt="$1"
-  local default="$2"
-  local answer
-  if [ -n "$default" ]; then
-    read -r -p "$prompt [$default]: " answer </dev/tty
-    echo "${answer:-$default}"
-  else
-    read -r -p "$prompt: " answer </dev/tty
-    echo "$answer"
-  fi
-}
-
 ask_choice() {
   local prompt="$1"
   shift
@@ -58,20 +45,6 @@ ask_choice() {
   echo "${choice:-1}"
 }
 
-ask_multichoice() {
-  local prompt="$1"
-  shift
-  local options=("$@")
-  echo "$prompt" >&2
-  echo "  (enter numbers separated by spaces, e.g. 1 2)" >&2
-  for i in "${!options[@]}"; do
-    echo "  $((i+1))) ${options[$i]}" >&2
-  done
-  local choices
-  read -r -p "Choices [1]: " choices </dev/tty
-  echo "${choices:-1}"
-}
-
 create_if_missing() {
   local filepath="$1"
   local content="$2"
@@ -79,7 +52,7 @@ create_if_missing() {
     echo "$content" > "$filepath"
     echo "  Created: $(basename "$filepath")"
   else
-    echo "  Exists:  $(basename "$filepath") (skipped)"
+    echo "  Exists:  $(basename "$filepath") (preserved)"
   fi
 }
 
@@ -89,136 +62,74 @@ section() {
 }
 
 # ─────────────────────────────────────────────
-# Check already initialized
+# Detect reinstall
 # ─────────────────────────────────────────────
 
-if [ -f "$TARGET/HANDOFF.md" ] && [ -f "$TARGET/MAESTRO.md" ]; then
-  echo "⚠️  Maestro already initialized in this directory."
-  echo "   To re-run setup: delete HANDOFF.md and MAESTRO.md first."
-  echo "   To add a new tool: run /mae-init tools in Claude Code."
-  exit 0
+REINSTALL=false
+if [ -f "$TARGET/MAESTRO.md" ]; then
+  REINSTALL=true
+  echo "Maestro detected — updating framework files, preserving your files."
+  echo ""
 fi
 
 print_header
 
 # ─────────────────────────────────────────────
-# Quick mode (non-interactive)
+# Configuration: one question (session visibility)
 # ─────────────────────────────────────────────
 
+PROJECT_NAME="$(basename "$TARGET")"
+SESSION_VISIBILITY="committed"
+
 if [ "$QUICK_MODE" = "--quick" ]; then
-  PROJECT_NAME="$(basename "$TARGET")"
-  MODE="solo"
-  TOOLS="1"     # Claude Code only
-  SCOPE="2"     # Core folders only
-  echo "Quick mode: Claude Code, solo, core folders."
+  echo "Quick mode: full structure, all adapters, sessions committed."
 elif [ -n "$PRECONFIGURED_MODE" ]; then
-  # Settings passed via environment variables from setup wizard
   PROJECT_NAME="${PROJECT_NAME:-$(basename "$TARGET")}"
-  MODE="${MODE:-solo}"
-  TOOLS="${TOOLS:-1}"
-  SCOPE="${SCOPE:-1}"   # 1=Full, 2=Core, 3=Minimal
-  echo "Preconfigured mode: $PROJECT_NAME, $MODE"
-else
-  # ─────────────────────────────────────────────
-  # Interactive setup
-  # ─────────────────────────────────────────────
-
-  PROJECT_NAME="$(basename "$TARGET")"
-
-  section "Project"
-  MODE_CHOICE=$(ask_choice "Mode:" "Solo (one person)" "Team (multiple people)")
-  if [ "$MODE_CHOICE" = "2" ]; then
-    MODE="team"
-  else
-    MODE="solo"
+  SESSION_VISIBILITY="${SESSION_VISIBILITY:-committed}"
+  echo "Preconfigured mode: $PROJECT_NAME"
+elif [ "$REINSTALL" = false ]; then
+  section "Setup"
+  VIS_CHOICE=$(ask_choice "Session visibility:" \
+    "Committed — sessions saved in git (solo projects, full audit trail)" \
+    "Gitignored — sessions are personal working material (teams)")
+  if [ "$VIS_CHOICE" = "2" ]; then
+    SESSION_VISIBILITY="gitignored"
   fi
+fi
 
-  echo ""
-  TOOLS=$(ask_multichoice "Which AI tool(s) will you use?" \
-    "Claude Code (VS Code / CLI)" \
-    "Cursor" \
-    "Codex (OpenAI)" \
-    "All of the above")
-
-  echo ""
-  SCOPE_CHOICE=$(ask_choice "Delivery folder scope:" \
-    "Full — explore, prd, design, plan, review, test, deploy, maintenance  (recommended)" \
-    "Core — explore, prd, design, plan only" \
-    "Minimal — no delivery folders (session-based only)")
-  SCOPE="$SCOPE_CHOICE"
+# On reinstall, read existing visibility from maestro.toml if present
+if [ "$REINSTALL" = true ] && [ -f "$TARGET/maestro.toml" ]; then
+  EXISTING_VIS=$(grep 'session_visibility' "$TARGET/maestro.toml" 2>/dev/null | sed 's/.*= *"\(.*\)"/\1/' || true)
+  [ -n "$EXISTING_VIS" ] && SESSION_VISIBILITY="$EXISTING_VIS"
 fi
 
 # ─────────────────────────────────────────────
-# Parse tool selections
-# ─────────────────────────────────────────────
-
-SETUP_CLAUDE=false
-SETUP_CURSOR=false
-SETUP_CODEX=false
-
-for t in $TOOLS; do
-  case "$t" in
-    1) SETUP_CLAUDE=true ;;
-    2) SETUP_CURSOR=true ;;
-    3) SETUP_CODEX=true ;;
-    4) SETUP_CLAUDE=true; SETUP_CURSOR=true; SETUP_CODEX=true ;;
-  esac
-done
-
-# ─────────────────────────────────────────────
-# Build tools list for maestro.toml
-# ─────────────────────────────────────────────
-
-TOOLS_LIST=""
-$SETUP_CLAUDE && TOOLS_LIST="${TOOLS_LIST}\"claude-code\", "
-$SETUP_CURSOR && TOOLS_LIST="${TOOLS_LIST}\"cursor\", "
-$SETUP_CODEX  && TOOLS_LIST="${TOOLS_LIST}\"codex\", "
-TOOLS_LIST="${TOOLS_LIST%, }"  # strip trailing comma
-
-# ─────────────────────────────────────────────
-# Create folder structure
+# Create folder structure (always full)
 # ─────────────────────────────────────────────
 
 section "Creating folders"
 
-# Core delivery folders (always if scope != minimal)
-if [ "$SCOPE" != "3" ]; then
-  mkdir -p "$TARGET/delivery/01-explore"
-  mkdir -p "$TARGET/delivery/02-prd"
-  mkdir -p "$TARGET/delivery/03-design"
-  mkdir -p "$TARGET/delivery/04-plan/tasks"
-  echo "  Created: delivery/ (core)"
-fi
+mkdir -p "$TARGET/delivery/01-explore"
+mkdir -p "$TARGET/delivery/02-prd"
+mkdir -p "$TARGET/delivery/03-design"
+mkdir -p "$TARGET/delivery/04-plan/tasks"
+mkdir -p "$TARGET/delivery/05-review"
+mkdir -p "$TARGET/delivery/06-test"
+mkdir -p "$TARGET/delivery/07-deploy"
+mkdir -p "$TARGET/delivery/08-maintenance/issues"
+echo "  Created: delivery/ (full structure)"
 
-# Full delivery folders (scope = 1)
-if [ "$SCOPE" = "1" ]; then
-  mkdir -p "$TARGET/delivery/05-review"
-  mkdir -p "$TARGET/delivery/06-test"
-  mkdir -p "$TARGET/delivery/07-deploy"
-  mkdir -p "$TARGET/delivery/08-maintenance/issues"
-  echo "  Created: delivery/05-08 (full)"
-fi
-
-# Sessions folder: use .sessions if it already exists, otherwise sessions/
-if [ -d "$TARGET/.sessions" ]; then
-  SESSIONS_DIR=".sessions"
-else
-  SESSIONS_DIR="sessions"
-fi
-mkdir -p "$TARGET/$SESSIONS_DIR"
+mkdir -p "$TARGET/.sessions"
 mkdir -p "$TARGET/notes"
 mkdir -p "$TARGET/templates"
 mkdir -p "$TARGET/.maestro/commands"
-
-# Tool-specific folders
-$SETUP_CLAUDE && mkdir -p "$TARGET/.claude/commands"
-$SETUP_CURSOR && mkdir -p "$TARGET/.cursor/rules"
-$SETUP_CODEX  && mkdir -p "$TARGET/.github"
-
-echo "  Created: sessions/, notes/, templates/, .maestro/commands/"
+mkdir -p "$TARGET/.claude/commands"
+mkdir -p "$TARGET/.cursor/rules"
+mkdir -p "$TARGET/.github"
+echo "  Created: .sessions/, notes/, templates/, .maestro/commands/"
 
 # ─────────────────────────────────────────────
-# Copy framework files
+# Copy framework files (always update)
 # ─────────────────────────────────────────────
 
 section "Copying framework files"
@@ -226,49 +137,57 @@ section "Copying framework files"
 cp "$SCRIPT_DIR/MAESTRO.md" "$TARGET/MAESTRO.md"
 echo "  Copied: MAESTRO.md"
 
-# Copy command specs to .maestro/commands/ (single source of truth)
 for cmd in "$SCRIPT_DIR/.maestro/commands/"*.md; do
   [ -f "$cmd" ] || continue
   BASENAME="$(basename "$cmd")"
   cp "$cmd" "$TARGET/.maestro/commands/$BASENAME"
 done
-echo "  Copied: .maestro/commands/ ($(ls "$TARGET/.maestro/commands/" | wc -l | tr -d ' ') command files)"
+echo "  Copied: .maestro/commands/ ($(ls "$TARGET/.maestro/commands/" | wc -l | tr -d ' ') files)"
 
-# Copy templates
+# ─────────────────────────────────────────────
+# Copy templates (never overwrite user customizations)
+# ─────────────────────────────────────────────
+
+section "Copying templates"
+
+TMPL_NEW=0
+TMPL_SKIP=0
 for tmpl in "$SCRIPT_DIR/templates/"*.md; do
   [ -f "$tmpl" ] || continue
   BASENAME="$(basename "$tmpl")"
-  cp "$tmpl" "$TARGET/templates/$BASENAME"
+  if [ ! -f "$TARGET/templates/$BASENAME" ]; then
+    cp "$tmpl" "$TARGET/templates/$BASENAME"
+    TMPL_NEW=$((TMPL_NEW + 1))
+  else
+    TMPL_SKIP=$((TMPL_SKIP + 1))
+  fi
 done
-echo "  Copied: templates/"
+echo "  New: $TMPL_NEW | Preserved: $TMPL_SKIP"
 
 # ─────────────────────────────────────────────
 # Claude Code adapters
 # ─────────────────────────────────────────────
 
-if $SETUP_CLAUDE; then
-  section "Setting up Claude Code"
-  for cmd in "$TARGET/.maestro/commands/"*.md; do
-    [ -f "$cmd" ] || continue
-    BASENAME="$(basename "$cmd")"
-    CMDNAME="${BASENAME%.md}"
-    cat > "$TARGET/.claude/commands/$BASENAME" <<EOF
+section "Setting up Claude Code"
+for cmd in "$TARGET/.maestro/commands/"*.md; do
+  [ -f "$cmd" ] || continue
+  BASENAME="$(basename "$cmd")"
+  CMDNAME="${BASENAME%.md}"
+  cat > "$TARGET/.claude/commands/$BASENAME" <<EOF
 # $CMDNAME
 Follow the protocol defined in \`.maestro/commands/$BASENAME\`.
 Pass \$ARGUMENTS through as-is.
 EOF
-  done
-  echo "  Created: .claude/commands/ (thin wrappers → .maestro/commands/)"
-fi
+done
+echo "  Created: .claude/commands/ (thin wrappers)"
 
 # ─────────────────────────────────────────────
 # Cursor adapters
 # ─────────────────────────────────────────────
 
-if $SETUP_CURSOR; then
-  section "Setting up Cursor"
+section "Setting up Cursor"
 
-  cat > "$TARGET/.cursor/rules/maestro-core.mdc" <<'EOF'
+cat > "$TARGET/.cursor/rules/maestro-core.mdc" <<'EOF'
 ---
 description: Maestro delivery framework — core rules and behavior
 alwaysApply: true
@@ -281,12 +200,12 @@ MAESTRO.md contains: output standards, delivery phases, context loading rules, f
 Follow all rules in MAESTRO.md. Key rules:
 - Save every substantive response as a numbered file in the current session folder
 - Use flags (CONSISTENCY:, GAP:, UNCLEAR:) when appropriate
-- On new chat: read HANDOFF.md, check sessions/ for highest-numbered folder, greet user
+- On new chat: read HANDOFF.md, check .sessions/ for highest-numbered folder, greet user
 - Output standard: lead with answer, no filler, tables for comparisons
 - Instruction priority: user's explicit instruction > command defaults > MAESTRO.md baseline
 EOF
 
-  cat > "$TARGET/.cursor/rules/maestro-dispatch.mdc" <<'EOF'
+cat > "$TARGET/.cursor/rules/maestro-dispatch.mdc" <<'EOF'
 ---
 description: Maestro command dispatcher — maps /mae-* commands to protocol files
 alwaysApply: true
@@ -313,19 +232,15 @@ Text after the command name = $ARGUMENTS passed to the protocol.
 Always read the file — do not guess the protocol from memory.
 EOF
 
-  echo "  Created: .cursor/rules/maestro-core.mdc"
-  echo "  Created: .cursor/rules/maestro-dispatch.mdc"
-fi
+echo "  Created: .cursor/rules/ (core + dispatch)"
 
 # ─────────────────────────────────────────────
 # Codex adapter
 # ─────────────────────────────────────────────
 
-if $SETUP_CODEX; then
-  section "Setting up Codex"
+section "Setting up Codex"
 
-  # Read MAESTRO.md for inclusion (first 80 lines = core rules)
-  cat > "$TARGET/.github/copilot-instructions.md" <<'EOF'
+cat > "$TARGET/.github/copilot-instructions.md" <<'EOF'
 # Maestro — AI-Assisted Delivery Framework
 
 You are an AI delivery partner. Follow MAESTRO.md at the project root for all framework behavior, output standards, phases, and conventions.
@@ -334,7 +249,7 @@ You are an AI delivery partner. Follow MAESTRO.md at the project root for all fr
 
 **Output:** Lead with answer. No filler. Tables for comparisons. Save every substantive response as a numbered file in the current session folder.
 
-**On new chat:** Read HANDOFF.md → check sessions/ for highest-numbered folder → greet user → create session folder → begin work.
+**On new chat:** Read HANDOFF.md → check .sessions/ for highest-numbered folder → greet user → create session folder → begin work.
 
 **Instruction priority:** User's explicit instruction > command defaults > MAESTRO.md baseline.
 
@@ -361,11 +276,10 @@ When user types any of these, read the corresponding file and follow its full pr
 Always read the file before executing — do not guess the protocol.
 EOF
 
-  echo "  Created: .github/copilot-instructions.md"
-fi
+echo "  Created: .github/copilot-instructions.md"
 
 # ─────────────────────────────────────────────
-# Tracking files
+# Tracking files (never overwrite)
 # ─────────────────────────────────────────────
 
 section "Creating tracking files"
@@ -396,13 +310,13 @@ create_if_missing "$TARGET/HANDOFF.md" "# HANDOFF — $PROJECT_NAME
 
 create_if_missing "$TARGET/DECISIONS.md" "# Decision Log
 
-| Date | Session | Decision | Status |
-|------|---------|----------|--------|"
+| # | Date | Session | Decision | Status |
+|---|------|---------|----------|--------|"
 
 create_if_missing "$TARGET/OPEN_QUESTIONS.md" "# Open Questions
 
-| ID | Priority | Question | Context | Status |
-|----|----------|----------|---------|--------|"
+| # | Priority | Question | Context | Status |
+|---|----------|----------|---------|--------|"
 
 create_if_missing "$TARGET/WORKLOG.md" "# Work Log
 
@@ -417,34 +331,30 @@ Promote to OPEN_QUESTIONS.md when they need a decision.
 ---"
 
 # ─────────────────────────────────────────────
-# maestro.toml
+# maestro.toml (never overwrite)
 # ─────────────────────────────────────────────
 
 section "Creating config"
 
-if [ ! -f "$TARGET/maestro.toml" ]; then
-  cat > "$TARGET/maestro.toml" <<EOF
-[project]
-name = "$PROJECT_NAME"
-mode = "$MODE"
+create_if_missing "$TARGET/maestro.toml" "[project]
+name = \"$PROJECT_NAME\"
+session_visibility = \"$SESSION_VISIBILITY\"
 
-[tools]
-active = [$TOOLS_LIST]
+# Uncomment and fill in to enable profile-aware behavior:
+# [user]
+# description = \"Your role and expertise\"
+# strengths = [\"area1\", \"area2\"]
+# needs_help = [\"area3\", \"area4\"]
 
-# Output tier default: "standard" | "verbose" | "caveman"
-# Override per-command with -v or -c flags
-output_tier = "standard"
-
-# Uncomment to share sessions with team (remove sessions/ from .gitignore too):
-# share_sessions = true
-EOF
-  echo "  Created: maestro.toml"
-else
-  echo "  Exists:  maestro.toml (skipped)"
-fi
+# Uncomment to define team members (activates team features):
+# [[team.members]]
+# name = \"Name\"
+# role = \"role\"
+# strengths = [\"area1\"]
+# needs_help = [\"area2\"]"
 
 # ─────────────────────────────────────────────
-# CLAUDE.md
+# CLAUDE.md (never overwrite)
 # ─────────────────────────────────────────────
 
 if [ ! -f "$TARGET/CLAUDE.md" ]; then
@@ -472,7 +382,7 @@ else
     printf '\n## Framework Instructions\n\nSee `MAESTRO.md` for all delivery framework behavior.\n' >> "$TARGET/CLAUDE.md"
     echo "  Updated: CLAUDE.md (added MAESTRO.md reference)"
   else
-    echo "  Exists:  CLAUDE.md (already references MAESTRO.md)"
+    echo "  Exists:  CLAUDE.md (preserved)"
   fi
 fi
 
@@ -481,24 +391,23 @@ fi
 # ─────────────────────────────────────────────
 
 if [ ! -f "$TARGET/.gitignore" ]; then
-  if [ "$MODE" = "team" ]; then
+  if [ "$SESSION_VISIBILITY" = "gitignored" ]; then
     cat > "$TARGET/.gitignore" <<'EOF'
-# Maestro: personal working artifacts (gitignored in team mode)
-sessions/
+# Maestro: personal working artifacts (gitignored)
+.sessions/
 notes/
 .DS_Store
 EOF
-    echo "  Created: .gitignore (team mode — sessions/ gitignored)"
+    echo "  Created: .gitignore (.sessions/ gitignored)"
   else
     cat > "$TARGET/.gitignore" <<'EOF'
 .DS_Store
-# sessions/ and notes/ committed in solo mode
-# Change mode to "team" in maestro.toml to gitignore them
+# .sessions/ and notes/ committed (change session_visibility in maestro.toml)
 EOF
-    echo "  Created: .gitignore (solo mode — sessions/ committed)"
+    echo "  Created: .gitignore (.sessions/ committed)"
   fi
 else
-  echo "  Exists:  .gitignore (skipped — check manually for sessions/ entry)"
+  echo "  Exists:  .gitignore (preserved)"
 fi
 
 # ─────────────────────────────────────────────
@@ -507,34 +416,18 @@ fi
 
 echo ""
 echo "╔══════════════════════════════════════╗"
-echo "║    ✓ Installation complete           ║"
+echo "║    Maestro installed successfully    ║"
 echo "╚══════════════════════════════════════╝"
 echo ""
-echo "Project: $PROJECT_NAME  |  Mode: $MODE"
+echo "Project: $PROJECT_NAME"
+echo "Sessions: $SESSION_VISIBILITY"
+echo "Adapters: Claude Code, Cursor, Codex"
 echo ""
-
-if $SETUP_CLAUDE; then
-  echo "── Claude Code ──────────────────────────"
-  echo "  Open a new Claude Code conversation."
-  echo "  Type: /mae-explore"
-  echo ""
-fi
-
-if $SETUP_CURSOR; then
-  echo "── Cursor ───────────────────────────────"
-  echo "  Open your project in Cursor."
-  echo "  In the AI chat, type: /mae-explore"
-  echo "  (Cursor rules are loaded automatically)"
-  echo ""
-fi
-
-if $SETUP_CODEX; then
-  echo "── Codex ────────────────────────────────"
-  echo "  Codex reads .github/copilot-instructions.md automatically."
-  echo "  Type: /mae-explore"
-  echo ""
-fi
-
+echo "── Next steps ──────────────────────────"
+echo "  1. Edit CLAUDE.md with your project details"
+echo "  2. Run /mae-init to set up your profile (optional)"
+echo "  3. Run /mae-explore to start"
+echo ""
 echo "── Available commands ───────────────────"
 echo "  /mae-explore    Build project understanding"
 echo "  /mae-prd        Formalize requirements"
@@ -543,6 +436,4 @@ echo "  /mae-plan       Break design into tasks"
 echo "  /mae-do         Execute tasks"
 echo "  /mae-review     Review code and artifacts"
 echo "  /mae-checkpoint Save project state snapshot"
-echo ""
-echo "Edit CLAUDE.md with your project details, then run /mae-explore."
 echo ""

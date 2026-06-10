@@ -1,0 +1,9 @@
+[project]
+name = "maestro"
+description = "AI-Assisted Project Delivery Framework"
+session_visibility = "committed"
+
+[user]
+description = "AI Solutions Architect, Python/FastAPI specialist, planning-heavy workflow"
+strengths = ["backend", "python", "system-design", "architecture", "fastapi"]
+needs_help = ["frontend", "ux", "css"]

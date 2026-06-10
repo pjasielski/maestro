@@ -45,7 +45,7 @@ The installer creates the folder structure, copies framework files, and creates 
 
 | Command | What It Does |
 |---------|-------------|
-| `/mae-init` | Initialize framework in your project (solo or team mode) |
+| `/mae-init` | Set up user/team profile after installation |
 | `/mae-explore` | Build understanding — analyze docs, topics, transcripts |
 | `/mae-explore ask` | Generate questions to deepen understanding (for user, client, team) |
 | `/mae-explore doc` | Synthesize final explore report from all artifacts |
@@ -72,7 +72,7 @@ The installer creates the folder structure, copies framework files, and creates 
 
 ### Sessions-First Workflow
 
-Commands save artifacts to `sessions/` (your workbench). You review, then **promote** to `delivery/` when ready.
+Commands save artifacts to `.sessions/` (your workbench). You review, then **promote** to `delivery/` when ready.
 
 ```
 /mae-explore  → session artifacts  ──promote──→  delivery/01-explore/
@@ -100,7 +100,7 @@ After installation, your project gets:
 your-project/
 ├── MAESTRO.md                ← Framework instructions (don't edit)
 ├── CLAUDE.md                 ← Your project config (edit this)
-├── maestro.toml              ← Framework settings (solo/team mode)
+├── maestro.toml              ← Framework settings (session visibility, profile)
 ├── HANDOFF.md                ← Single source of truth for project status
 ├── DECISIONS.md              ← Decision audit trail
 ├── OPEN_QUESTIONS.md         ← Questions needing answers
@@ -110,7 +110,7 @@ your-project/
 │   ├── 02-prd/               ← PRD.md
 │   ├── 03-design/            ← SDD.md
 │   └── 04-plan/tasks/        ← Task files (the plan)
-├── sessions/                 ← Working material (per-session)
+├── .sessions/                ← Working material (per-session)
 ├── notes/ideas.md            ← Raw ideas and parking lot
 ├── templates/                ← Document templates (customizable)
 └── .claude/commands/         ← Framework commands
@@ -131,21 +131,22 @@ Maestro includes templates for key deliverables. Each has **core sections** (alw
 
 Edit templates in `templates/` to match your team's standards.
 
-## Solo vs Team Mode
+## Session Visibility
 
 Set in `maestro.toml`:
 
 ```toml
 [project]
 name = "my-project"
-mode = "solo"  # or "team"
+session_visibility = "committed"  # or "gitignored"
 ```
 
-| Aspect | Solo | Team |
-|--------|------|------|
-| `sessions/` | Committed to git | Gitignored |
-| `notes/` | Committed to git | Gitignored |
-| `WORKLOG.md` | No "Who" column | "Who" column added |
+| Setting | `.sessions/` | Use case |
+|---------|-------------|----------|
+| `"committed"` | In git | Solo projects, full audit trail |
+| `"gitignored"` | Gitignored | Teams where sessions are personal |
+
+Team features (e.g., "Who" column in WORKLOG.md) activate automatically when `[[team.members]]` is defined in `maestro.toml`.
 
 ## User / Team Profile
 

@@ -1,11 +1,11 @@
 # HANDOFF.md — Maestro Framework
 
 ## Current Status
-- **Phase:** bootstrap → multi-tool support (v0.4 dev)
-- **Last worked on:** 2026-05-20 — multi-tool support, setup wizard, output tiers, .gitignore
-- **Active branch:** `dev` (work here; merge to `main` when stable)
-- **Archive:** `archive/v0.3` preserves state before these changes
-- **Next priorities (session 003):** See below
+- **Phase:** bootstrap → packaging (v0.1.0 alpha)
+- **Last worked on:** 2026-06-10 — Milestone 1 (Foundation & Stability)
+- **Active branch:** `main`
+- **Version:** v0.1.0 (tagged)
+- **Next priorities:** Milestone 1 items — see ROADMAP.md
 - **Blockers:** None
 
 ## Next Priorities (from poc session 003-framework-evolution)
@@ -28,12 +28,12 @@
 11. **Symphony app** — web UI vision
 
 ## Recent Changes (2026-05-20)
-- Added `.gitignore` (sessions/ gitignored)
+- Added `.gitignore` (.sessions/ gitignored)
 - Added output tiers (-v/-c) to MAESTRO.md
 - Rewrote install.sh: interactive prompts, Cursor + Codex support, --quick and --preconfigured modes
 - Created `setup/index.html` — static HTML wizard + `setup/server.py` — local browser-based setup
 - Updated MAESTRO.md: `.maestro/commands/` reference, output tiers
-- Created `archive/v0.3` branch; working on `dev`
+- Created `archive/v0.3` branch; merged to `main`
 
 ## Previous Changes (2026-04-22)
 - Rewrote explore command: readiness signals (replace artifact count), context scanning, `ask` sub-command, questions as first-class output
@@ -63,7 +63,7 @@
 | Framework name | Maestro (`mae-`) | Music theme, fits Symphony platform |
 | Config format | TOML | Python native, no indent bugs |
 | Command naming | Dashes (`/mae-explore`) | Flat files, easier typing than colons |
-| Artifact flow | Sessions-first | All output to sessions/, promote to delivery/ when ready |
+| Artifact flow | Sessions-first | All output to .sessions/, promote to delivery/ when ready |
 | Explore behavior | Adaptive + readiness signals | Smart default, targeted, ask, doc modes |
 | Templates | Core + optional pattern | HTML comments mark optional sections |
 | User profile | `[user]` / `[[team.members]]` in maestro.toml | Optional, adapts agent behavior to expertise |
@@ -101,12 +101,12 @@
 | Architecture | `delivery/03-design/SDD.md` |
 | Tasks | `delivery/04-plan/tasks/` |
 | Templates | `templates/` (task, summary, report, prd, sdd, explore) |
-| Session history | `sessions/001-framework-bootstrap/` |
-| Design decisions | `sessions/001-framework-bootstrap/11_design_decisions_reference.md` |
-| Latest report | `sessions/001-framework-bootstrap/15_implementation_report.md` |
+| Session history | `.sessions/001-framework-bootstrap/` |
+| Design decisions | `.sessions/001-framework-bootstrap/11_design_decisions_reference.md` |
+| Latest report | `.sessions/001-framework-bootstrap/15_implementation_report.md` |
 
 ## Open Considerations
 - **PoC pathway:** Framework may feel too sequential; document alternative pathways (PoC-first, fast-track, iterative)
 - **Init vs Install overlap:** Reconcile install.sh and mae-init so either entry point works for any user
-- **Symphony app:** Lightweight web/desktop app built on Maestro — see `sessions/001-framework-bootstrap/symphony_app_brief.md`
+- **Symphony app:** Lightweight web/desktop app built on Maestro — see `.sessions/001-framework-bootstrap/symphony_app_brief.md`
 - **Naming:** "AI-Assisted Delivery Framework" as identity; use "SDLC" in marketing context

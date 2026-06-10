@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Maestro local setup server.
-Opens a browser form, user fills it, server writes all config files.
+Opens a browser form, user fills it, server runs install.sh.
 
 Usage:
     python3 setup/server.py [target-directory]
@@ -11,12 +11,11 @@ Usage:
 import http.server
 import json
 import os
-import shutil
 import subprocess
 import sys
 import webbrowser
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import urlparse
 
 SCRIPT_DIR = Path(__file__).parent
 MAESTRO_DIR = SCRIPT_DIR.parent
@@ -43,10 +42,16 @@ HTML_SUCCESS = """<!DOCTYPE html>
 </head>
 <body>
 <div class="card">
-  <h1>✓ Maestro Ready</h1>
+  <h1>Maestro Ready</h1>
   <p>Your project <strong>{project_name}</strong> has been set up.</p>
-  <div class="tools">{tool_instructions}</div>
+  <p>Sessions: <strong>{session_visibility}</strong></p>
+  <div class="tools">
+    <p><strong>Claude Code:</strong> Open new conversation, type <code>/mae-explore</code></p>
+    <p><strong>Cursor:</strong> Open project in Cursor, type <code>/mae-explore</code> in AI chat</p>
+    <p><strong>Codex:</strong> Instructions auto-loaded, type <code>/mae-explore</code></p>
+  </div>
   <p>Edit <code>CLAUDE.md</code> to describe your project, then start exploring.</p>
+  <p>Run <code>/mae-init</code> to set up your profile (optional).</p>
   <p style="margin-top:1.5rem; font-size: 0.78rem; color: #484f58;">
     This server has stopped. You can close this tab.
   </p>
@@ -60,7 +65,7 @@ class SetupHandler(http.server.BaseHTTPRequestHandler):
     target_dir: Path = Path(".")
 
     def log_message(self, format, *args):
-        pass  # suppress default logging
+        pass
 
     def do_GET(self):
         parsed = urlparse(self.path)
@@ -100,33 +105,18 @@ class SetupHandler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(error)
 
-        # Shutdown server after responding
         import threading
         threading.Timer(1.0, self.server.shutdown).start()
 
     def _run_setup(self, data: dict) -> str:
         project_name = data.get("project_name", "my-project").strip() or "my-project"
-        mode = data.get("mode", "solo")
-        tools = data.get("tools", ["claude-code"])
-        scope = data.get("scope", "core")
+        session_visibility = data.get("session_visibility", "committed")
         target = self.__class__.target_dir
-
-        # Build env for install.sh
-        tools_map = {"claude-code": "1", "cursor": "2", "codex": "3"}
-        if set(tools) == {"claude-code", "cursor", "codex"}:
-            tools_str = "4"
-        else:
-            tools_str = " ".join(tools_map[t] for t in tools if t in tools_map)
-
-        scope_map = {"core": "1", "full": "2", "minimal": "3"}
-        scope_num = scope_map.get(scope, "1")
 
         env = os.environ.copy()
         env.update({
             "PROJECT_NAME": project_name,
-            "MODE": mode,
-            "TOOLS": tools_str,
-            "SCOPE": scope_num,
+            "SESSION_VISIBILITY": session_visibility,
         })
 
         install_script = MAESTRO_DIR / "install.sh"
@@ -140,18 +130,9 @@ class SetupHandler(http.server.BaseHTTPRequestHandler):
         if result.returncode != 0:
             raise RuntimeError(result.stderr or result.stdout)
 
-        # Build tool instructions
-        instructions = []
-        if "claude-code" in tools:
-            instructions.append("<p>🔵 <strong>Claude Code:</strong> Open new conversation → type <code>/mae-explore</code></p>")
-        if "cursor" in tools:
-            instructions.append("<p>🟣 <strong>Cursor:</strong> Open project → AI chat → type <code>/mae-explore</code></p>")
-        if "codex" in tools:
-            instructions.append("<p>🟢 <strong>Codex:</strong> Instructions auto-loaded → type <code>/mae-explore</code></p>")
-
         return HTML_SUCCESS.format(
             project_name=project_name,
-            tool_instructions="\n".join(instructions),
+            session_visibility=session_visibility,
         )
 
 
@@ -159,9 +140,9 @@ def main():
     target = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(".").resolve()
     SetupHandler.target_dir = target
 
-    print(f"\n╔══════════════════════════════════════╗")
-    print(f"║    Maestro Setup Wizard              ║")
-    print(f"╚══════════════════════════════════════╝")
+    print(f"\n{'='*40}")
+    print(f"  Maestro Setup Wizard")
+    print(f"{'='*40}")
     print(f"\nTarget directory: {target}")
     print(f"Opening browser at http://localhost:{PORT} ...")
     print("Fill in the form and click 'Install'.")
@@ -175,7 +156,7 @@ def main():
     except KeyboardInterrupt:
         print("\nSetup cancelled.")
 
-    print("\n✓ Done. Server stopped.")
+    print("\nDone. Server stopped.")
 
 
 if __name__ == "__main__":
