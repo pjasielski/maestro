@@ -4,9 +4,11 @@
 
 ## What Is Maestro?
 
-Maestro turns Claude into a structured delivery partner. Instead of ad-hoc AI conversations, you get a repeatable workflow with tracked decisions, versioned artifacts, and a clear audit trail.
+Maestro turns AI coding tools into structured delivery partners. Instead of ad-hoc conversations, you get a repeatable workflow with tracked decisions, versioned artifacts, and a clear audit trail.
 
 It works for solo developers, small teams, and client engagements — adapting its depth to your project's complexity.
+
+**Supported tools:** Claude Code, Cursor, GitHub Copilot (Codex).
 
 ## Quick Start
 
@@ -23,7 +25,7 @@ git clone https://github.com/pjasielski/maestro.git /tmp/maestro
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 ```
 
-The installer creates the folder structure, copies framework files, and creates tracking files. It never overwrites existing files.
+The installer creates the folder structure, copies framework files, sets up tool adapters (Claude Code, Cursor, Codex), and creates tracking files. It never overwrites existing files.
 
 **Future:** `pip install maestro-delivery` / `uv add maestro-delivery` (Python CLI — planned).
 
@@ -32,9 +34,9 @@ The installer creates the folder structure, copies framework files, and creates 
 ```
 /mae-explore                  # Start exploring your project
 /mae-explore doc              # Generate final explore report
-/mae-prd                      # Formalize requirements into PRD
-/mae-design                   # Create technical architecture (SDD)
-/mae-plan                     # Break design into tasks
+/mae-req                      # Formalize requirements
+/mae-design                   # Create technical architecture
+/mae-plan                     # Create roadmap and tasks
 /mae-do                       # Execute tasks
 /mae-review                   # Review code and artifacts
 ```
@@ -43,30 +45,35 @@ The installer creates the folder structure, copies framework files, and creates 
 
 ### Delivery Commands
 
-| Command | What It Does |
-|---------|-------------|
-| `/mae-init` | Set up user/team profile after installation |
-| `/mae-explore` | Build understanding — analyze docs, topics, transcripts |
-| `/mae-explore ask` | Generate questions to deepen understanding (for user, client, team) |
-| `/mae-explore doc` | Synthesize final explore report from all artifacts |
-| `/mae-prd` | Generate Product Requirements Document from explore artifacts |
-| `/mae-design` | Create Solution Design Document from PRD |
-| `/mae-plan` | Break design into actionable tasks |
-| `/mae-do` | Execute a task (planned or ad-hoc) |
-| `/mae-review` | Review code or delivery artifacts |
-| `/mae-checkpoint` | Save a named snapshot of project state |
+| Command | Alias | What It Does |
+|---------|-------|-------------|
+| `/mae-init` | — | Set up user/team profile after installation |
+| `/mae-explore` | `mex` | Build understanding — analyze docs, topics, transcripts |
+| `/mae-explore ask` | — | Generate questions for user, client, team |
+| `/mae-explore doc` | — | Synthesize final explore report |
+| `/mae-req` | `mrq` | Generate requirements document from explore artifacts |
+| `/mae-design` | `mds` | Create technical design document from requirements |
+| `/mae-plan` | `mpl` | Create roadmap, enrich milestones, generate tasks |
+| `/mae-do` | `mdo` | Execute a task (planned or ad-hoc) |
+| `/mae-review` | `mrv` | Review code or delivery artifacts |
 
 ### Utility Commands
 
 | Command | What It Does |
 |---------|-------------|
 | `/status` | Project overview (phase, tasks, decisions, questions) |
-| `/status tasks` | Full task board |
-| `/status decisions` | Decision summary |
-| `/status questions` | Open questions by priority |
 | `/decide` | Record a decision in the audit trail |
-| `/sync` | Push decisions to canonical files |
+| `/sync` | End-of-session save — update HANDOFF, ROADMAP, DECISIONS |
 | `/md` | Save current response to a session file |
+
+### Aliases
+
+Every delivery command has a 3-letter shortcut for faster typing:
+
+```
+/mex  = /mae-explore     /mrq = /mae-req       /mds = /mae-design
+/mpl  = /mae-plan        /mdo = /mae-do        /mrv = /mae-review
+```
 
 ## How It Works
 
@@ -76,9 +83,9 @@ Commands save artifacts to `.sessions/` (your workbench). You review, then **pro
 
 ```
 /mae-explore  → session artifacts  ──promote──→  delivery/01-explore/
-/mae-prd      → PRD draft          ──promote──→  delivery/02-prd/PRD.md
-/mae-design   → SDD draft          ──promote──→  delivery/03-design/SDD.md
-/mae-plan     → task files          ──────────→  delivery/04-plan/tasks/
+/mae-req      → requirements draft ──promote──→  delivery/02-requirements/REQUIREMENTS.md
+/mae-design   → design draft       ──promote──→  delivery/03-design/DESIGN.md
+/mae-plan     → roadmap + tasks    ──────────→  delivery/04-plan/
 ```
 
 This keeps delivery/ clean — only confirmed, reviewed artifacts live there.
@@ -91,6 +98,18 @@ notes/ideas.md  →  OPEN_QUESTIONS.md  →  DECISIONS.md  →  Canonical files
 ```
 
 Nothing gets lost. Every idea has a path to becoming a decision.
+
+### Adaptive Workflow
+
+Not every project needs every command. Maestro suggests what to skip:
+
+```
+Simple project:   explore → do
+Medium project:   explore → design → plan → do
+Complex project:  explore → req → design → plan → do → review
+```
+
+Each command has a `## Skip When` section. The agent suggests but never blocks.
 
 ## Project Structure
 
@@ -107,27 +126,28 @@ your-project/
 ├── WORKLOG.md                ← Activity log
 ├── delivery/
 │   ├── 01-explore/           ← Confirmed explore artifacts
-│   ├── 02-prd/               ← PRD.md
-│   ├── 03-design/            ← SDD.md
-│   └── 04-plan/tasks/        ← Task files (the plan)
+│   ├── 02-requirements/      ← REQUIREMENTS.md
+│   ├── 03-design/            ← DESIGN.md
+│   └── 04-plan/              ← ROADMAP.md + tasks/
 ├── .sessions/                ← Working material (per-session)
 ├── notes/ideas.md            ← Raw ideas and parking lot
 ├── templates/                ← Document templates (customizable)
-└── .claude/commands/         ← Framework commands
+├── .maestro/commands/        ← Canonical command files
+├── .claude/commands/         ← Claude Code adapters + aliases
+└── .cursor/rules/            ← Cursor adapters
 ```
 
 ## Templates
 
-Maestro includes templates for key deliverables. Each has **core sections** (always included) and **optional sections** (marked with comments — include when relevant):
-
-| Template | Purpose | Core Sections | Optional Sections |
-|----------|---------|---------------|-------------------|
-| `prd.md` | Product Requirements | Problem, personas, goals, requirements, scope, stories, risks | Constraints, release strategy, glossary |
-| `sdd.md` | Solution Design | Overview, architecture, tech stack, data model, source structure, questions | AI/ML, integrations, infra, security, performance |
-| `explore.md` | Explore Report | Summary, business analysis, technical analysis, risks, questions, recommendations | Stakeholders, change readiness, data assessment, AI feasibility |
-| `task.md` | Task File | Description, acceptance criteria, files, notes | — |
-| `summary.md` | Session Summary | What was done, decisions, open items, next steps | — |
-| `report.md` | Command Report | Summary, output, flags, considerations, next steps | — |
+| Template | Purpose | Output File |
+|----------|---------|-------------|
+| `requirements.md` | Requirements document | `REQUIREMENTS.md` |
+| `design.md` | Technical design | `DESIGN.md` |
+| `roadmap.md` | Project roadmap with milestones | `ROADMAP.md` |
+| `explore.md` | Explore report | Session artifact |
+| `task.md` | Task file | `task-NNN.md` |
+| `summary.md` | Session summary | `_summary.md` |
+| `review.md` | Review report | Session artifact |
 
 Edit templates in `templates/` to match your team's standards.
 
@@ -145,8 +165,6 @@ session_visibility = "committed"  # or "gitignored"
 |---------|-------------|----------|
 | `"committed"` | In git | Solo projects, full audit trail |
 | `"gitignored"` | Gitignored | Teams where sessions are personal |
-
-Team features (e.g., "Who" column in WORKLOG.md) activate automatically when `[[team.members]]` is defined in `maestro.toml`.
 
 ## User / Team Profile
 
@@ -167,37 +185,21 @@ strengths = ["backend", "python"]
 needs_help = ["frontend"]
 ```
 
-The agent adapts: deeper assistance in unfamiliar areas, lighter in strengths. Set up during `/mae-init` or add manually.
+The agent adapts: deeper assistance in unfamiliar areas, lighter in strengths.
 
-## Customization
+## Multi-Tool Support
 
-### Adding Custom Commands
+Maestro works across AI coding tools. Canonical command files live in `.maestro/commands/`. Each tool gets thin adapters:
 
-Create a `.md` file in `.claude/commands/`:
-- `mae-{name}.md` for delivery commands
-- `{name}.md` for utility commands
-
-Follow existing command files for format: title, arguments, behavior, rules.
-
-### Extending Delivery Structure
-
-Add folders to `delivery/` for project-specific needs:
-- `delivery/05-review/` — created on demand for formal reviews
-- `delivery/06-test/` — test plans and strategies
-- `delivery/07-deploy/` — deployment configuration
-- `delivery/08-compliance/` — for regulated projects
-
-## Documentation
-
-| Document | Purpose |
-|----------|---------|
-| `README.md` | Quick start and overview (this file) |
-| `docs/user-guide.md` | How-to guide for the delivery workflow |
-| `docs/reference.md` | Complete reference — every concept, command, and decision explained |
+| Tool | Adapter Location | How Commands Work |
+|------|-----------------|-------------------|
+| **Claude Code** | `.claude/commands/` | `/mae-explore` or `/mex` — autocomplete works |
+| **Cursor** | `.cursor/rules/` | Type `mae-explore` or `mex` in chat — dispatch rule loads the command |
+| **Codex** | `.github/copilot-instructions.md` | Type command name in chat |
 
 ## Requirements
 
-- [Claude Code](https://claude.com/claude-code) CLI
+- An AI coding tool: [Claude Code](https://claude.com/claude-code), [Cursor](https://cursor.sh), or GitHub Copilot
 - A project directory
 
 ## License

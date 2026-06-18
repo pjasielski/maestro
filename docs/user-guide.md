@@ -71,10 +71,10 @@ Choose what fits your project. The phases below describe each tool, not a mandat
 **Goal:** Formalize what you're building.
 
 ```
-/mae-prd
+/mae-req
 ```
 
-Reads your explore artifacts and generates a Product Requirements Document using `templates/prd.md`. The PRD is saved as a draft in your session — review it, request changes, then promote to `delivery/02-prd/PRD.md`.
+Reads your explore artifacts and generates a Product Requirements Document using `templates/requirements.md`. The PRD is saved as a draft in your session — review it, request changes, then promote to `delivery/02-requirements/REQUIREMENTS.md`.
 
 **Template sections:** 7 core (always included) + 3 optional (constraints, release strategy, glossary — include when relevant).
 
@@ -88,7 +88,7 @@ Reads your explore artifacts and generates a Product Requirements Document using
 /mae-design src/api/routes.py     # File-level spec
 ```
 
-Works top-down: full architecture first, then drill into components and files. The agent reads both the PRD and the explore report's technical sections for context. Before generating the SDD, it presents a technical questionnaire for decisions it can't make from available information (tech stack, architecture patterns, deployment model). The SDD is drafted in your session, then promoted to `delivery/03-design/SDD.md`.
+Works top-down: full architecture first, then drill into components and files. The agent reads both the PRD and the explore report's technical sections for context. Before generating the SDD, it presents a technical questionnaire for decisions it can't make from available information (tech stack, architecture patterns, deployment model). The SDD is drafted in your session, then promoted to `delivery/03-design/DESIGN.md`.
 
 If the design process reveals missing information, the agent suggests running additional explore commands to fill the gap.
 
@@ -138,7 +138,7 @@ If you start working without naming a session, the agent will ask: "Should I ope
 
 - `_summary.md` — Living summary of what happened (auto-updated)
 - `NN_description.md` — Numbered working artifacts (analysis, drafts, reports)
-- `checkpoints/` — Project state snapshots (via `/mae-checkpoint`)
+- `checkpoints/` — Project state snapshots (via `/mae-checkpoint (removed — use sync)`)
 
 ---
 
@@ -184,10 +184,10 @@ Used in `_summary.md` to track lifecycle:
 Save named snapshots for progress tracking:
 
 ```
-/mae-checkpoint pre-design       # Before starting design
-/mae-checkpoint sprint-1-end     # End of sprint
-/mae-checkpoint list             # See all checkpoints
-/mae-checkpoint compare pre-design sprint-1-end  # See what changed
+/mae-checkpoint (removed — use sync) pre-design       # Before starting design
+/mae-checkpoint (removed — use sync) sprint-1-end     # End of sprint
+/mae-checkpoint (removed — use sync) list             # See all checkpoints
+/mae-checkpoint (removed — use sync) compare pre-design sprint-1-end  # See what changed
 ```
 
 ---

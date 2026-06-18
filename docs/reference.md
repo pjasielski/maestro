@@ -166,8 +166,8 @@ your-project/
 │
 ├── delivery/                    ← Confirmed, canonical artifacts
 │   ├── 01-explore/              ← Explore report + confirmed analysis
-│   ├── 02-prd/                  ← PRD.md
-│   ├── 03-design/               ← SDD.md
+│   ├── 02-requirements/                  ← REQUIREMENTS.md
+│   ├── 03-design/               ← DESIGN.md
 │   ├── 04-plan/                 ← PLAN.md + tasks/
 │   │   └── tasks/               ← Task files (individual tickets)
 │   └── 08-maintenance/          ← On-demand: bugs & maintenance
@@ -194,13 +194,13 @@ your-project/
 │
 ├── .claude/commands/            ← Framework commands
 │   ├── mae-explore.md           ← Delivery commands (8)
-│   ├── mae-prd.md
+│   ├── mae-req.md
 │   ├── mae-design.md
 │   ├── mae-plan.md
 │   ├── mae-do.md
 │   ├── mae-review.md
 │   ├── mae-init.md
-│   ├── mae-checkpoint.md
+│   ├── mae-checkpoint (removed — use sync).md
 │   ├── status.md                ← Utility commands (4)
 │   ├── decide.md
 │   ├── sync.md
@@ -261,19 +261,19 @@ The most sophisticated command. Adapts to project state and produces the most us
 - Tracks readiness signals (scope, coverage, gaps) and updates `_summary.md`
 - Final report uses `templates/explore.md`
 
-### /mae-prd — Formalize Requirements
+### /mae-req — Formalize Requirements
 
-Generates PRD from explore artifacts using `templates/prd.md`.
+Generates PRD from explore artifacts using `templates/requirements.md`.
 
 **Key behaviors:**
 - Prioritizes reading the final explore report over individual artifacts
 - Warns if explore report has unresolved gaps
 - Populates user stories (Section 6) with concrete stories and acceptance criteria
-- Saves draft to session, offers promotion to `delivery/02-prd/PRD.md`
+- Saves draft to session, offers promotion to `delivery/02-requirements/REQUIREMENTS.md`
 
 ### /mae-design — Technical Architecture
 
-Creates SDD from PRD + explore report using `templates/sdd.md`.
+Creates SDD from PRD + explore report using `templates/design.md`.
 
 **Modes:**
 - No arguments → full solution design
@@ -284,7 +284,7 @@ Creates SDD from PRD + explore report using `templates/sdd.md`.
 - Reads both PRD and explore report (technical sections)
 - Presents technical questionnaire before generating SDD (for decisions it can't make)
 - Cross-phase awareness: suggests running `/mae-explore` when information is missing
-- Saves draft to session, offers promotion to `delivery/03-design/SDD.md`
+- Saves draft to session, offers promotion to `delivery/03-design/DESIGN.md`
 
 ### /mae-plan — Break Into Tasks
 
@@ -307,7 +307,7 @@ Universal task executor. Handles code, docs, config, PoCs.
 
 Reviews code or delivery artifacts against the SDD and PRD.
 
-### /mae-checkpoint — Save Snapshot
+### /mae-checkpoint (removed — use sync) — Save Snapshot
 
 Creates named snapshots of project state for progress tracking.
 
@@ -389,7 +389,7 @@ Formalize what you're building. Transform the understanding from exploration int
 2. Individual explore artifacts (fallback if no report)
 3. DECISIONS.md, OPEN_QUESTIONS.md
 4. maestro.toml (project context)
-5. templates/prd.md (structure)
+5. templates/requirements.md (structure)
 
 The PRD does NOT read raw sources (docs/, data/). That's explore's job. The explore report should contain everything the PRD needs.
 
@@ -415,7 +415,7 @@ Define how to build it. Translate product requirements into technical architectu
 2. Explore report (technical context — current state, constraints, integrations)
 3. DECISIONS.md (confirmed technical decisions)
 4. maestro.toml (user profile for adaptation)
-5. templates/sdd.md (structure)
+5. templates/design.md (structure)
 
 ### Technical Questionnaire
 
@@ -654,8 +654,8 @@ Ask without a command only when:
 | File | Target | Max |
 |------|--------|-----|
 | HANDOFF.md | 200-300 lines | 400 |
-| PRD.md | 1,500-3,000 words | 5,000 |
-| SDD.md | 2,000-4,000 words | 6,000 |
+| REQUIREMENTS.md | 1,500-3,000 words | 5,000 |
+| DESIGN.md | 2,000-4,000 words | 6,000 |
 | Task file | 200-500 words | 800 |
 
 ---

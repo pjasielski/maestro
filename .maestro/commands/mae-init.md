@@ -55,7 +55,7 @@ $ARGUMENTS — optional: project name
 4. Save report to session folder
 
 ## What init does NOT do
-- Create folder structure (that's `install.sh`)
+- Create folder structure (that's `install.sh` — creates delivery/01-explore/, 02-requirements/, 03-design/, 04-plan/)
 - Create tracking files (that's `install.sh`)
 - Set up source code structure (that's a `/mae-do` task after `/mae-design`)
 - Choose tech stack (that's `/mae-explore` and `/mae-design`)

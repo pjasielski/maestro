@@ -43,14 +43,14 @@ Apply per-command: `/mae-explore -v` produces a verbose report. `/mae-explore -c
 
 ### Output Behaviors by Command Type
 
-| Command | Auto-include                                                                          |
-| ------- | ------------------------------------------------------------------------------------- |
-| explore | Surface questions. Flag unknowns. Compare options when multiple approaches exist.     |
-| prd     | Flag ambiguities. Note assumptions. Identify missing requirements.                    |
-| design  | List trade-offs as tables. State recommendation with rationale. Compare alternatives. |
-| plan    | Flag dependencies and blockers. Estimate effort. Sequence tasks logically.            |
-| do      | Report what was done. Flag issues found. Show verification results.                   |
-| review  | List findings by severity. Suggest concrete fixes. Cross-reference with SDD/PRD.      |
+| Command | Auto-include                                                                                   |
+| ------- | ---------------------------------------------------------------------------------------------- |
+| explore | Surface questions. Flag unknowns. Compare options when multiple approaches exist.              |
+| req     | Flag ambiguities. Note assumptions. Identify missing requirements.                             |
+| design  | List trade-offs as tables. State recommendation with rationale. Compare alternatives.          |
+| plan    | Flag dependencies and blockers. Estimate effort. Sequence tasks logically.                     |
+| do      | Report what was done. Flag issues found. Show verification results.                            |
+| review  | List findings by severity. Suggest concrete fixes. Cross-reference with DESIGN/REQUIREMENTS.   |
 
 ---
 
@@ -78,14 +78,14 @@ If the user doesn't provide a title and jumps into work, ask: "Should I open a s
 
 | Task                         | Load                                                                        | Skip                          |
 | ---------------------------- | --------------------------------------------------------------------------- | ----------------------------- |
-| **Exploration**        | HANDOFF.md, delivery/01-explore/                                            | Code, SDD, plan               |
-| **PRD writing**        | HANDOFF.md, delivery/01-explore/, DECISIONS.md                              | Code, SDD                     |
-| **Design**             | HANDOFF.md, PRD.md, delivery/01-explore/ (technical sections), maestro.toml | Code, test files              |
-| **Planning**           | HANDOFF.md, SDD.md, existing tasks                                          | Full code, exploration        |
-| **Implementation**     | HANDOFF.md, task file, SDD.md (relevant section), source files              | Other tasks, exploration, PRD |
-| **Code review**        | HANDOFF.md, SDD.md, files being reviewed                                    | Exploration, planning         |
-| **Testing**            | HANDOFF.md, task file, source code, SDD (expected behaviour)                | Exploration, planning         |
-| **Debugging**          | HANDOFF.md, error context, source files, SDD                                | Everything unrelated          |
+| **Exploration**        | HANDOFF.md, delivery/01-explore/                                                        | Code, design, plan                 |
+| **Requirements**       | HANDOFF.md, delivery/01-explore/, DECISIONS.md                                          | Code, design                       |
+| **Design**             | HANDOFF.md, REQUIREMENTS.md, delivery/01-explore/ (technical sections), maestro.toml    | Code, test files                   |
+| **Planning**           | HANDOFF.md, DESIGN.md, ROADMAP.md, existing tasks                                       | Full code, exploration             |
+| **Implementation**     | HANDOFF.md, task file, DESIGN.md (relevant section), source files                       | Other tasks, exploration, req      |
+| **Code review**        | HANDOFF.md, DESIGN.md, files being reviewed                                              | Exploration, planning              |
+| **Testing**            | HANDOFF.md, task file, source code, DESIGN.md (expected behaviour)                      | Exploration, planning              |
+| **Debugging**          | HANDOFF.md, error context, source files, DESIGN.md                                       | Everything unrelated               |
 | **Session management** | HANDOFF.md, DECISIONS.md, OPEN_QUESTIONS.md                                 | Code, delivery docs           |
 
 ### Context Budget
@@ -106,9 +106,9 @@ Activity log                → WORKLOG.md
 Project config              → maestro.toml
 
 Exploration artifacts       → delivery/01-explore/
-Requirements (PRD)          → delivery/02-prd/
-Architecture (SDD)          → delivery/03-design/
-Implementation plan & tasks → delivery/04-plan/ and delivery/04-plan/tasks/
+Requirements               → delivery/02-requirements/REQUIREMENTS.md
+Design (architecture)      → delivery/03-design/DESIGN.md
+Roadmap & tasks            → delivery/04-plan/ROADMAP.md and delivery/04-plan/tasks/
 Review artifacts            → delivery/05-review/  (created on demand)
 Test artifacts              → delivery/06-test/    (created on demand)
 Deployment config           → delivery/07-deploy/  (created on demand)
@@ -139,7 +139,7 @@ Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-disp
 ### Decision Protection
 
 - NEVER change established architecture decisions without user approval
-- When you spot an inconsistency between code and SDD, flag it: `CONSISTENCY: [details]`
+- When you spot an inconsistency between code and DESIGN.md, flag it: `CONSISTENCY: [details]`
 - Treat `delivery/` artifacts as canonical truth for requirements and design
 - `.sessions/` and `notes/` are working material, NOT canonical
 
@@ -196,7 +196,7 @@ Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-disp
 | `GAP:`         | Missing information relevant to current work    |
 | `UNCLEAR:`     | Ambiguous requirement                           |
 | `STALE:`       | Delivery artifact references outdated decisions |
-| `DRIFT:`       | Code diverges from SDD                          |
+| `DRIFT:`       | Code diverges from DESIGN.md                    |
 
 ### Auto-Update Triggers for _summary.md
 
@@ -221,7 +221,7 @@ Every substantive response (proposal, analysis, draft, comparison) MUST be saved
 
 1. Ambiguity blocks the current task
 2. A contradiction between artifacts is detected
-3. An implementation task references a component not in the SDD
+3. An implementation task references a component not in DESIGN.md
 4. A security or data concern is spotted
 
 NEVER proactively ask about future phases, technology preferences when the stack is decided, or topics unrelated to the current task.
@@ -253,29 +253,28 @@ Use in `_summary.md` to track decision lifecycle:
 
 ## Delivery Phases
 
-8 commands. Not all projects need all phases — the user decides which to use and in what order.
+7 delivery commands + 4 utility commands. Not all projects need all phases — the user decides which to use and in what order.
 
-**Maestro does not enforce a rigid sequence.** Phases are tools, not gates. The user can revisit any phase, skip phases, or run them in any order that fits the project. Common patterns:
+**Maestro does not enforce a rigid sequence.** Phases are tools, not gates. The user can revisit any phase, skip phases, or run them in any order that fits the project. Each command has a `## Skip When` section describing when to skip it. Common patterns:
 
 ```
-Standard:   explore → prd → design → plan → do → review
-PoC-first:  explore (light) → do (PoC) → [feedback] → explore (refined) → prd → design → do
+Standard:   explore → req → design → plan → do → review
+PoC-first:  explore (light) → do (PoC) → [feedback] → explore (refined) → req → design → do
 Fast-track: explore → design → do → review
-Iterative:  explore → prd → do (MVP) → [feedback] → explore → prd (revised) → do
+Iterative:  explore → req → do (MVP) → [feedback] → explore → req (revised) → do
 ```
 
 The agent should suggest next steps based on what exists, but never block the user from choosing a different path.
 
-| #  | Phase      | Command             | Output                                                    |
-| -- | ---------- | ------------------- | --------------------------------------------------------- |
-| 01 | Explore    | `/mae-explore`    | Understanding docs, questions, gaps, readiness assessment |
-| 02 | PRD        | `/mae-prd`        | PRD.md — formalized requirements                         |
-| 03 | Design     | `/mae-design`     | SDD.md — technical architecture                          |
-| 04 | Plan       | `/mae-plan`       | PLAN.md, tasks/ — implementation roadmap                 |
-| — | Do         | `/mae-do`         | Executed work (code, docs, config, PoCs)                  |
-| — | Review     | `/mae-review`     | Review findings, suggestions                              |
-| — | Init       | `/mae-init`       | Project scaffold (run once at start)                      |
-| — | Checkpoint | `/mae-checkpoint` | Named snapshot of project state                           |
+| #  | Phase        | Command           | Alias  | Output                                                    |
+| -- | ------------ | ----------------- | ------ | --------------------------------------------------------- |
+| 01 | Explore      | `/mae-explore`  | `mex` | Understanding docs, questions, gaps, readiness assessment |
+| 02 | Requirements | `/mae-req`      | `mrq` | REQUIREMENTS.md — formalized requirements                |
+| 03 | Design       | `/mae-design`   | `mds` | DESIGN.md — technical architecture                       |
+| 04 | Plan         | `/mae-plan`     | `mpl` | ROADMAP.md + tasks/ — milestones and task files          |
+| —  | Do           | `/mae-do`       | `mdo` | Executed work (code, docs, config, PoCs)                  |
+| —  | Review       | `/mae-review`   | `mrv` | Review findings, suggestions                              |
+| —  | Init         | `/mae-init`     | —      | Profile setup (run once at start)                         |
 
 ### On-Demand Phases
 
@@ -299,21 +298,45 @@ Session (workbench)                     Delivery (confirmed)
   → working artifacts (session)  ──promote──→  delivery/01-explore/
   → /mae-explore doc (session)   ──promote──→  delivery/01-explore/
 
-/mae-prd
+/mae-req
   ← reads delivery/01-explore/*
-  → PRD draft (session)          ──promote──→  delivery/02-prd/PRD.md
+  → requirements draft (session)  ──promote──→  delivery/02-requirements/REQUIREMENTS.md
 
 /mae-design
-  ← reads delivery/02-prd/PRD.md
-  → SDD draft (session)          ──promote──→  delivery/03-design/SDD.md
+  ← reads delivery/02-requirements/REQUIREMENTS.md
+  → design draft (session)        ──promote──→  delivery/03-design/DESIGN.md
 
 /mae-plan
-  ← reads delivery/03-design/SDD.md
+  ← reads delivery/03-design/DESIGN.md
+  → ROADMAP.md                    ──────────→  delivery/04-plan/ROADMAP.md
   → task files                    ──────────→  delivery/04-plan/tasks/
 ```
 
 All commands save to `.sessions/` first. User reviews, then promotes to `delivery/` when ready.
-Exception: `/mae-plan` saves tasks directly to delivery/ (they're immediately actionable).
+Exception: `/mae-plan` saves ROADMAP and tasks directly to delivery/ (they're immediately actionable).
+
+### Adaptive Workflow Guidance
+
+After each command, ask yourself whether to proceed or skip:
+
+```
+After /mae-explore:
+  "Can I describe what to build in 2 sentences?"
+    Yes → skip req, go to /mae-design or /mae-do
+    No  → run /mae-req to formalize requirements
+
+After /mae-req or /mae-design:
+  "Is there more than one milestone of work?"
+    Yes → run /mae-plan to sequence it
+    No  → go straight to /mae-do
+
+After /mae-do:
+  "Did I complete a planned task?"
+    Yes → ROADMAP status updated; suggest /sync at end of session
+    No  → continue or suggest next task
+```
+
+This is soft guidance — the agent suggests, the user decides.
 
 ---
 
@@ -323,10 +346,11 @@ Exception: `/mae-plan` saves tasks directly to delivery/ (they're immediately ac
 
 | File                  | Purpose                                                   | Updated By                         |
 | --------------------- | --------------------------------------------------------- | ---------------------------------- |
-| `HANDOFF.md`        | Single source of truth — status, decisions, architecture | `/sync` (with review)            |
-| `DECISIONS.md`      | Decision audit trail — date, session, decision, status   | `/decide` (free zone)            |
-| `OPEN_QUESTIONS.md` | Questions needing answers — prioritized                  | `/decide` resolves               |
+| `HANDOFF.md`        | Single source of truth — status, decisions, architecture | `/sync` (with review)             |
+| `DECISIONS.md`      | Decision audit trail — date, session, decision, status   | `/decide` (free zone)             |
+| `OPEN_QUESTIONS.md` | Questions needing answers — prioritized                  | `/decide` resolves                |
 | `WORKLOG.md`        | Activity log — date, session, summary                    | Auto-updated at session boundaries |
+| `ROADMAP.md`        | Milestone tracker with status column                     | `/mae-plan`, `/mae-do`, `/sync`  |
 
 ### Session Structure
 
@@ -461,9 +485,9 @@ If no profile is configured, the agent behaves generically (no adaptation). This
 
 | File        | Target             | Hard Max    |
 | ----------- | ------------------ | ----------- |
-| HANDOFF.md  | 200–300 lines     | 400 lines   |
-| PRD.md      | 1,500–3,000 words | 5,000 words |
-| SDD.md      | 2,000–4,000 words | 6,000 words |
+| HANDOFF.md       | 200–300 lines     | 400 lines   |
+| REQUIREMENTS.md  | 1,500–3,000 words | 5,000 words |
+| DESIGN.md        | 2,000–4,000 words | 6,000 words |
 | Task file   | 200–500 words     | 800 words   |
 | _summary.md | 200–400 words     | 600 words   |
 

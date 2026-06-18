@@ -1,10 +1,10 @@
-# PRD: Maestro — AI-Assisted Project Delivery Framework
+# REQUIREMENTS: Maestro — AI-Assisted Project Delivery Framework
 
-**Date:** 2026-06-10
-**Version:** v0.1.0 (alpha)
+**Date:** 2026-06-18
+**Version:** v0.2.0
 **Status:** Draft — reconciled
 **Explore report:** .sessions/003-framework-evolution/, .sessions/005-review/
-**Changes from 009 version:** Aligned versioning (v0.1.0), session visibility model, PoC flag approach, installer simplification, .sessions/ convention
+**Changes from v0.1:** Renamed from PRD.md. Activity-based command names (mae-req, mae-design). REQUIREMENTS.md/DESIGN.md as universal artifact names. Session 010 consolidation decisions.
 
 ---
 
@@ -161,7 +161,7 @@ Technical professionals working with AI tools experience:
 | Story ID | User Story | Acceptance Criteria | Priority |
 |---|---|---|---|
 | US-1.1 | As a developer, I want to run /mae-explore to analyze documents and build understanding so that I don't start designing with incomplete knowledge | Explore command produces structured analysis with questions, gaps, and readiness assessment | Must |
-| US-1.2 | As a developer, I want /mae-prd to generate a PRD from explore artifacts so that requirements are formalized and traceable | PRD follows template, references explore findings, flags ambiguities | Must |
+| US-1.2 | As a developer, I want /mae-req to generate a requirements document from explore artifacts so that requirements are formalized and traceable | PRD follows template, references explore findings, flags ambiguities | Must |
 | US-1.3 | As an architect, I want /mae-design to produce an SDD with a technical questionnaire so that design decisions are explicit and reasoned | SDD covers architecture, tech stack, data model, source structure; questionnaire surfaces decisions needing human input | Must |
 | US-1.4 | As a developer, I want /mae-plan to break the SDD into task files so that I have actionable work items | Task files created in delivery/04-plan/tasks/ with statuses, effort estimates, and dependency info | Must |
 | US-1.5 | As a developer, I want /mae-do to execute tasks (planned or ad-hoc) so that I can implement with AI assistance while maintaining traceability | Execution reports saved to session; task status updated on completion | Must |
@@ -216,8 +216,8 @@ Technical professionals working with AI tools experience:
 | Story ID | User Story | Acceptance Criteria | Priority |
 |---|---|---|---|
 | US-6.1 | As a developer, I want to add `poc` to any delivery command so that I get a lighter, prototype-focused version of the artifact | All delivery commands accept `poc` flag; output includes PoC banner, limitations section, and production delta section | Should |
-| US-6.2 | As a developer, I want PoC artifacts stored as separate files so that they can coexist with production artifacts during transition | PoC artifacts named `PRD-poc.md`, `SDD-poc.md`, etc.; archived to `delivery/poc/` when production versions are ready | Should |
-| US-6.3 | As a developer, I want production commands to use my PoC artifact as a starting point so that I don't redo work | Running `/mae-prd` when `PRD-poc.md` exists reads the PoC version and expands it | Should |
+| US-6.2 | As a developer, I want PoC artifacts stored as separate files so that they can coexist with production artifacts during transition | PoC artifacts named `REQUIREMENTS-poc.md`, `SDD-poc.md`, etc.; archived to `delivery/poc/` when production versions are ready | Should |
+| US-6.3 | As a developer, I want production commands to use my PoC artifact as a starting point so that I don't redo work | Running `/mae-req` when `REQUIREMENTS-poc.md` exists reads the PoC version and expands it | Should |
 
 ---
 

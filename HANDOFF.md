@@ -1,92 +1,93 @@
 # HANDOFF.md — Maestro Framework
 
 ## Current Status
-- **Phase:** bootstrap → packaging (v0.1.0 alpha)
-- **Last worked on:** 2026-06-10 — Milestone 1 (Foundation & Stability)
-- **Active branch:** `main`
-- **Version:** v0.1.0 (tagged)
-- **Next priorities:** Milestone 1 items — see ROADMAP.md
+- **Phase:** bootstrap → packaging (v0.2.0)
+- **Last worked on:** 2026-06-18 — v0.2 implementation (command renames, aliases, Cursor support, ROADMAP restructure)
+- **Active branch:** `dev`
+- **Version:** v0.2.0
+- **Next priorities:** Installer simplification (item 1.1), remaining Milestone 1 items
 - **Blockers:** None
 
-## Next Priorities (from poc session 003-framework-evolution)
+## Recent Changes (2026-06-18) — v0.2.0
 
-### Immediate (dev branch)
-1. **`.maestro/commands/` Phase 1** — commands still in `.claude/commands/`, need to populate `.maestro/commands/` and make `.claude/commands/` thin wrappers. install.sh does this for new installs; existing installs need migration.
-2. **Output tiers in MAESTRO.md** ✓ done — standard/-v/-c
-3. **Cursor setup** — install.sh now generates `.cursor/rules/` ✓
-4. **mae-review references template** — verify `.claude/commands/mae-review.md` references `templates/review.md`
-5. **Setup wizard** ✓ done — `setup/index.html` + `setup/server.py`
+### Command Changes
+- Renamed `mae-prd` → `mae-req` (output: REQUIREMENTS.md)
+- Renamed output: `SDD.md` → `DESIGN.md`
+- Absorbed `mae-checkpoint` into `sync` (expanded scope: HANDOFF + ROADMAP status + DECISIONS + delta summary)
+- Added `## Skip When` section to all delivery commands (soft guidance)
+- Rewrote `mae-plan` — now owns ROADMAP lifecycle (create, enrich milestones, generate tasks)
+- Updated `mae-do` — updates ROADMAP Status column after task completion
 
-### Soon
-6. **mae-init tool selection** — update `/mae-init` command to ask which tools during interactive init (matching new install.sh flow)
-7. **README update** — document Cursor and Codex setup options
-8. **Test on real project** — use Maestro + Cursor at work project
+### Aliases (3-letter shortcuts)
+| Canonical | Alias |
+|-----------|-------|
+| `mae-explore` | `mex` |
+| `mae-req` | `mrq` |
+| `mae-design` | `mds` |
+| `mae-plan` | `mpl` |
+| `mae-do` | `mdo` |
+| `mae-review` | `mrv` |
 
-### Medium term
-9. **Python CLI** (`uvx maestro init`) — replaces install.sh for non-technical users
-10. **GitHub Pages** — host `setup/index.html` at maestro.tools/setup
-11. **Symphony app** — web UI vision
+### File/Folder Structure
+- `delivery/02-prd/` → `delivery/02-requirements/` (REQUIREMENTS.md)
+- `delivery/03-design/` → `delivery/03-design/` (DESIGN.md, was SDD.md)
+- `ROADMAP.md` moved from root → `delivery/04-plan/ROADMAP.md`
+- ROADMAP now has Status column: ☐ todo | 🔄 in progress | ⏳ blocked | ✅ done | ⊘ dropped
+- PLAN.md eliminated — execution notes go into ROADMAP milestone sections
+- Templates renamed: `prd.md` → `requirements.md`, `sdd.md` → `design.md`
 
-## Recent Changes (2026-05-20)
-- Added `.gitignore` (.sessions/ gitignored)
+### Multi-Tool Support
+- Added `.cursor/rules/maestro-core.mdc` + `maestro-dispatch.mdc`
+- Updated `install.sh` — creates Cursor adapters, alias files, simplified setup flow
+- Updated `.github/copilot-instructions.md` for Codex
+
+## Previous Changes (2026-06-10)
+- Created ROADMAP.md (5 milestones + future items)
+- Reconciled PRD.md and SDD.md — promoted to delivery/
+- Implemented Milestone 1 items (sessions standardization, version tagging)
+
+## Previous Changes (2026-05-20)
 - Added output tiers (-v/-c) to MAESTRO.md
-- Rewrote install.sh: interactive prompts, Cursor + Codex support, --quick and --preconfigured modes
-- Created `setup/index.html` — static HTML wizard + `setup/server.py` — local browser-based setup
-- Updated MAESTRO.md: `.maestro/commands/` reference, output tiers
-- Created `archive/v0.3` branch; merged to `main`
-
-## Previous Changes (2026-04-22)
-- Rewrote explore command: readiness signals (replace artifact count), context scanning, `ask` sub-command, questions as first-class output
-- Created explore-lite variant for A/B testing (questions encouraged vs mandatory)
-- Updated PRD command: prioritize final explore report, gap checking, user stories emphasis
-- Updated design command: reads explore report for tech context, technical questionnaire before SDD, cross-phase awareness
-- Added user/team profile support: `[user]` (solo) / `[[team.members]]` (team) in `maestro.toml`
-- Dropped 5 utility commands (probe, question, recap, update-worklog, update-session) — now 4 utility commands
-- Updated MAESTRO.md, README.md, user guide, init command
-
-### Previous Changes (2026-04-20)
-- Renamed all commands: colons → dashes (`/mae:explore` → `/mae-explore`), flat files
-- Implemented sessions-first artifact flow
-- Created templates: prd.md, sdd.md, explore.md (core + optional pattern)
-- Created install.sh, README.md, docs/user-guide.md
-- Created /mae-checkpoint command
+- Rewrote install.sh: interactive prompts, Cursor + Codex support
+- Created setup wizard (setup/index.html + setup/server.py)
 
 ## Project Overview
 - **Name:** Maestro
-- **Description:** AI-assisted delivery framework. 8 delivery commands + 4 utility commands. Sessions-first workflow, decision tracking, task management via markdown files. Designed for architects, developers, PMs, and founders.
+- **Description:** AI-assisted delivery framework. 7 delivery commands + 4 utility commands + 6 aliases. Sessions-first workflow, decision tracking, task management via markdown files.
 - **Stack:** Markdown-first (commands as `.md` files), TOML config (`maestro.toml`), future CLI in Python
-- **Platform vision:** Standalone framework → Symphony app (lightweight web/desktop app with editor, AI agent, file management)
+- **Multi-tool:** Claude Code (`.claude/commands/`), Cursor (`.cursor/rules/`), Codex (`.github/copilot-instructions.md`)
 
 ## Architecture Decisions
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
 | Framework name | Maestro (`mae-`) | Music theme, fits Symphony platform |
 | Config format | TOML | Python native, no indent bugs |
-| Command naming | Dashes (`/mae-explore`) | Flat files, easier typing than colons |
+| Command naming | Activity-based (`mae-req`, `mae-design`) | Universal, not tied to doc format names |
+| Artifact naming | Universal terms (`REQUIREMENTS.md`, `DESIGN.md`) | Works across companies regardless of internal naming |
 | Artifact flow | Sessions-first | All output to .sessions/, promote to delivery/ when ready |
-| Explore behavior | Adaptive + readiness signals | Smart default, targeted, ask, doc modes |
-| Templates | Core + optional pattern | HTML comments mark optional sections |
-| User profile | `[user]` / `[[team.members]]` in maestro.toml | Optional, adapts agent behavior to expertise |
-| Utility commands | 4 commands (decide, sync, status, md) | Reduced from 9; dropped commands absorbed by explore ask, status, and auto-triggers |
+| ROADMAP location | `delivery/04-plan/ROADMAP.md` | Consistent with delivery folder convention |
+| PLAN.md | Eliminated — merged into ROADMAP | One file for strategic + tactical view |
+| Checkpoint | Absorbed into `/sync` | Sync is the natural end-of-session save point |
+| Aliases | 3-letter shortcuts (mex, mrq, mds, mpl, mdo, mrv) | Faster typing; canonical names for docs |
+| Skip guidance | Soft — agent suggests, user decides | Framework guides but never blocks |
 
 ## Commands
-### Delivery (8)
-| Command | Purpose |
-|---------|---------|
-| `/mae-init` | Scaffold framework, configure mode and user profile |
-| `/mae-explore` | Build understanding — smart default, targeted, ask, doc |
-| `/mae-prd` | Formalize requirements from explore report |
-| `/mae-design` | Technical architecture with questionnaire |
-| `/mae-plan` | Break design into task files |
-| `/mae-do` | Execute tasks (planned or ad-hoc) |
-| `/mae-review` | Review code or artifacts |
-| `/mae-checkpoint` | Save named project snapshots |
+### Delivery (7)
+| Command | Alias | Purpose |
+|---------|-------|---------|
+| `/mae-init` | — | Profile setup after installation |
+| `/mae-explore` | `mex` | Build understanding — smart default, targeted, ask, doc |
+| `/mae-req` | `mrq` | Formalize requirements from explore report |
+| `/mae-design` | `mds` | Technical architecture from requirements |
+| `/mae-plan` | `mpl` | Create/update ROADMAP, generate task files |
+| `/mae-do` | `mdo` | Execute tasks (planned or ad-hoc) |
+| `/mae-review` | `mrv` | Review code or artifacts |
 
 ### Utility (4)
 | Command | Purpose |
 |---------|---------|
 | `/decide` | Record decision in audit trail |
-| `/sync` | Push decisions to canonical files |
+| `/sync` | End-of-session save — update HANDOFF, ROADMAP status, DECISIONS, checkpoint |
 | `/status` | Project overview + sub-commands (tasks, decisions, questions) |
 | `/md` | Save response to session file |
 
@@ -97,16 +98,11 @@
 | Project config | `CLAUDE.md` |
 | Framework settings | `maestro.toml` |
 | Explore artifacts | `delivery/01-explore/` |
-| Requirements | `delivery/02-prd/PRD.md` |
-| Architecture | `delivery/03-design/SDD.md` |
+| Requirements | `delivery/02-requirements/REQUIREMENTS.md` |
+| Design/Architecture | `delivery/03-design/DESIGN.md` |
+| Roadmap | `delivery/04-plan/ROADMAP.md` |
 | Tasks | `delivery/04-plan/tasks/` |
-| Templates | `templates/` (task, summary, report, prd, sdd, explore) |
-| Session history | `.sessions/001-framework-bootstrap/` |
-| Design decisions | `.sessions/001-framework-bootstrap/11_design_decisions_reference.md` |
-| Latest report | `.sessions/001-framework-bootstrap/15_implementation_report.md` |
-
-## Open Considerations
-- **PoC pathway:** Framework may feel too sequential; document alternative pathways (PoC-first, fast-track, iterative)
-- **Init vs Install overlap:** Reconcile install.sh and mae-init so either entry point works for any user
-- **Symphony app:** Lightweight web/desktop app built on Maestro — see `.sessions/001-framework-bootstrap/symphony_app_brief.md`
-- **Naming:** "AI-Assisted Delivery Framework" as identity; use "SDLC" in marketing context
+| Templates | `templates/` (requirements, design, explore, task, summary, report, roadmap) |
+| Framework commands | `.maestro/commands/` |
+| Claude Code adapters | `.claude/commands/` (wrappers + aliases) |
+| Cursor adapters | `.cursor/rules/` (core + dispatch) |

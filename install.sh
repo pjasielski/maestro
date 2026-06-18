@@ -104,13 +104,13 @@ if [ "$REINSTALL" = true ] && [ -f "$TARGET/maestro.toml" ]; then
 fi
 
 # ─────────────────────────────────────────────
-# Create folder structure (always full)
+# Create folder structure
 # ─────────────────────────────────────────────
 
 section "Creating folders"
 
 mkdir -p "$TARGET/delivery/01-explore"
-mkdir -p "$TARGET/delivery/02-prd"
+mkdir -p "$TARGET/delivery/02-requirements"
 mkdir -p "$TARGET/delivery/03-design"
 mkdir -p "$TARGET/delivery/04-plan/tasks"
 mkdir -p "$TARGET/delivery/05-review"
@@ -165,11 +165,13 @@ done
 echo "  New: $TMPL_NEW | Preserved: $TMPL_SKIP"
 
 # ─────────────────────────────────────────────
-# Claude Code adapters
+# Claude Code adapters (wrappers + aliases)
 # ─────────────────────────────────────────────
 
 section "Setting up Claude Code"
-for cmd in "$TARGET/.maestro/commands/"*.md; do
+
+# Create thin wrappers for all mae-* commands
+for cmd in "$TARGET/.maestro/commands/"mae-*.md; do
   [ -f "$cmd" ] || continue
   BASENAME="$(basename "$cmd")"
   CMDNAME="${BASENAME%.md}"
@@ -179,7 +181,38 @@ Follow the protocol defined in \`.maestro/commands/$BASENAME\`.
 Pass \$ARGUMENTS through as-is.
 EOF
 done
-echo "  Created: .claude/commands/ (thin wrappers)"
+
+# Create wrappers for utility commands (non-mae- prefixed)
+for cmd in decide sync status md; do
+  if [ -f "$TARGET/.maestro/commands/$cmd.md" ]; then
+    cat > "$TARGET/.claude/commands/$cmd.md" <<EOF
+# $cmd
+Follow the protocol defined in \`.maestro/commands/$cmd.md\`.
+Pass \$ARGUMENTS through as-is.
+EOF
+  fi
+done
+
+# Create aliases
+declare -A ALIASES=(
+  ["mex"]="mae-explore"
+  ["mrq"]="mae-req"
+  ["mds"]="mae-design"
+  ["mpl"]="mae-plan"
+  ["mdo"]="mae-do"
+  ["mrv"]="mae-review"
+)
+
+for alias in "${!ALIASES[@]}"; do
+  canonical="${ALIASES[$alias]}"
+  cat > "$TARGET/.claude/commands/$alias.md" <<EOF
+# $alias
+Follow the protocol defined in \`.maestro/commands/$canonical.md\`.
+Pass \$ARGUMENTS through as-is.
+EOF
+done
+
+echo "  Created: .claude/commands/ (wrappers + aliases)"
 
 # ─────────────────────────────────────────────
 # Cursor adapters
@@ -187,50 +220,40 @@ echo "  Created: .claude/commands/ (thin wrappers)"
 
 section "Setting up Cursor"
 
-cat > "$TARGET/.cursor/rules/maestro-core.mdc" <<'EOF'
+# Copy Cursor rules from source if they exist, otherwise generate
+if [ -d "$SCRIPT_DIR/.cursor/rules" ]; then
+  for rule in "$SCRIPT_DIR/.cursor/rules/"*.mdc; do
+    [ -f "$rule" ] || continue
+    cp "$rule" "$TARGET/.cursor/rules/$(basename "$rule")"
+  done
+else
+  cat > "$TARGET/.cursor/rules/maestro-core.mdc" <<'CURSOREOF'
 ---
-description: Maestro delivery framework — core rules and behavior
 alwaysApply: true
 ---
+# Maestro Framework — Core Rules
 
 Read `MAESTRO.md` at the project root before responding to any delivery-related request.
-
-MAESTRO.md contains: output standards, delivery phases, context loading rules, file conventions, decision tracking, and the New Chat Protocol.
-
 Follow all rules in MAESTRO.md. Key rules:
 - Save every substantive response as a numbered file in the current session folder
 - Use flags (CONSISTENCY:, GAP:, UNCLEAR:) when appropriate
 - On new chat: read HANDOFF.md, check .sessions/ for highest-numbered folder, greet user
 - Output standard: lead with answer, no filler, tables for comparisons
-- Instruction priority: user's explicit instruction > command defaults > MAESTRO.md baseline
-EOF
+CURSOREOF
 
-cat > "$TARGET/.cursor/rules/maestro-dispatch.mdc" <<'EOF'
+  cat > "$TARGET/.cursor/rules/maestro-dispatch.mdc" <<'CURSOREOF'
 ---
-description: Maestro command dispatcher — maps /mae-* commands to protocol files
 alwaysApply: true
 ---
+# Maestro Command Dispatch
 
-When the user writes any of the following in chat, read the corresponding file and execute its full protocol. Do not summarise or shortcut the protocol — read the file first.
+When the user types a Maestro command in chat, load the corresponding file from `.maestro/commands/` and follow its protocol.
 
-| User types | Load and follow |
-|------------|----------------|
-| /mae-explore (+ optional args) | .maestro/commands/mae-explore.md |
-| /mae-prd (+ optional args) | .maestro/commands/mae-prd.md |
-| /mae-design (+ optional args) | .maestro/commands/mae-design.md |
-| /mae-plan (+ optional args) | .maestro/commands/mae-plan.md |
-| /mae-do (+ optional args) | .maestro/commands/mae-do.md |
-| /mae-review (+ optional args) | .maestro/commands/mae-review.md |
-| /mae-checkpoint (+ optional args) | .maestro/commands/mae-checkpoint.md |
-| /mae-init (+ optional args) | .maestro/commands/mae-init.md |
-| /status (+ optional args) | .maestro/commands/status.md |
-| /decide (+ optional args) | .maestro/commands/decide.md |
-| /sync | .maestro/commands/sync.md |
-| /md (+ optional args) | .maestro/commands/md.md |
+Commands: mae-explore (mex), mae-req (mrq), mae-design (mds), mae-plan (mpl), mae-do (mdo), mae-review (mrv), mae-init, sync, decide, status, md
 
-Text after the command name = $ARGUMENTS passed to the protocol.
-Always read the file — do not guess the protocol from memory.
-EOF
+Always read the command file before executing — do not guess the protocol.
+CURSOREOF
+fi
 
 echo "  Created: .cursor/rules/ (core + dispatch)"
 
@@ -251,27 +274,25 @@ You are an AI delivery partner. Follow MAESTRO.md at the project root for all fr
 
 **On new chat:** Read HANDOFF.md → check .sessions/ for highest-numbered folder → greet user → create session folder → begin work.
 
-**Instruction priority:** User's explicit instruction > command defaults > MAESTRO.md baseline.
-
-**Flags:** CONSISTENCY: (contradiction) | GAP: (missing info) | UNCLEAR: (ambiguous) | STALE: (outdated artifact) | DRIFT: (code ≠ SDD)
+**Flags:** CONSISTENCY: (contradiction) | GAP: (missing info) | UNCLEAR: (ambiguous) | STALE: (outdated artifact) | DRIFT: (code ≠ DESIGN.md)
 
 ## Commands
 
 When user types any of these, read the corresponding file and follow its full protocol:
 
-| Command | File |
-|---------|------|
-| /mae-explore | .maestro/commands/mae-explore.md |
-| /mae-prd | .maestro/commands/mae-prd.md |
-| /mae-design | .maestro/commands/mae-design.md |
-| /mae-plan | .maestro/commands/mae-plan.md |
-| /mae-do | .maestro/commands/mae-do.md |
-| /mae-review | .maestro/commands/mae-review.md |
-| /mae-checkpoint | .maestro/commands/mae-checkpoint.md |
-| /mae-init | .maestro/commands/mae-init.md |
-| /status | .maestro/commands/status.md |
-| /decide | .maestro/commands/decide.md |
-| /sync | .maestro/commands/sync.md |
+| Command | Alias | File |
+|---------|-------|------|
+| mae-explore | mex | .maestro/commands/mae-explore.md |
+| mae-req | mrq | .maestro/commands/mae-req.md |
+| mae-design | mds | .maestro/commands/mae-design.md |
+| mae-plan | mpl | .maestro/commands/mae-plan.md |
+| mae-do | mdo | .maestro/commands/mae-do.md |
+| mae-review | mrv | .maestro/commands/mae-review.md |
+| mae-init | — | .maestro/commands/mae-init.md |
+| status | — | .maestro/commands/status.md |
+| decide | — | .maestro/commands/decide.md |
+| sync | — | .maestro/commands/sync.md |
+| md | — | .maestro/commands/md.md |
 
 Always read the file before executing — do not guess the protocol.
 EOF
@@ -370,7 +391,7 @@ Always save substantive responses to a file in the session folder unless the res
 
 ## Project
 
-- **Framework:** Maestro (command prefix: `mae-`)
+- **Framework:** Maestro (command prefix: `mae-`, aliases: `mex`/`mrq`/`mds`/`mpl`/`mdo`/`mrv`)
 - **What this is:** {describe your project}
 - **Current phase:** exploration
 - **Stack:** {your tech stack}
@@ -428,12 +449,11 @@ echo "  1. Edit CLAUDE.md with your project details"
 echo "  2. Run /mae-init to set up your profile (optional)"
 echo "  3. Run /mae-explore to start"
 echo ""
-echo "── Available commands ───────────────────"
-echo "  /mae-explore    Build project understanding"
-echo "  /mae-prd        Formalize requirements"
-echo "  /mae-design     Create technical architecture"
-echo "  /mae-plan       Break design into tasks"
-echo "  /mae-do         Execute tasks"
-echo "  /mae-review     Review code and artifacts"
-echo "  /mae-checkpoint Save project state snapshot"
+echo "── Commands ────────────────────────────"
+echo "  /mae-explore (mex)   Build project understanding"
+echo "  /mae-req     (mrq)   Formalize requirements"
+echo "  /mae-design  (mds)   Create technical architecture"
+echo "  /mae-plan    (mpl)   Create roadmap and tasks"
+echo "  /mae-do      (mdo)   Execute tasks"
+echo "  /mae-review  (mrv)   Review code and artifacts"
 echo ""

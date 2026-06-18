@@ -1,0 +1,49 @@
+---
+alwaysApply: true
+---
+# Maestro Command Dispatch
+
+When the user types a Maestro command in chat, load and follow the corresponding command file from `.maestro/commands/`.
+
+## Command Recognition
+
+Recognize these patterns (with or without `/` prefix):
+
+| User types | Load file |
+|-----------|-----------|
+| `mae-explore` or `mex` | `.maestro/commands/mae-explore.md` |
+| `mae-req` or `mrq` | `.maestro/commands/mae-req.md` |
+| `mae-design` or `mds` | `.maestro/commands/mae-design.md` |
+| `mae-plan` or `mpl` | `.maestro/commands/mae-plan.md` |
+| `mae-do` or `mdo` | `.maestro/commands/mae-do.md` |
+| `mae-review` or `mrv` | `.maestro/commands/mae-review.md` |
+| `mae-init` | `.maestro/commands/mae-init.md` |
+| `sync` | `.maestro/commands/sync.md` |
+| `decide` | `.maestro/commands/decide.md` |
+| `status` | `.maestro/commands/status.md` |
+| `md` | `.maestro/commands/md.md` |
+
+## Dispatch Protocol
+
+1. When a command is recognized, **read the full command file** from `.maestro/commands/`
+2. Pass any arguments the user provided after the command name
+3. Follow the command file's behavior specification exactly
+4. Save output to the current session folder as specified
+
+## Examples
+
+```
+User: "mae-explore the auth system"
+→ Read .maestro/commands/mae-explore.md
+→ Execute with argument: "the auth system"
+
+User: "mex ask client"
+→ Read .maestro/commands/mae-explore.md
+→ Execute with arguments: "ask client"
+
+User: "mrq"
+→ Read .maestro/commands/mae-req.md
+→ Execute with no arguments (smart default)
+```
+
+If unsure whether input is a command: if the first word matches a command name above, treat it as a command. Otherwise treat it as a regular message.

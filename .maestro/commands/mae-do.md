@@ -41,8 +41,9 @@ When invoked without arguments, suggest work in this priority order:
 4. **Execute** the work
 5. **Verify** (run checks, lint, tests if applicable)
 6. **Update task status** to `done` (if planned, with completion date)
-7. **Save report** to session folder
-8. **Update `_summary.md`** → Tasks Touched section
+7. **Update ROADMAP status** — if the completed task corresponds to a roadmap item in `delivery/04-plan/ROADMAP.md`, update its Status column to ✅ done
+8. **Save report** to session folder
+9. **Update `_summary.md`** → Tasks Touched section
 
 ## Output Behaviors
 - Report what was done clearly
@@ -50,9 +51,12 @@ When invoked without arguments, suggest work in this priority order:
 - Show verification results
 - Suggest next task if sequential dependency exists
 
+## Skip When
+- No planned tasks exist and no ad-hoc work is needed — nothing to do
+
 ## Special: Source Code Scaffolding
 When executing the scaffolding task (typically task-001):
-- Read `delivery/03-design/SDD.md` § Tech Stack and § Source Structure
+- Read `delivery/03-design/DESIGN.md` § Tech Stack and § Source Structure
 - Create directory tree, package files, config files
 - Show both `pip` and `uv` install commands
 

@@ -8,7 +8,7 @@ Always save substantive responses (> 80 words) as a numbered file in the current
 
 ## Project
 
-- **Framework:** Maestro (command prefix: `mae-`)
+- **Framework:** Maestro (command prefix: `mae-`, aliases: `mex`/`mrq`/`mds`/`mpl`/`mdo`/`mrv`)
 - **What this repo is:** The Maestro framework itself (bootstrapping — building the framework using itself)
 - **Current phase:** bootstrap → packaging
 - **Config:** `maestro.toml` (TOML format — Python native, no indent bugs)
@@ -18,9 +18,11 @@ Always save substantive responses (> 80 words) as a numbered file in the current
 ## Project-Specific Notes
 
 - This repo IS the framework — not a project using the framework
-- Commands are flat in `.claude/commands/` with `mae-` prefix (e.g., `mae-explore.md`)
+- Canonical commands in `.maestro/commands/` with `mae-` prefix
+- Claude Code wrappers + aliases in `.claude/commands/`
+- Cursor adapters in `.cursor/rules/`
 - Delivery artifacts in this repo describe the framework's own design
 
 ## Active Context
 
-- **Session folder:** `.sessions/004-multi-tool-implementation/`
+- **Session folder:** `.sessions/010-roadmap-plan-consolidation/`

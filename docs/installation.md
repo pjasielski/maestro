@@ -164,7 +164,7 @@ your-project/
 │
 ├── delivery/
 │   ├── 01-explore/
-│   ├── 02-prd/
+│   ├── 02-requirements/
 │   ├── 03-design/
 │   └── 04-plan/tasks/
 │
@@ -228,8 +228,8 @@ description: Maestro command dispatcher
 alwaysApply: true
 ---
 When user types /mae-X in chat, read .maestro/commands/mae-X.md and follow its protocol.
-Commands: mae-explore, mae-prd, mae-design, mae-plan, mae-do, mae-review,
-          mae-checkpoint, mae-init, status, decide, sync, md
+Commands: mae-explore, mae-req, mae-design, mae-plan, mae-do, mae-review,
+          mae-checkpoint (removed — use sync), mae-init, status, decide, sync, md
 ```
 
 ---

@@ -179,11 +179,16 @@ The explore report is a **living document** — running `explore doc` again repl
 - Rank questions by importance (blocking → important → clarifying)
 - When uncertain about what to read or analyze, ask the user rather than guessing
 
+## Skip When
+- Requirements are already well-defined (e.g., detailed brief from client) — skip to `/mae-req`
+- Building a trivial script with obvious scope — skip to `/mae-do`
+- Returning to a well-explored project — check if coverage is already sufficient before exploring again
+
 ## Artifact Flow
 
 All explore artifacts → .sessions/ (working material)
 Final report (`doc`) → .sessions/ → user promotes to delivery/01-explore/
-When ready → user runs `/mae-prd` to formalize requirements
+When ready → user runs `/mae-req` to formalize requirements
 
 ## Rules
 

@@ -1,10 +1,10 @@
-# SDD: Maestro — AI-Assisted Project Delivery Framework
+# DESIGN: Maestro — AI-Assisted Project Delivery Framework
 
-**Date:** 2026-06-10
-**Version:** v0.1.0 (alpha)
+**Date:** 2026-06-18
+**Version:** v0.2.0
 **Status:** Draft — reconciled
-**PRD:** .sessions/005-review/08_prd-maestro-framework.md
-**Changes from 009 version:** .sessions/ convention, session visibility model, installer simplification, PoC flag approach, delivery/poc/ and delivery/04-plan/reports/ folders
+**Requirements:** delivery/02-requirements/REQUIREMENTS.md
+**Changes from v0.1:** Renamed from SDD.md. DESIGN.md as universal artifact name. ROADMAP.md moved to delivery/04-plan/. Checkpoint absorbed into sync. Session 010 consolidation decisions.
 
 ---
 
@@ -44,7 +44,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 ┌─────────────────────────────────────────────────────┐
 │                    USER                              │
 │                                                      │
-│  Runs: /mae-explore, /mae-prd poc, /mae-do, etc.   │
+│  Runs: /mae-explore, /mae-req poc, /mae-do, etc.   │
 └──────────────────┬──────────────────────────────────┘
                    │
                    ▼
@@ -88,7 +88,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 
 | Step | From | To | Data | Mechanism |
 |---|---|---|---|---|
-| 1 | User | AI Tool | Command invocation (/mae-explore, /mae-prd poc, etc.) | Slash command or prompt |
+| 1 | User | AI Tool | Command invocation (/mae-explore, /mae-req poc, etc.) | Slash command or prompt |
 | 2 | AI Tool | Adapter file | Dispatch | Tool reads .claude/commands/mae-explore.md |
 | 3 | Adapter | .maestro/commands/ | Delegation | Adapter says "follow .maestro/commands/mae-explore.md" |
 | 4 | Command file | File system | Context loading | Command reads specified inputs (HANDOFF.md, delivery/, etc.) |
@@ -138,7 +138,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 
 **ADR-006: PoC as Command Flag, Not Separate Command**
 - **Context:** Users need lightweight, prototype-focused artifacts. Two approaches: a dedicated `/mae-poc` command, or a `poc` flag on existing commands.
-- **Decision:** PoC is a flag on existing delivery commands (`/mae-prd poc`, `/mae-design poc`, etc.). PoC artifacts use separate files (PRD-poc.md) and are archived to `delivery/poc/` when production versions replace them.
+- **Decision:** PoC is a flag on existing delivery commands (`/mae-req poc`, `/mae-design poc`, etc.). PoC artifacts use separate files (REQUIREMENTS-poc.md) and are archived to `delivery/poc/` when production versions replace them.
 - **Consequences:** No new command to learn. Same workflow, lighter requirements. Natural upgrade path from PoC to production. Each command file needs a `## PoC Mode` section.
 
 ---
@@ -153,7 +153,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 | **Session** | number, name, started date | Contains artifacts, summary | Folder: .sessions/NNN-name/ |
 | **Session Artifact** | number, description, type | Belongs to session; may be promoted to delivery | File: NN_description.md |
 | **Delivery Artifact** | phase, type (PRD/SDD/task/etc.) | Belongs to delivery phase | File in delivery/NN-phase/ |
-| **PoC Artifact** | phase, type, poc flag | Delivery artifact with -poc suffix | File: PRD-poc.md; archived to delivery/poc/ |
+| **PoC Artifact** | phase, type, poc flag | Delivery artifact with -poc suffix | File: REQUIREMENTS-poc.md; archived to delivery/poc/ |
 | **Task** | ID, title, status, priority, effort | Belongs to plan; references SDD components | File: delivery/04-plan/tasks/task-NNN.md |
 | **Implementation Report** | date, task reference, findings | Belongs to plan reports | File: delivery/04-plan/reports/YYYYMMDD_task-name.md |
 | **Decision** | date, session, decision text, status | Referenced by HANDOFF.md | Row in DECISIONS.md |
@@ -185,8 +185,8 @@ HANDOFF.md ──references──► DECISIONS.md
 
 delivery/
   ├─── 01-explore/  ──► explore reports, transcripts
-  ├─── 02-prd/      ──► PRD.md (and PRD-poc.md during PoC)
-  ├─── 03-design/   ──► SDD.md (and SDD-poc.md during PoC)
+  ├─── 02-requirements/ ──► REQUIREMENTS.md (and REQUIREMENTS-poc.md during PoC)
+  ├─── 03-design/   ──► DESIGN.md (and DESIGN-poc.md during PoC)
   ├─── 04-plan/     ──► PLAN.md, tasks/task-NNN.md, reports/
   ├─── 05-review/   ──► review reports (on demand)
   ├─── 06-test/     ──► test plans (on demand)
@@ -216,12 +216,12 @@ maestro/                          ← Framework repository root
 │   └── commands/
 │       ├── mae-explore.md        ← Delivery commands (8)
 │       ├── mae-explore-lite.md
-│       ├── mae-prd.md
+│       ├── mae-req.md
 │       ├── mae-design.md
 │       ├── mae-plan.md
 │       ├── mae-do.md
 │       ├── mae-review.md
-│       ├── mae-checkpoint.md
+│       ├── sync.md
 │       ├── mae-init.md
 │       ├── decide.md             ← Utility commands (4)
 │       ├── sync.md
@@ -243,8 +243,8 @@ maestro/                          ← Framework repository root
 │
 ├── delivery/                     ← Canonical delivery artifacts
 │   ├── 01-explore/
-│   ├── 02-prd/                   ← PRD.md
-│   ├── 03-design/                ← SDD.md
+│   ├── 02-requirements/          ← REQUIREMENTS.md
+│   ├── 03-design/                ← DESIGN.md
 │   ├── 04-plan/
 │   │   ├── tasks/                ← Task files
 │   │   └── reports/              ← Implementation reports
@@ -315,7 +315,7 @@ AI reads: MAESTRO.md (framework rules, output tiers, context loading)
 Cursor adapters use `.cursor/rules/maestro-dispatch.mdc` which maps command names to `.maestro/commands/` files.
 
 **PoC flag behavior (all commands):**
-- Output file uses `-poc` suffix (e.g., `PRD-poc.md`)
+- Output file uses `-poc` suffix (e.g., `REQUIREMENTS-poc.md`)
 - Header includes `**Phase: PoC**` banner
 - Requirements are relaxed (command-specific)
 - Additional sections: `## PoC Limitations`, `## Production Delta`
@@ -431,7 +431,7 @@ Maestro                              ai-deck (separate repo)
 | 1 | `.sessions/` or `sessions/` as canonical? | `.sessions/` is canonical; `sessions/` supported as alternative | Session 005 |
 | 2 | Framework files overwrite on re-install? | Yes — framework files (MAESTRO.md, commands) update to latest. Templates and config use create_if_missing. | Session 005 |
 | 3 | Full Jira replacement scope? | Not Jira-like exactly; well-incorporated into workflow for PMs, devs, and agents | Session 005/009 |
-| 4 | `/mae-poc` command or flag? | Flag on existing commands (`/mae-prd poc`). PoC artifacts as separate files, archived when done. | Session 005 |
+| 4 | `/mae-poc` command or flag? | Flag on existing commands (e.g. `/mae-req poc`). PoC artifacts as separate files, archived when done. | Session 005 |
 | 5 | Optional capabilities (ai-deck)? | ai-deck is optional; /mae-deck gracefully reports if not installed | Session 009 |
 | 6 | Solo/team mode? | Replaced by session_visibility + team inference from [[team.members]] | Session 005 |
 | 7 | Tool adapter installation? | All adapters installed by default; unused adapters are inert | Session 005 |
