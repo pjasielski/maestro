@@ -34,8 +34,9 @@ Exploration artifacts       → delivery/01-explore/
 Requirements                → delivery/02-requirements/REQUIREMENTS.md
 Architecture/Design         → delivery/03-design/DESIGN.md
 Plan, roadmap & tasks       → delivery/04-plan/ROADMAP.md, delivery/04-plan/tasks/
-Review artifacts            → delivery/05-review/  (on demand)
-Test artifacts              → delivery/06-test/    (on demand)
+Implementation reports     → delivery/05-implementation/  (on demand)
+Review artifacts            → delivery/06-review/  (on demand)
+Test artifacts              → delivery/07-test/    (on demand)
 
 Templates                   → templates/
 Session history             → .sessions/{NNN}-{name}/
