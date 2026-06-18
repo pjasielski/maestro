@@ -86,8 +86,8 @@ This keeps delivery/ clean — only confirmed, reviewed artifacts live there.
 ### Decision Pipeline
 
 ```
-notes/ideas.md  →  OPEN_QUESTIONS.md  →  DECISIONS.md  →  Canonical files
-"what if?"         "should we?"          "we decided"     (via /sync)
+OPEN_QUESTIONS.md  →  DECISIONS.md  →  Canonical files
+"should we?"          "we decided"     (via /sync)
 ```
 
 Nothing gets lost. Every idea has a path to becoming a decision.
@@ -123,7 +123,6 @@ your-project/
 │   ├── 03-design/            ← DESIGN.md
 │   └── 04-plan/              ← ROADMAP.md + tasks/
 ├── .sessions/                ← Working material (per-session)
-├── notes/ideas.md            ← Raw ideas and parking lot
 ├── templates/                ← Document templates (customizable)
 ├── .maestro/commands/        ← Canonical command files
 ├── .claude/commands/         ← Claude Code adapters + aliases

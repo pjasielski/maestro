@@ -115,7 +115,6 @@ Deployment config           → delivery/07-deploy/  (created on demand)
 Maintenance & bugs          → delivery/08-maintenance/  (created on demand)
 
 Templates                   → templates/
-Raw ideas                   → notes/ideas.md
 Session history             → .sessions/{NNN}-{name}/_summary.md
 Source code                 → src/ (or project-specific path)
 Framework commands          → .maestro/commands/mae-*.md
@@ -170,7 +169,6 @@ Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-disp
 
 - Creating new files anywhere
 - Editing anything inside `.sessions/`
-- Editing anything inside `notes/`
 - Appending to WORKLOG.md
 - Appending to DECISIONS.md
 
@@ -369,8 +367,8 @@ This is soft guidance — the agent suggests, the user decides.
 ### The Pipeline
 
 ```
-notes/ideas.md        →  OPEN_QUESTIONS.md  →  DECISIONS.md  →  Canonical files
-"what if?"               "should we?"           "we decided"     (via /sync)
+OPEN_QUESTIONS.md  →  DECISIONS.md  →  Canonical files
+"should we?"          "we decided"     (via /sync)
 ```
 
 ---

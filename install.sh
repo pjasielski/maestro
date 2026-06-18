@@ -143,13 +143,12 @@ mkdir -p "$TARGET/delivery/08-maintenance/issues"
 echo "  Created: delivery/ (full structure)"
 
 mkdir -p "$TARGET/.sessions"
-mkdir -p "$TARGET/notes"
 mkdir -p "$TARGET/templates"
 mkdir -p "$TARGET/.maestro/commands"
 mkdir -p "$TARGET/.claude/commands"
 mkdir -p "$TARGET/.cursor/rules"
 mkdir -p "$TARGET/.github"
-echo "  Created: .sessions/, notes/, templates/, .maestro/commands/"
+echo "  Created: .sessions/, templates/, .maestro/commands/"
 
 # ─────────────────────────────────────────────
 # Copy framework files (always update)
@@ -217,19 +216,11 @@ EOF
 done
 
 # Create aliases
-declare -A ALIASES=(
-  ["mex"]="mae-explore"
-  ["mrq"]="mae-req"
-  ["mds"]="mae-design"
-  ["mpl"]="mae-plan"
-  ["mdo"]="mae-do"
-  ["mrv"]="mae-review"
-)
-
-for alias in "${!ALIASES[@]}"; do
-  canonical="${ALIASES[$alias]}"
-  cat > "$TARGET/.claude/commands/$alias.md" <<EOF
-# $alias
+for pair in mex:mae-explore mrq:mae-req mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review; do
+  alias_name="${pair%%:*}"
+  canonical="${pair##*:}"
+  cat > "$TARGET/.claude/commands/$alias_name.md" <<EOF
+# $alias_name
 Follow the protocol defined in \`.maestro/commands/$canonical.md\`.
 Pass \$ARGUMENTS through as-is.
 EOF
@@ -367,13 +358,6 @@ create_if_missing "$TARGET/WORKLOG.md" "# Work Log
 | Date | Session | Summary |
 |------|---------|---------|"
 
-create_if_missing "$TARGET/notes/ideas.md" "# Ideas
-
-Capture raw ideas, what-ifs, and parking-lot items here.
-Promote to OPEN_QUESTIONS.md when they need a decision.
-
----"
-
 # ─────────────────────────────────────────────
 # maestro.toml (never overwrite)
 # ─────────────────────────────────────────────
@@ -439,7 +423,6 @@ if [ ! -f "$TARGET/.gitignore" ]; then
     cat > "$TARGET/.gitignore" <<'EOF'
 # Maestro: personal working artifacts (gitignored)
 .sessions/
-notes/
 .DS_Store
 EOF
     echo "  Created: .gitignore (.sessions/ gitignored)"
@@ -482,4 +465,4 @@ echo "  /mae-review  (mrv)   Review code and artifacts"
 echo ""
 
 # Clean up temp source dir if we downloaded it
-$_CLEANUP_SOURCE && rm -rf "$SOURCE_DIR"
+if $_CLEANUP_SOURCE; then rm -rf "$SOURCE_DIR"; fi
