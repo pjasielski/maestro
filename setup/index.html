@@ -62,12 +62,12 @@
       transition: border-color 0.15s;
     }
     input[type="text"]:focus { border-color: #58a6ff; }
-    .radio-group {
+    .radio-group, .check-group {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
     }
-    .radio-group label {
+    .radio-group label, .check-group label {
       display: flex;
       align-items: flex-start;
       gap: 0.6rem;
@@ -77,11 +77,11 @@
       border-radius: 6px;
       transition: border-color 0.15s, background 0.15s;
     }
-    .radio-group label:hover {
+    .radio-group label:hover, .check-group label:hover {
       border-color: #58a6ff;
       background: #1c2333;
     }
-    .radio-group input { margin-top: 2px; }
+    .radio-group input, .check-group input { margin-top: 2px; }
     .label-text { flex: 1; }
     .label-title { font-size: 0.9rem; color: #e1e4e8; }
     .label-desc { font-size: 0.78rem; color: #8b949e; margin-top: 1px; }
@@ -104,6 +104,12 @@
       margin-top: 1.5rem;
     }
     .btn:hover { background: #2ea043; }
+    .btn-secondary {
+      background: #21262d;
+      border: 1px solid #30363d;
+      margin-top: 0.75rem;
+    }
+    .btn-secondary:hover { background: #30363d; }
     #output { display: none; }
     #output h2 { color: #3fb950; font-size: 1rem; text-transform: none; letter-spacing: 0; margin-bottom: 1rem; }
     .code-block {
@@ -151,16 +157,6 @@
     .step-text { font-size: 0.88rem; color: #c9d1d9; line-height: 1.5; }
     .back-btn { background: none; border: none; color: #58a6ff; cursor: pointer; font-size: 0.85rem; margin-bottom: 1rem; padding: 0; }
     .back-btn:hover { text-decoration: underline; }
-    .info-box {
-      background: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      padding: 0.75rem 1rem;
-      font-size: 0.82rem;
-      color: #8b949e;
-      line-height: 1.5;
-      margin-top: 1rem;
-    }
   </style>
 </head>
 <body>
@@ -177,43 +173,93 @@
 
     <hr class="divider">
 
-    <h2>Session Visibility</h2>
+    <h2>Mode</h2>
     <div class="radio-group">
       <label>
-        <input type="radio" name="visibility" value="committed" checked>
+        <input type="radio" name="mode" value="solo" checked>
         <span class="label-text">
-          <span class="label-title">Committed</span>
-          <span class="label-desc">Sessions saved in git. Best for solo projects and full audit trails.</span>
+          <span class="label-title">Solo</span>
+          <span class="label-desc">One person. Sessions committed to git.</span>
         </span>
       </label>
       <label>
-        <input type="radio" name="visibility" value="gitignored">
+        <input type="radio" name="mode" value="team">
         <span class="label-text">
-          <span class="label-title">Gitignored</span>
-          <span class="label-desc">Sessions are personal working material. Best for teams.</span>
+          <span class="label-title">Team</span>
+          <span class="label-desc">Multiple people. Sessions gitignored by default.</span>
         </span>
       </label>
     </div>
 
-    <div class="info-box">
-      Maestro installs adapters for all supported AI tools (Claude Code, Cursor, Codex) and the full delivery folder structure. Run <code>/mae-init</code> after setup to configure your profile.
+    <hr class="divider">
+
+    <h2>AI Tools</h2>
+    <div class="check-group">
+      <label>
+        <input type="checkbox" name="tools" value="claude-code" checked>
+        <span class="label-text">
+          <span class="label-title">Claude Code</span>
+          <span class="label-desc">VS Code extension or CLI. Best parity with Maestro.</span>
+        </span>
+      </label>
+      <label>
+        <input type="checkbox" name="tools" value="cursor">
+        <span class="label-text">
+          <span class="label-title">Cursor</span>
+          <span class="label-desc">AI-native IDE. Commands via /mae-* in chat.</span>
+        </span>
+      </label>
+      <label>
+        <input type="checkbox" name="tools" value="codex">
+        <span class="label-text">
+          <span class="label-title">Codex (OpenAI)</span>
+          <span class="label-desc">Cloud-based coding agent. Reads repo instructions automatically.</span>
+        </span>
+      </label>
     </div>
 
-    <button class="btn" onclick="generate()">Generate Install Command</button>
+    <hr class="divider">
+
+    <h2>Delivery folders</h2>
+    <div class="radio-group">
+      <label>
+        <input type="radio" name="scope" value="core">
+        <span class="label-text">
+          <span class="label-title">Core</span>
+          <span class="label-desc">explore, prd, design, plan/tasks</span>
+        </span>
+      </label>
+      <label>
+        <input type="radio" name="scope" value="full" checked>
+        <span class="label-text">
+          <span class="label-title">Full — recommended</span>
+          <span class="label-desc">Core + review, test, deploy, maintenance</span>
+        </span>
+      </label>
+      <label>
+        <input type="radio" name="scope" value="minimal">
+        <span class="label-text">
+          <span class="label-title">Minimal</span>
+          <span class="label-desc">No delivery folders. Session-based only.</span>
+        </span>
+      </label>
+    </div>
+
+    <button class="btn" onclick="generate()">Generate Setup Script</button>
   </div>
 
   <!-- OUTPUT -->
   <div id="output">
-    <button class="back-btn" onclick="goBack()">&#8592; Back</button>
-    <h2>Your install command is ready</h2>
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <h2>✓ Ready to install</h2>
 
     <div class="step">
       <div class="step-num">1</div>
-      <div class="step-text">Open Terminal in your project directory.</div>
+      <div class="step-text">Open Terminal and navigate to your project folder:<br><code>cd /path/to/your-project</code></div>
     </div>
     <div class="step">
       <div class="step-num">2</div>
-      <div class="step-text">Paste and run this command:</div>
+      <div class="step-text">Copy and paste this command:</div>
     </div>
 
     <button class="copy-btn" onclick="copyScript()">Copy</button>
@@ -221,13 +267,13 @@
 
     <div class="step">
       <div class="step-num">3</div>
-      <div class="step-text">Open your AI tool and type <code>/mae-explore</code> to begin.</div>
+      <div class="step-text" id="next-step-text">Open your AI tool and type <code>/mae-explore</code> to begin.</div>
     </div>
 
     <hr class="divider">
     <p class="note">
-      The installer creates all folders, copies framework files, and sets up adapters for Claude Code, Cursor, and Codex.
-      Templates and user files are never overwritten on re-install.
+      Maestro installs into the current directory. It never overwrites existing files.
+      Edit <code>CLAUDE.md</code> after setup to describe your project.
     </p>
   </div>
 
@@ -236,18 +282,35 @@
 <script>
   function generate() {
     const name = document.getElementById('project-name').value.trim() || 'my-project';
-    const visibility = document.querySelector('input[name="visibility"]:checked').value;
+    const mode = document.querySelector('input[name="mode"]:checked').value;
+    const tools = [...document.querySelectorAll('input[name="tools"]:checked')].map(i => i.value);
+    const scope = document.querySelector('input[name="scope"]:checked').value;
 
-    const command = generateCommand(name, visibility);
-    document.getElementById('script-output').textContent = command;
+    if (tools.length === 0) {
+      alert('Please select at least one AI tool.');
+      return;
+    }
+
+    const toolFlags = tools.includes('claude-code') && tools.includes('cursor') && tools.includes('codex')
+      ? '4'
+      : tools.map(t => t === 'claude-code' ? '1' : t === 'cursor' ? '2' : '3').join(' ');
+
+    const scopeNum = scope === 'full' ? '1' : scope === 'core' ? '2' : '3';
+
+    const script = generateScript(name, mode, toolFlags, scopeNum, tools);
+    document.getElementById('script-output').textContent = script;
+
+    const nextStepTool = tools.includes('cursor') ? 'Cursor' : tools.includes('claude-code') ? 'Claude Code' : 'Codex';
+    document.getElementById('next-step-text').innerHTML =
+      `Open ${nextStepTool} in your project and type <code>/mae-explore</code> to begin.`;
 
     document.getElementById('form-section').style.display = 'none';
     document.getElementById('output').style.display = 'block';
   }
 
-  function generateCommand(name, visibility) {
-    const base = 'https://raw.githubusercontent.com/pjasielski/maestro/main';
-    return `git clone https://github.com/pjasielski/maestro.git /tmp/maestro && SESSION_VISIBILITY="${visibility}" /tmp/maestro/install.sh . --preconfigured && rm -rf /tmp/maestro`;
+  function generateScript(name, mode, tools, scope, toolList) {
+    const url = 'https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh';
+    return `curl -fsSL "${url}" | MODE="${mode}" TOOLS="${tools}" SCOPE="${scope}" bash -s -- . --preconfigured`;
   }
 
   function copyScript() {

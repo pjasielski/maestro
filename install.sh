@@ -9,7 +9,8 @@
 
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MAESTRO_URL="${MAESTRO_URL:-https://raw.githubusercontent.com/pjasielski/maestro/main}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-/dev/null}")" 2>/dev/null && pwd || pwd)"
 TARGET="${1:-.}"
 mkdir -p "$TARGET"
 TARGET="$(cd "$TARGET" && pwd)"
@@ -17,6 +18,28 @@ QUICK_MODE="${2:-}"
 
 PRECONFIGURED_MODE=""
 [ "$QUICK_MODE" = "--preconfigured" ] && PRECONFIGURED_MODE="yes"
+
+# ─────────────────────────────────────────────
+# Self-download when running via curl (no local source files)
+# ─────────────────────────────────────────────
+
+_CLEANUP_SOURCE=false
+if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
+  echo "Downloading framework files..."
+  SOURCE_DIR="$(mktemp -d)"
+  _CLEANUP_SOURCE=true
+  curl -fsSL "$MAESTRO_URL/MAESTRO.md" -o "$SOURCE_DIR/MAESTRO.md"
+  mkdir -p "$SOURCE_DIR/.maestro/commands"
+  for _cmd in mae-explore mae-req mae-design mae-plan mae-do mae-review mae-init mae-explore-lite status decide sync md; do
+    curl -fsSL "$MAESTRO_URL/.maestro/commands/$_cmd.md" -o "$SOURCE_DIR/.maestro/commands/$_cmd.md" 2>/dev/null || true
+  done
+  mkdir -p "$SOURCE_DIR/templates"
+  for _tmpl in requirements design explore task summary report review roadmap; do
+    curl -fsSL "$MAESTRO_URL/templates/$_tmpl.md" -o "$SOURCE_DIR/templates/$_tmpl.md" 2>/dev/null || true
+  done
+else
+  SOURCE_DIR="$SCRIPT_DIR"
+fi
 
 # ─────────────────────────────────────────────
 # Helpers
@@ -134,10 +157,10 @@ echo "  Created: .sessions/, notes/, templates/, .maestro/commands/"
 
 section "Copying framework files"
 
-cp "$SCRIPT_DIR/MAESTRO.md" "$TARGET/MAESTRO.md"
+cp "$SOURCE_DIR/MAESTRO.md" "$TARGET/MAESTRO.md"
 echo "  Copied: MAESTRO.md"
 
-for cmd in "$SCRIPT_DIR/.maestro/commands/"*.md; do
+for cmd in "$SOURCE_DIR/.maestro/commands/"*.md; do
   [ -f "$cmd" ] || continue
   BASENAME="$(basename "$cmd")"
   cp "$cmd" "$TARGET/.maestro/commands/$BASENAME"
@@ -152,7 +175,7 @@ section "Copying templates"
 
 TMPL_NEW=0
 TMPL_SKIP=0
-for tmpl in "$SCRIPT_DIR/templates/"*.md; do
+for tmpl in "$SOURCE_DIR/templates/"*.md; do
   [ -f "$tmpl" ] || continue
   BASENAME="$(basename "$tmpl")"
   if [ ! -f "$TARGET/templates/$BASENAME" ]; then
@@ -221,8 +244,8 @@ echo "  Created: .claude/commands/ (wrappers + aliases)"
 section "Setting up Cursor"
 
 # Copy Cursor rules from source if they exist, otherwise generate
-if [ -d "$SCRIPT_DIR/.cursor/rules" ]; then
-  for rule in "$SCRIPT_DIR/.cursor/rules/"*.mdc; do
+if [ -d "$SOURCE_DIR/.cursor/rules" ]; then
+  for rule in "$SOURCE_DIR/.cursor/rules/"*.mdc; do
     [ -f "$rule" ] || continue
     cp "$rule" "$TARGET/.cursor/rules/$(basename "$rule")"
   done
@@ -457,3 +480,6 @@ echo "  /mae-plan    (mpl)   Create roadmap and tasks"
 echo "  /mae-do      (mdo)   Execute tasks"
 echo "  /mae-review  (mrv)   Review code and artifacts"
 echo ""
+
+# Clean up temp source dir if we downloaded it
+$_CLEANUP_SOURCE && rm -rf "$SOURCE_DIR"

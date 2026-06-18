@@ -14,20 +14,13 @@ It works for solo developers, small teams, and client engagements — adapting i
 
 ### Install
 
-Maestro is a set of files (markdown commands, templates, framework instructions) that live in your project. "Installing" means copying these files in.
-
 ```bash
-# Option 1: Clone and run the installer
-git clone https://github.com/pjasielski/maestro.git /tmp/maestro
-/tmp/maestro/install.sh /path/to/your-project
-
-# Option 2: One-line install into current directory
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 ```
 
 The installer creates the folder structure, copies framework files, sets up tool adapters (Claude Code, Cursor, Codex), and creates tracking files. It never overwrites existing files.
 
-**Future:** `pip install maestro-delivery` / `uv add maestro-delivery` (Python CLI — planned).
+→ **[Full installation guide](docs/installation.md)** — browser wizard, manual install, Cursor setup, team setup, troubleshooting
 
 ### First Session
 
