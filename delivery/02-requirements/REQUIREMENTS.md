@@ -120,7 +120,7 @@ Technical professionals working with AI tools experience:
 - Claude Code native support + Cursor/Codex adapters (all installed automatically)
 - Output tiers (standard, verbose, caveman)
 - PoC flag on all delivery commands with separate artifact files
-- Implementation reports in delivery/04-plan/reports/
+- Implementation reports in delivery/05-implementation/
 - ai-deck integration via /mae-deck wrapper command
 - Documentation (README, user guide, tool capability matrix)
 
@@ -274,7 +274,7 @@ Technical professionals working with AI tools experience:
 | Term | Definition |
 |---|---|
 | Session | A working folder (.sessions/NNN-name/) containing artifacts for one work period; material is promoted to delivery/ when confirmed |
-| Delivery folder | Canonical artifact storage (delivery/01-explore/ through delivery/08-maintenance/) — only confirmed, reviewed content lives here |
+| Delivery folder | Canonical artifact storage (delivery/01-explore/ through delivery/09-maintenance/) — only confirmed, reviewed content lives here |
 | Promotion | Moving a draft artifact from .sessions/ to delivery/ after user review |
 | Artifact flow | The pipeline: .sessions/ (workbench) → delivery/ (confirmed) |
 | HANDOFF.md | Single source of truth for project status, decisions, architecture — read at the start of every session |

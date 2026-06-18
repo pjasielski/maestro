@@ -136,10 +136,11 @@ mkdir -p "$TARGET/delivery/01-explore"
 mkdir -p "$TARGET/delivery/02-requirements"
 mkdir -p "$TARGET/delivery/03-design"
 mkdir -p "$TARGET/delivery/04-plan/tasks"
-mkdir -p "$TARGET/delivery/05-review"
-mkdir -p "$TARGET/delivery/06-test"
-mkdir -p "$TARGET/delivery/07-deploy"
-mkdir -p "$TARGET/delivery/08-maintenance/issues"
+mkdir -p "$TARGET/delivery/05-implementation"
+mkdir -p "$TARGET/delivery/06-review"
+mkdir -p "$TARGET/delivery/07-test"
+mkdir -p "$TARGET/delivery/08-deploy"
+mkdir -p "$TARGET/delivery/09-maintenance/issues"
 echo "  Created: delivery/ (full structure)"
 
 mkdir -p "$TARGET/.sessions"
@@ -147,6 +148,7 @@ mkdir -p "$TARGET/templates"
 mkdir -p "$TARGET/.maestro/commands"
 mkdir -p "$TARGET/.claude/commands"
 mkdir -p "$TARGET/.cursor/rules"
+mkdir -p "$TARGET/.cursor/commands"
 mkdir -p "$TARGET/.github"
 echo "  Created: .sessions/, templates/, .maestro/commands/"
 
@@ -270,6 +272,40 @@ CURSOREOF
 fi
 
 echo "  Created: .cursor/rules/ (core + dispatch)"
+
+# Cursor slash commands (same pattern as Claude Code wrappers)
+for cmd in "$TARGET/.maestro/commands/"mae-*.md; do
+  [ -f "$cmd" ] || continue
+  BASENAME="$(basename "$cmd")"
+  CMDNAME="${BASENAME%.md}"
+  cat > "$TARGET/.cursor/commands/$BASENAME" <<EOF
+# $CMDNAME
+Follow the protocol defined in \`.maestro/commands/$BASENAME\`.
+Pass all user arguments through as-is.
+EOF
+done
+
+for cmd in decide sync status md; do
+  if [ -f "$TARGET/.maestro/commands/$cmd.md" ]; then
+    cat > "$TARGET/.cursor/commands/$cmd.md" <<EOF
+# $cmd
+Follow the protocol defined in \`.maestro/commands/$cmd.md\`.
+Pass all user arguments through as-is.
+EOF
+  fi
+done
+
+for pair in mex:mae-explore mrq:mae-req mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review; do
+  alias_name="${pair%%:*}"
+  canonical="${pair##*:}"
+  cat > "$TARGET/.cursor/commands/$alias_name.md" <<EOF
+# $alias_name
+Follow the protocol defined in \`.maestro/commands/$canonical.md\`.
+Pass all user arguments through as-is.
+EOF
+done
+
+echo "  Created: .cursor/commands/ (slash commands + aliases)"
 
 # ─────────────────────────────────────────────
 # Codex adapter
@@ -429,7 +465,7 @@ EOF
   else
     cat > "$TARGET/.gitignore" <<'EOF'
 .DS_Store
-# .sessions/ and notes/ committed (change session_visibility in maestro.toml)
+# .sessions/ committed (change session_visibility in maestro.toml)
 EOF
     echo "  Created: .gitignore (.sessions/ committed)"
   fi

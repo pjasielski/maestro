@@ -245,10 +245,11 @@ Name it `mae-estimate.md` and it becomes `/mae-estimate`.
 Add folders for project-specific needs:
 
 ```
-delivery/05-review/      # Formal review cycles
-delivery/06-test/        # Test plans and strategies
-delivery/07-deploy/      # Deployment configuration
-delivery/08-compliance/  # Regulated domain requirements
+delivery/05-implementation/ # Implementation reports from /mae-do
+delivery/06-review/      # Formal review cycles
+delivery/07-test/        # Test plans and strategies
+delivery/08-deploy/      # Deployment configuration
+delivery/09-maintenance/ # Bugs, tech debt, maintenance
 ```
 
 ---

@@ -121,7 +121,10 @@ your-project/
 │   ├── 01-explore/           ← Confirmed explore artifacts
 │   ├── 02-requirements/      ← REQUIREMENTS.md
 │   ├── 03-design/            ← DESIGN.md
-│   └── 04-plan/              ← ROADMAP.md + tasks/
+│   ├── 04-plan/              ← ROADMAP.md + tasks/
+│   ├── 05-implementation/    ← Implementation reports from /mae-do
+│   ├── 06-review/            ← Review reports (on demand)
+│   └── ...                   ← 07-test, 08-deploy, 09-maintenance
 ├── .sessions/                ← Working material (per-session)
 ├── templates/                ← Document templates (customizable)
 ├── .maestro/commands/        ← Canonical command files

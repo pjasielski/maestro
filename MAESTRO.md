@@ -109,10 +109,11 @@ Exploration artifacts       → delivery/01-explore/
 Requirements               → delivery/02-requirements/REQUIREMENTS.md
 Design (architecture)      → delivery/03-design/DESIGN.md
 Roadmap & tasks            → delivery/04-plan/ROADMAP.md and delivery/04-plan/tasks/
-Review artifacts            → delivery/05-review/  (created on demand)
-Test artifacts              → delivery/06-test/    (created on demand)
-Deployment config           → delivery/07-deploy/  (created on demand)
-Maintenance & bugs          → delivery/08-maintenance/  (created on demand)
+Implementation reports     → delivery/05-implementation/  (created on demand)
+Review artifacts            → delivery/06-review/  (created on demand)
+Test artifacts              → delivery/07-test/    (created on demand)
+Deployment config           → delivery/08-deploy/  (created on demand)
+Maintenance & bugs          → delivery/09-maintenance/  (created on demand)
 
 Templates                   → templates/
 Session history             → .sessions/{NNN}-{name}/_summary.md
@@ -126,10 +127,11 @@ Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-disp
 
 | Folder                       | Contains                                                       | Create when                                    |
 | ---------------------------- | -------------------------------------------------------------- | ---------------------------------------------- |
-| `delivery/05-review/`      | Review reports (code, docs, architecture), audit findings      | First formal review cycle                      |
-| `delivery/06-test/`        | Test plans, test reports, coverage summaries, QA checklists    | Test planning needed beyond inline tests       |
-| `delivery/07-deploy/`      | Deployment runbooks, environment configs, release checklists   | Deployment is non-trivial or multi-environment |
-| `delivery/08-maintenance/` | Bug reports (`issues/`), tech debt log, maintenance runbooks | First bug filed or maintenance task identified |
+| `delivery/05-implementation/` | Implementation reports from `/mae-do` execution              | First substantial implementation task          |
+| `delivery/06-review/`      | Review reports (code, docs, architecture), audit findings      | First formal review cycle                      |
+| `delivery/07-test/`        | Test plans, test reports, coverage summaries, QA checklists    | Test planning needed beyond inline tests       |
+| `delivery/08-deploy/`      | Deployment runbooks, environment configs, release checklists   | Deployment is non-trivial or multi-environment |
+| `delivery/09-maintenance/` | Bug reports (`issues/`), tech debt log, maintenance runbooks | First bug filed or maintenance task identified |
 
 ---
 
@@ -270,8 +272,8 @@ The agent should suggest next steps based on what exists, but never block the us
 | 02 | Requirements | `/mae-req`      | `mrq` | REQUIREMENTS.md — formalized requirements                |
 | 03 | Design       | `/mae-design`   | `mds` | DESIGN.md — technical architecture                       |
 | 04 | Plan         | `/mae-plan`     | `mpl` | ROADMAP.md + tasks/ — milestones and task files          |
-| —  | Do           | `/mae-do`       | `mdo` | Executed work (code, docs, config, PoCs)                  |
-| —  | Review       | `/mae-review`   | `mrv` | Review findings, suggestions                              |
+| 05 | Do           | `/mae-do`       | `mdo` | Executed work (code, docs, config, PoCs)                  |
+| 06 | Review       | `/mae-review`   | `mrv` | Review findings, suggestions                              |
 | —  | Init         | `/mae-init`     | —      | Profile setup (run once at start)                         |
 
 ### On-Demand Phases
@@ -280,10 +282,11 @@ These folders are created when first needed, not by `init`:
 
 | Phase       | Folder                              | Created when                       |
 | ----------- | ----------------------------------- | ---------------------------------- |
-| Review      | `delivery/05-review/`             | Formal review cycles or audits     |
-| Test        | `delivery/06-test/`               | Test plans need dedicated storage  |
-| Deploy      | `delivery/07-deploy/`             | Deployment is non-trivial          |
-| Maintenance | `delivery/08-maintenance/issues/` | Bugs, tech debt, maintenance tasks |
+| Implementation | `delivery/05-implementation/`  | First substantial `/mae-do` execution |
+| Review      | `delivery/06-review/`             | Formal review cycles or audits     |
+| Test        | `delivery/07-test/`               | Test plans need dedicated storage  |
+| Deploy      | `delivery/08-deploy/`             | Deployment is non-trivial          |
+| Maintenance | `delivery/09-maintenance/issues/` | Bugs, tech debt, maintenance tasks |
 
 ---
 
@@ -308,10 +311,16 @@ Session (workbench)                     Delivery (confirmed)
   ← reads delivery/03-design/DESIGN.md
   → ROADMAP.md                    ──────────→  delivery/04-plan/ROADMAP.md
   → task files                    ──────────→  delivery/04-plan/tasks/
+
+/mae-do
+  ← reads task file + DESIGN.md (relevant section) + source files
+  → code, docs, config           ──────────→  in-place
+  → implementation report         ──promote──→  delivery/05-implementation/
 ```
 
 All commands save to `.sessions/` first. User reviews, then promotes to `delivery/` when ready.
-Exception: `/mae-plan` saves ROADMAP and tasks directly to delivery/ (they're immediately actionable).
+Exceptions: `/mae-plan` saves ROADMAP and tasks directly to delivery/ (immediately actionable).
+`/mae-do` saves reports to session; substantial reports can be promoted to `delivery/05-implementation/`.
 
 ### Adaptive Workflow Guidance
 

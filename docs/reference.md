@@ -170,7 +170,11 @@ your-project/
 │   ├── 03-design/               ← DESIGN.md
 │   ├── 04-plan/                 ← PLAN.md + tasks/
 │   │   └── tasks/               ← Task files (individual tickets)
-│   └── 08-maintenance/          ← On-demand: bugs & maintenance
+│   ├── 05-implementation/       ← Implementation reports
+│   ├── 06-review/               ← Review reports (on demand)
+│   ├── 07-test/                 ← Test plans (on demand)
+│   ├── 08-deploy/               ← Deployment config (on demand)
+│   └── 09-maintenance/          ← Bugs & maintenance (on demand)
 │       └── issues/              ← Issue files (bug-001.md, debt-001.md)
 │
 ├── sessions/                    ← Working material (per-session folders)
@@ -665,7 +669,7 @@ Ask without a command only when:
 For post-delivery maintenance, bugs, and tech debt:
 
 ```
-delivery/08-maintenance/
+delivery/09-maintenance/
 └── issues/
     ├── bug-001-login-timeout.md
     ├── bug-002-csv-export-encoding.md
@@ -696,9 +700,11 @@ Edit files in `templates/` to match your domain. Add industry-specific sections,
 ### Extending Delivery Structure
 
 Add folders for project-specific needs:
-- `delivery/05-review/` — formal reviews
-- `delivery/06-test/` — test plans
-- `delivery/07-deploy/` — deployment config
+- `delivery/05-implementation/` — implementation reports from /mae-do
+- `delivery/06-review/` — formal reviews
+- `delivery/07-test/` — test plans
+- `delivery/08-deploy/` — deployment config
+- `delivery/09-maintenance/issues/` — bugs, tech debt
 
 ---
 

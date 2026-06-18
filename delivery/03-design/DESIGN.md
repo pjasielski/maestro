@@ -82,7 +82,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 | **Setup wizard** | Browser-based configuration UI | HTML + JS | setup/index.html; generates install command |
 | **Tracking files** | Project state: HANDOFF.md, DECISIONS.md, OPEN_QUESTIONS.md, WORKLOG.md | Markdown | Root-level files; HANDOFF.md is the primary context source |
 | **Session manager** | Organizes working artifacts into numbered sessions | Convention | .sessions/NNN-name/ with _summary.md and numbered files |
-| **Delivery folders** | Stores canonical, promoted artifacts | Convention | delivery/01-explore/ through delivery/08-maintenance/ |
+| **Delivery folders** | Stores canonical, promoted artifacts | Convention | delivery/01-explore/ through delivery/09-maintenance/ |
 
 ### 2.3 Data Flow
 
@@ -155,7 +155,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 | **Delivery Artifact** | phase, type (PRD/SDD/task/etc.) | Belongs to delivery phase | File in delivery/NN-phase/ |
 | **PoC Artifact** | phase, type, poc flag | Delivery artifact with -poc suffix | File: REQUIREMENTS-poc.md; archived to delivery/poc/ |
 | **Task** | ID, title, status, priority, effort | Belongs to plan; references SDD components | File: delivery/04-plan/tasks/task-NNN.md |
-| **Implementation Report** | date, task reference, findings | Belongs to plan reports | File: delivery/04-plan/reports/YYYYMMDD_task-name.md |
+| **Implementation Report** | date, task reference, findings | Belongs to implementation phase | File: delivery/05-implementation/YYYYMMDD_task-name.md |
 | **Decision** | date, session, decision text, status | Referenced by HANDOFF.md | Row in DECISIONS.md |
 | **Open Question** | priority, question text, blocks | May become a decision | Row in OPEN_QUESTIONS.md |
 | **User Profile** | description, strengths, needs_help | Belongs to project config | Section in maestro.toml |
@@ -187,11 +187,12 @@ delivery/
   ├─── 01-explore/  ──► explore reports, transcripts
   ├─── 02-requirements/ ──► REQUIREMENTS.md (and REQUIREMENTS-poc.md during PoC)
   ├─── 03-design/   ──► DESIGN.md (and DESIGN-poc.md during PoC)
-  ├─── 04-plan/     ──► PLAN.md, tasks/task-NNN.md, reports/
-  ├─── 05-review/   ──► review reports (on demand)
-  ├─── 06-test/     ──► test plans (on demand)
-  ├─── 07-deploy/   ──► deployment config (on demand)
-  ├─── 08-maintenance/ ──► issues/, tech debt (on demand)
+  ├─── 04-plan/     ──► ROADMAP.md, tasks/task-NNN.md
+  ├─── 05-implementation/ ──► implementation reports (on demand)
+  ├─── 06-review/   ──► review reports (on demand)
+  ├─── 07-test/     ──► test plans (on demand)
+  ├─── 08-deploy/   ──► deployment config (on demand)
+  ├─── 09-maintenance/ ──► issues/, tech debt (on demand)
   └─── poc/         ──► archived PoC artifacts (on demand)
 ```
 
@@ -248,10 +249,11 @@ maestro/                          ← Framework repository root
 │   ├── 04-plan/
 │   │   ├── tasks/                ← Task files
 │   │   └── reports/              ← Implementation reports
-│   ├── 05-review/                ← Review reports (on demand)
-│   ├── 06-test/                  ← Test plans (on demand)
-│   ├── 07-deploy/                ← Deployment config (on demand)
-│   ├── 08-maintenance/           ← Issues, tech debt (on demand)
+│   ├── 05-implementation/        ← Implementation reports (on demand)
+│   ├── 06-review/                ← Review reports (on demand)
+│   ├── 07-test/                  ← Test plans (on demand)
+│   ├── 08-deploy/                ← Deployment config (on demand)
+│   ├── 09-maintenance/           ← Issues, tech debt (on demand)
 │   │   └── issues/
 │   └── poc/                      ← Archived PoC artifacts (on demand)
 │

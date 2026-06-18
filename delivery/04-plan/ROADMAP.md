@@ -12,11 +12,12 @@ Fix what's broken. Establish versioning. Standardize conventions.
 
 | # | Item | Priority | Effort | Depends | Status | Source |
 |---|------|----------|--------|---------|--------|--------|
-| 1.1 | **Installer rework: simplify questions, fix silent failures, protect templates** | P0 | M | — | ☐ todo | 005 review |
+| 1.1a | **Installer rework: simplify to one question** | P0 | M | — | ✅ done | 005 review |
+| 1.1b | **Installer: fix silent failures, protect templates on update** | P1 | S | — | ☐ todo | 005 review |
 | 1.2 | **Standardize `.sessions/` as canonical folder name across all files** | P1 | S | — | ✅ done | 005 review |
 | 1.3 | **Replace solo/team mode with session visibility + team member inference** | P1 | S | 1.1 | ✅ done | 005 analysis |
-| 1.4 | **Create missing tracking files for this repo (DECISIONS, OPEN_QUESTIONS, WORKLOG)** | P1 | S | — | ☐ todo | 009 gap |
-| 1.5 | **Create maestro.toml for this repo with project metadata and user profile** | P1 | S | 1.3 | ☐ todo | 009 gap |
+| 1.4 | **Create missing tracking files for this repo (DECISIONS, OPEN_QUESTIONS, WORKLOG)** | P1 | S | — | ✅ done | 009 gap |
+| 1.5 | **Create maestro.toml for this repo with project metadata and user profile** | P1 | S | 1.3 | ✅ done | 009 gap |
 | 1.6 | **Fix HANDOFF.md branch reference (dev → main)** | P1 | S | — | ✅ done | 009 drift |
 | 1.7 | **Sync setup wizard (index.html, server.py) with new installer behavior** | P1 | S | 1.1 | ☐ todo | 005 scope |
 | 1.8 | **Create CHANGELOG.md and tag v0.1.0 on current state** | P1 | S | — | ✅ done | 005 decision |
@@ -36,7 +37,7 @@ First-class iterative development support. Strengthen command reliability.
 | # | Item | Priority | Effort | Depends | Status | Source |
 |---|------|----------|--------|---------|--------|--------|
 | 2.1 | **Add `poc` flag to all delivery commands (explore, req, design, plan, do, review)** | P1 | M | 1.2 | ☐ todo | 005 decision |
-| 2.2 | **Add implementation reports folder (`delivery/04-plan/reports/`)** | P1 | S | — | ☐ todo | 005 decision |
+| 2.2 | **Add implementation folder (`delivery/05-implementation/`)** | P1 | S | — | ✅ done | 005 decision |
 | 2.3 | **Strengthen context loading with MUST/SHOULD/MAY tiers per command** | P2 | S | — | ☐ todo | 005/009 review |
 | 2.4 | **Add post-do state sync (checklist or required /sync after implementation)** | P2 | S | — | ☐ todo | 009 pattern |
 | 2.5 | **Enforce definition of done: acceptance criteria checked before status → done** | P2 | S | — | ☐ todo | 009 recommendation |
