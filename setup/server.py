@@ -109,15 +109,12 @@ class SetupHandler(http.server.BaseHTTPRequestHandler):
         threading.Timer(1.0, self.server.shutdown).start()
 
     def _run_setup(self, data: dict) -> str:
-        project_name = data.get("project_name", "my-project").strip() or "my-project"
         session_visibility = data.get("session_visibility", "committed")
         target = self.__class__.target_dir
+        project_name = target.name
 
         env = os.environ.copy()
-        env.update({
-            "PROJECT_NAME": project_name,
-            "SESSION_VISIBILITY": session_visibility,
-        })
+        env["SESSION_VISIBILITY"] = session_visibility
 
         install_script = MAESTRO_DIR / "install.sh"
         result = subprocess.run(

@@ -28,15 +28,33 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
   echo "Downloading framework files..."
   SOURCE_DIR="$(mktemp -d)"
   _CLEANUP_SOURCE=true
-  curl -fsSL "$MAESTRO_URL/MAESTRO.md" -o "$SOURCE_DIR/MAESTRO.md"
+  _DL_FAIL=0
+
+  if ! curl -fsSL "$MAESTRO_URL/MAESTRO.md" -o "$SOURCE_DIR/MAESTRO.md"; then
+    echo "ERROR: Failed to download MAESTRO.md — cannot continue." >&2
+    rm -rf "$SOURCE_DIR"
+    exit 1
+  fi
+
   mkdir -p "$SOURCE_DIR/.maestro/commands"
   for _cmd in mae-explore mae-req mae-design mae-plan mae-do mae-review mae-init mae-explore-lite status decide sync md; do
-    curl -fsSL "$MAESTRO_URL/.maestro/commands/$_cmd.md" -o "$SOURCE_DIR/.maestro/commands/$_cmd.md" 2>/dev/null || true
+    if ! curl -fsSL "$MAESTRO_URL/.maestro/commands/$_cmd.md" -o "$SOURCE_DIR/.maestro/commands/$_cmd.md" 2>/dev/null; then
+      echo "  Warning: failed to download $_cmd.md" >&2
+      _DL_FAIL=$((_DL_FAIL + 1))
+    fi
   done
+
   mkdir -p "$SOURCE_DIR/templates"
   for _tmpl in requirements design explore task summary report review roadmap; do
-    curl -fsSL "$MAESTRO_URL/templates/$_tmpl.md" -o "$SOURCE_DIR/templates/$_tmpl.md" 2>/dev/null || true
+    if ! curl -fsSL "$MAESTRO_URL/templates/$_tmpl.md" -o "$SOURCE_DIR/templates/$_tmpl.md" 2>/dev/null; then
+      echo "  Warning: failed to download template $_tmpl.md" >&2
+      _DL_FAIL=$((_DL_FAIL + 1))
+    fi
   done
+
+  if [ "$_DL_FAIL" -gt 0 ]; then
+    echo "  $_DL_FAIL file(s) failed to download. Install will continue with available files."
+  fi
 else
   SOURCE_DIR="$SCRIPT_DIR"
 fi
@@ -159,6 +177,10 @@ echo "  Created: .sessions/, templates/, .maestro/commands/"
 section "Copying framework files"
 
 cp "$SOURCE_DIR/MAESTRO.md" "$TARGET/MAESTRO.md"
+if [ ! -f "$TARGET/MAESTRO.md" ]; then
+  echo "ERROR: MAESTRO.md not found after copy — install cannot continue." >&2
+  exit 1
+fi
 echo "  Copied: MAESTRO.md"
 
 for cmd in "$SOURCE_DIR/.maestro/commands/"*.md; do

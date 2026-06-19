@@ -13,13 +13,13 @@ Fix what's broken. Establish versioning. Standardize conventions.
 | # | Item | Priority | Effort | Depends | Status | Source |
 |---|------|----------|--------|---------|--------|--------|
 | 1.1a | **Installer rework: simplify to one question** | P0 | M | — | ✅ done | 005 review |
-| 1.1b | **Installer: fix silent failures, protect templates on update** | P1 | S | — | ☐ todo | 005 review |
+| 1.1b | **Installer: fix silent failures, protect templates on update** | P1 | S | — | ✅ done | 005 review |
 | 1.2 | **Standardize `.sessions/` as canonical folder name across all files** | P1 | S | — | ✅ done | 005 review |
 | 1.3 | **Replace solo/team mode with session visibility + team member inference** | P1 | S | 1.1 | ✅ done | 005 analysis |
 | 1.4 | **Create missing tracking files for this repo (DECISIONS, OPEN_QUESTIONS, WORKLOG)** | P1 | S | — | ✅ done | 009 gap |
 | 1.5 | **Create maestro.toml for this repo with project metadata and user profile** | P1 | S | 1.3 | ✅ done | 009 gap |
 | 1.6 | **Fix HANDOFF.md branch reference (dev → main)** | P1 | S | — | ✅ done | 009 drift |
-| 1.7 | **Sync setup wizard (index.html, server.py) with new installer behavior** | P1 | S | 1.1 | ☐ todo | 005 scope |
+| 1.7 | **Sync setup wizard (index.html, server.py) with new installer behavior** | P1 | S | 1.1 | ✅ done | 005 scope |
 | 1.8 | **Create CHANGELOG.md and tag v0.1.0 on current state** | P1 | S | — | ✅ done | 005 decision |
 | 1.9 | **Rename PRD→REQUIREMENTS, SDD→DESIGN, restructure delivery folders** | P1 | S | — | ✅ done | 009, 010 |
 | 1.10 | **Add command aliases (mex, mrq, mds, mpl, mdo, mrv)** | P1 | S | — | ✅ done | 010 |
