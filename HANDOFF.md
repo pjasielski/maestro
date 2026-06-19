@@ -1,14 +1,35 @@
 # HANDOFF.md — Maestro Framework
 
 ## Current Status
-- **Phase:** bootstrap → packaging (v0.2.0)
-- **Last worked on:** 2026-06-18 — v0.2 implementation (command renames, aliases, Cursor support, ROADMAP restructure)
+- **Phase:** bootstrap → packaging (v0.2.0 complete, M2+M3 next)
+- **Last worked on:** 2026-06-19 — Delivery folder restructure, Cursor slash commands, ROADMAP status icons, mae-do file argument
 - **Active branch:** `dev`
-- **Version:** v0.2.0
-- **Next priorities:** Installer simplification (item 1.1), remaining Milestone 1 items
+- **Version:** v0.2.0 (Milestone 1 complete)
+- **Next priorities:** Milestone 2 (PoC workflow) + Milestone 3 (docs & onboarding) — batch implementation
 - **Blockers:** None
 
-## Recent Changes (2026-06-18) — v0.2.0
+## Recent Changes (2026-06-19) — Session 010 continued
+
+### Delivery Folder Restructure
+- Added `delivery/05-implementation/` — mae-do's output folder for implementation reports
+- Renumbered: review→06, test→07, deploy→08, maintenance→09
+- Updated across 13 files (MAESTRO.md, DESIGN.md, REQUIREMENTS.md, ROADMAP.md, install.sh, README.md, mae-do.md, mae-review.md, cursor rules, 3 docs files)
+
+### Cursor Slash Commands
+- Created `.cursor/commands/` with 17 command files (autocomplete-enabled)
+- Installer now generates Cursor commands alongside rules
+- Users get `/mae-explore` autocomplete in Cursor chat
+
+### Other Changes
+- Added `path/to/file.md` argument to mae-do (read task from file)
+- Added ROADMAP status definitions to MAESTRO.md (☐/🔄/⏳/✅/⊘)
+- Fixed task status icons in MAESTRO.md
+- Removed .DS_Store from git tracking
+- Installer: fixed silent failures in curl downloads, added MAESTRO.md verification
+- ROADMAP: split 1.1 (done/remaining), marked 1.4, 1.5, 2.2 done
+- All M1 items now ✅ done (1.1b silent failures fixed by user, 1.7 wizard synced by user)
+
+## Changes (2026-06-18) — v0.2.0 Implementation
 
 ### Command Changes
 - Renamed `mae-prd` → `mae-req` (output: REQUIREMENTS.md)
@@ -31,31 +52,24 @@
 ### File/Folder Structure
 - `delivery/02-prd/` → `delivery/02-requirements/` (REQUIREMENTS.md)
 - `delivery/03-design/` → `delivery/03-design/` (DESIGN.md, was SDD.md)
+- `delivery/05-implementation/` added (mae-do output)
+- Folders renumbered: review→06, test→07, deploy→08, maintenance→09
 - `ROADMAP.md` moved from root → `delivery/04-plan/ROADMAP.md`
 - ROADMAP now has Status column: ☐ todo | 🔄 in progress | ⏳ blocked | ✅ done | ⊘ dropped
 - PLAN.md eliminated — execution notes go into ROADMAP milestone sections
 - Templates renamed: `prd.md` → `requirements.md`, `sdd.md` → `design.md`
 
 ### Multi-Tool Support
-- Added `.cursor/rules/maestro-core.mdc` + `maestro-dispatch.mdc`
-- Updated `install.sh` — creates Cursor adapters, alias files, simplified setup flow
+- Added `.cursor/rules/maestro-core.mdc` + `maestro-dispatch.mdc` (always-apply rules)
+- Added `.cursor/commands/` — 17 slash command files (autocomplete in Cursor)
+- Updated `install.sh` — creates Cursor rules + commands, alias files, simplified setup flow
 - Updated `.github/copilot-instructions.md` for Codex
-
-## Previous Changes (2026-06-10)
-- Created ROADMAP.md (5 milestones + future items)
-- Reconciled PRD.md and SDD.md — promoted to delivery/
-- Implemented Milestone 1 items (sessions standardization, version tagging)
-
-## Previous Changes (2026-05-20)
-- Added output tiers (-v/-c) to MAESTRO.md
-- Rewrote install.sh: interactive prompts, Cursor + Codex support
-- Created setup wizard (setup/index.html + setup/server.py)
 
 ## Project Overview
 - **Name:** Maestro
 - **Description:** AI-assisted delivery framework. 7 delivery commands + 4 utility commands + 6 aliases. Sessions-first workflow, decision tracking, task management via markdown files.
 - **Stack:** Markdown-first (commands as `.md` files), TOML config (`maestro.toml`), future CLI in Python
-- **Multi-tool:** Claude Code (`.claude/commands/`), Cursor (`.cursor/rules/`), Codex (`.github/copilot-instructions.md`)
+- **Multi-tool:** Claude Code (`.claude/commands/`), Cursor (`.cursor/rules/` + `.cursor/commands/`), Codex (`.github/copilot-instructions.md`)
 
 ## Architecture Decisions
 | Decision | Choice | Rationale |
@@ -70,6 +84,8 @@
 | Checkpoint | Absorbed into `/sync` | Sync is the natural end-of-session save point |
 | Aliases | 3-letter shortcuts (mex, mrq, mds, mpl, mdo, mrv) | Faster typing; canonical names for docs |
 | Skip guidance | Soft — agent suggests, user decides | Framework guides but never blocks |
+| Delivery folders | 9 folders (01-explore through 09-maintenance) | 05-implementation gives mae-do its own output space |
+| Cursor commands | `.cursor/commands/` for autocomplete | Matches Cursor's native slash command mechanism |
 
 ## Commands
 ### Delivery (7)
@@ -80,7 +96,7 @@
 | `/mae-req` | `mrq` | Formalize requirements from explore report |
 | `/mae-design` | `mds` | Technical architecture from requirements |
 | `/mae-plan` | `mpl` | Create/update ROADMAP, generate task files |
-| `/mae-do` | `mdo` | Execute tasks (planned or ad-hoc) |
+| `/mae-do` | `mdo` | Execute tasks (planned, ad-hoc, or from file) |
 | `/mae-review` | `mrv` | Review code or artifacts |
 
 ### Utility (4)
@@ -102,7 +118,8 @@
 | Design/Architecture | `delivery/03-design/DESIGN.md` |
 | Roadmap | `delivery/04-plan/ROADMAP.md` |
 | Tasks | `delivery/04-plan/tasks/` |
+| Implementation reports | `delivery/05-implementation/` |
 | Templates | `templates/` (requirements, design, explore, task, summary, report, roadmap) |
 | Framework commands | `.maestro/commands/` |
 | Claude Code adapters | `.claude/commands/` (wrappers + aliases) |
-| Cursor adapters | `.cursor/rules/` (core + dispatch) |
+| Cursor adapters | `.cursor/rules/` (core + dispatch) + `.cursor/commands/` (slash commands) |

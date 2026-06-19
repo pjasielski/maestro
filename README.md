@@ -124,7 +124,9 @@ your-project/
 │   ├── 04-plan/              ← ROADMAP.md + tasks/
 │   ├── 05-implementation/    ← Implementation reports from /mae-do
 │   ├── 06-review/            ← Review reports (on demand)
-│   └── ...                   ← 07-test, 08-deploy, 09-maintenance
+│   ├── 07-test/              ← Test plans (on demand)
+│   ├── 08-deploy/            ← Deployment config (on demand)
+│   └── 09-maintenance/       ← Bugs, tech debt (on demand)
 ├── .sessions/                ← Working material (per-session)
 ├── templates/                ← Document templates (customizable)
 ├── .maestro/commands/        ← Canonical command files

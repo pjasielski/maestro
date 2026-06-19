@@ -359,6 +359,18 @@ This is soft guidance — the agent suggests, the user decides.
 | `WORKLOG.md`        | Activity log — date, session, summary                    | Auto-updated at session boundaries |
 | `ROADMAP.md`        | Milestone tracker with status column                     | `/mae-plan`, `/mae-do`, `/sync`  |
 
+### ROADMAP Status Values
+
+When updating the Status column in `ROADMAP.md`, use these exact values:
+
+| Status | Meaning |
+|--------|---------|
+| ☐ todo | Not started |
+| 🔄 in progress | Work underway |
+| ⏳ blocked | Waiting on dependency |
+| ✅ done | Completed |
+| ⊘ dropped | Removed from scope |
+
 ### Session Structure
 
 ```
@@ -418,7 +430,7 @@ Tasks are markdown files in `delivery/04-plan/tasks/`. Each file IS the ticket.
 
 **Template:** `templates/task.md`
 
-**Statuses:** todo → in-progress → done (or blocked)
+**Statuses:** ☐ todo → 🔄 in-progress → ✅ done (or ⏳ blocked)
 
 **Board view:** Use `/status` to see task summary, or read task files directly.
 
