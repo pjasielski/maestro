@@ -8,7 +8,7 @@ Maestro is a set of files that live inside your project. Installing means copyin
 
 You need:
 - A project folder (any folder where your project lives)
-- One of these AI tools: **Claude Code**, **Cursor**, or **Codex**
+- One of these AI tools: **Claude Code**, **Cursor**, **Copilot**, or **Codex**
 - A terminal (Mac: Terminal app or iTerm; Windows: Command Prompt or PowerShell)
 
 ---
@@ -41,9 +41,9 @@ Double-click the downloaded `index.html` file. A setup form will open.
 
 The form asks:
 
-1. **Mode** — Solo (just you) or Team (multiple people)?
+1. **Session visibility** — Committed (saved in git) or Gitignored (personal working material)?
 2. **AI tool** — which tool(s) will you use? You can pick more than one.
-3. **Delivery folders** — Full is recommended for most projects.
+3. **Question style** — Should the agent ask questions in file (async) or in chat (sync)?
 
 Click **Generate Setup Script** when done.
 
@@ -76,7 +76,7 @@ cd /path/to/your-project
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 ```
 
-The installer will ask a few questions (mode, which tools, delivery scope). Answer each and press Enter.
+The installer will ask three questions (session visibility, AI tools, question style). Answer each and press Enter.
 
 **Skip the questions (use defaults):**
 
@@ -84,7 +84,7 @@ The installer will ask a few questions (mode, which tools, delivery scope). Answ
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash -s -- . --quick
 ```
 
-Defaults: solo mode, Claude Code only, core delivery folders.
+Defaults: all adapters, sessions committed, async questions.
 
 ### Step 3 — Follow the printed instructions
 
@@ -113,7 +113,7 @@ git clone https://github.com/pjasielski/maestro.git /tmp/maestro
 | File | What to edit |
 |------|-------------|
 | `CLAUDE.md` | Project description, stack, current phase |
-| `maestro.toml` | Mode, tools, output tier default |
+| `maestro.toml` | Session visibility, AI tools, question style, user profile |
 | `templates/` | Document templates to match your team's standards |
 
 ---
@@ -133,9 +133,9 @@ git clone https://github.com/pjasielski/maestro.git /tmp/maestro
 
 > Cursor does not autocomplete `/mae-*` commands — type them in full.
 
-### Codex
+### Copilot / Codex
 
-1. Open your repo with Codex — it reads `.github/copilot-instructions.md` automatically
+1. Open your repo — it reads `.github/copilot-instructions.md` automatically
 2. Type `/mae-explore`
 
 ---
@@ -146,7 +146,7 @@ git clone https://github.com/pjasielski/maestro.git /tmp/maestro
 your-project/
 ├── MAESTRO.md                        ← Framework rules (read by your AI tool)
 ├── CLAUDE.md                         ← Your project config — edit this
-├── maestro.toml                      ← Settings (mode, tools, output tier)
+├── maestro.toml                      ← Settings (sessions, tools, question style)
 ├── HANDOFF.md                        ← Project status — single source of truth
 ├── DECISIONS.md                      ← Decision log
 ├── OPEN_QUESTIONS.md                 ← Questions to resolve
@@ -155,7 +155,7 @@ your-project/
 ├── .maestro/commands/                ← Maestro command definitions
 ├── .claude/commands/                 ← Claude Code integration (if selected)
 ├── .cursor/rules/                    ← Cursor integration (if selected)
-├── .github/copilot-instructions.md   ← Codex integration (if selected)
+├── .github/copilot-instructions.md   ← Copilot/Codex integration (if selected)
 │
 ├── delivery/
 │   ├── 01-explore/
@@ -163,8 +163,7 @@ your-project/
 │   ├── 03-design/
 │   └── 04-plan/tasks/
 │
-├── sessions/                         ← Working notes (gitignored in team mode)
-├── notes/ideas.md                    ← Raw ideas
+├── .sessions/                        ← Working notes (gitignored or committed)
 └── templates/                        ← Document templates
 ```
 
@@ -183,8 +182,7 @@ One person installs and commits. Others pull and configure their own tool.
 ✓  HANDOFF.md, DECISIONS.md, OPEN_QUESTIONS.md, WORKLOG.md
 ✓  delivery/, templates/
 ✓  .maestro/commands/, .claude/commands/, .cursor/rules/
-✗  sessions/   — personal working notes, gitignored
-✗  notes/      — personal scratch space, gitignored
+✗  .sessions/  — personal working notes (when session_visibility = "gitignored")
 ```
 
 The `.gitignore` created by the installer handles this automatically.
@@ -224,7 +222,7 @@ alwaysApply: true
 ---
 When user types /mae-X in chat, read .maestro/commands/mae-X.md and follow its protocol.
 Commands: mae-explore, mae-req, mae-design, mae-plan, mae-do, mae-review,
-          mae-checkpoint (removed — use sync), mae-init, status, decide, sync, md
+          mae-init, status, decide, sync, md
 ```
 
 ---
@@ -236,7 +234,7 @@ Maestro is just files. To remove it:
 ```bash
 rm -rf .maestro/ .cursor/rules/maestro-*.mdc
 rm -f MAESTRO.md maestro.toml HANDOFF.md DECISIONS.md OPEN_QUESTIONS.md WORKLOG.md
-rm -rf delivery/ sessions/ notes/ templates/
+rm -rf delivery/ .sessions/ templates/
 rm -f .github/copilot-instructions.md
 ```
 

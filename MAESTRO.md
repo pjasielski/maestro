@@ -142,7 +142,7 @@ Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-disp
 - NEVER change established architecture decisions without user approval
 - When you spot an inconsistency between code and DESIGN.md, flag it: `CONSISTENCY: [details]`
 - Treat `delivery/` artifacts as canonical truth for requirements and design
-- `.sessions/` and `notes/` are working material, NOT canonical
+- `.sessions/` are working material, NOT canonical
 
 ### Code Standards
 
@@ -212,6 +212,19 @@ Do NOT update for quick Q&A or minor exchanges.
 ### Always Save to File
 
 Every substantive response (proposal, analysis, draft, comparison) MUST be saved as a numbered file in the session folder. Chat = brief summary. File = full content. Sequential numbering: `NN_kebab-case-description.md`.
+
+### Question Style
+
+Controlled by `question_style` in `maestro.toml`. Determines how the agent asks questions.
+
+| Style | Behavior |
+|-------|----------|
+| `"async"` | Write questions to a numbered file in the session folder (e.g., `03_questions.md`). In chat, say: "I have **N questions** — see `{session}/NN_questions.md`. Answer inline and let me know when ready." |
+| `"sync"` | Ask questions directly in the conversation. |
+
+**Default:** `async` — the user reviews and answers questions in their own time.
+
+The user can override per-message (e.g., "ask me directly" or "put questions in a file") regardless of the configured style.
 
 ### Proactive Questions
 
@@ -450,6 +463,8 @@ Set in `maestro.toml`:
 ```toml
 [project]
 session_visibility = "committed"  # or "gitignored"
+question_style = "async"          # or "sync"
+ai_tools = ["claude", "cursor"]   # installed adapters
 ```
 
 **Team features** are inferred from the presence of `[[team.members]]` in `maestro.toml`. No separate mode toggle needed — if team members are defined, team behaviors activate (e.g., "Who" column in WORKLOG.md, `/sync` required to share decisions).

@@ -86,6 +86,20 @@ ask_choice() {
   echo "${choice:-1}"
 }
 
+ask_multichoice() {
+  local prompt="$1"
+  shift
+  local options=("$@")
+  echo "$prompt" >&2
+  echo "  (enter numbers separated by spaces, e.g. 1 2)" >&2
+  for i in "${!options[@]}"; do
+    echo "  $((i+1))) ${options[$i]}" >&2
+  done
+  local choices
+  read -r -p "Choices [1]: " choices </dev/tty
+  echo "${choices:-1}"
+}
+
 create_if_missing() {
   local filepath="$1"
   local content="$2"
@@ -120,28 +134,83 @@ print_header
 # ─────────────────────────────────────────────
 
 PROJECT_NAME="$(basename "$TARGET")"
-SESSION_VISIBILITY="committed"
+SESSION_VISIBILITY="${SESSION_VISIBILITY:-committed}"
+TOOLS="${TOOLS:-}"
+QUESTION_STYLE="${QUESTION_STYLE:-async}"
+
+SETUP_CLAUDE=true
+SETUP_CURSOR=true
+SETUP_COPILOT=true
+SETUP_CODEX=true
 
 if [ "$QUICK_MODE" = "--quick" ]; then
-  echo "Quick mode: full structure, all adapters, sessions committed."
+  echo "Quick mode: all adapters, sessions committed, async questions."
 elif [ -n "$PRECONFIGURED_MODE" ]; then
   PROJECT_NAME="${PROJECT_NAME:-$(basename "$TARGET")}"
   SESSION_VISIBILITY="${SESSION_VISIBILITY:-committed}"
+  QUESTION_STYLE="${QUESTION_STYLE:-async}"
+  TOOLS="${TOOLS:-5}"
   echo "Preconfigured mode: $PROJECT_NAME"
 elif [ "$REINSTALL" = false ]; then
   section "Setup"
+
   VIS_CHOICE=$(ask_choice "Session visibility:" \
     "Committed — sessions saved in git (solo projects, full audit trail)" \
     "Gitignored — sessions are personal working material (teams)")
   if [ "$VIS_CHOICE" = "2" ]; then
     SESSION_VISIBILITY="gitignored"
   fi
+
+  echo ""
+  TOOLS=$(ask_multichoice "Which AI tool(s) will you use?" \
+    "Claude Code (VS Code / CLI)" \
+    "Cursor" \
+    "Copilot (GitHub)" \
+    "Codex (OpenAI)" \
+    "All of the above")
+
+  echo ""
+  QS_CHOICE=$(ask_choice "How should the agent ask questions?" \
+    "In file — agent writes questions to markdown for async review (recommended)" \
+    "In chat — agent asks questions during conversation")
+  if [ "$QS_CHOICE" = "2" ]; then
+    QUESTION_STYLE="sync"
+  fi
 fi
 
-# On reinstall, read existing visibility from maestro.toml if present
+# Parse tool selections
+if [ -n "$TOOLS" ]; then
+  SETUP_CLAUDE=false
+  SETUP_CURSOR=false
+  SETUP_COPILOT=false
+  SETUP_CODEX=false
+  for t in $TOOLS; do
+    case "$t" in
+      1) SETUP_CLAUDE=true ;;
+      2) SETUP_CURSOR=true ;;
+      3) SETUP_COPILOT=true ;;
+      4) SETUP_CODEX=true ;;
+      5) SETUP_CLAUDE=true; SETUP_CURSOR=true; SETUP_COPILOT=true; SETUP_CODEX=true ;;
+    esac
+  done
+fi
+
+# On reinstall, read existing settings from maestro.toml if present
 if [ "$REINSTALL" = true ] && [ -f "$TARGET/maestro.toml" ]; then
   EXISTING_VIS=$(grep 'session_visibility' "$TARGET/maestro.toml" 2>/dev/null | sed 's/.*= *"\(.*\)"/\1/' || true)
   [ -n "$EXISTING_VIS" ] && SESSION_VISIBILITY="$EXISTING_VIS"
+  EXISTING_QS=$(grep 'question_style' "$TARGET/maestro.toml" 2>/dev/null | sed 's/.*= *"\(.*\)"/\1/' || true)
+  [ -n "$EXISTING_QS" ] && QUESTION_STYLE="$EXISTING_QS"
+
+  # Read ai_tools from existing config
+  EXISTING_TOOLS=$(grep 'ai_tools' "$TARGET/maestro.toml" 2>/dev/null || true)
+  if [ -n "$EXISTING_TOOLS" ]; then
+    SETUP_CLAUDE=false; SETUP_CURSOR=false; SETUP_COPILOT=false; SETUP_CODEX=false
+    echo "$EXISTING_TOOLS" | grep -q '"claude"'  && SETUP_CLAUDE=true
+    echo "$EXISTING_TOOLS" | grep -q '"cursor"'  && SETUP_CURSOR=true
+    echo "$EXISTING_TOOLS" | grep -q '"copilot"' && SETUP_COPILOT=true
+    echo "$EXISTING_TOOLS" | grep -q '"codex"'   && SETUP_CODEX=true
+  fi
 fi
 
 # ─────────────────────────────────────────────
@@ -164,10 +233,6 @@ echo "  Created: delivery/ (full structure)"
 mkdir -p "$TARGET/.sessions"
 mkdir -p "$TARGET/templates"
 mkdir -p "$TARGET/.maestro/commands"
-mkdir -p "$TARGET/.claude/commands"
-mkdir -p "$TARGET/.cursor/rules"
-mkdir -p "$TARGET/.cursor/commands"
-mkdir -p "$TARGET/.github"
 echo "  Created: .sessions/, templates/, .maestro/commands/"
 
 # ─────────────────────────────────────────────
@@ -214,49 +279,57 @@ echo "  New: $TMPL_NEW | Preserved: $TMPL_SKIP"
 # Claude Code adapters (wrappers + aliases)
 # ─────────────────────────────────────────────
 
-section "Setting up Claude Code"
+if $SETUP_CLAUDE; then
+  section "Setting up Claude Code"
 
-# Create thin wrappers for all mae-* commands
-for cmd in "$TARGET/.maestro/commands/"mae-*.md; do
-  [ -f "$cmd" ] || continue
-  BASENAME="$(basename "$cmd")"
-  CMDNAME="${BASENAME%.md}"
-  cat > "$TARGET/.claude/commands/$BASENAME" <<EOF
+  mkdir -p "$TARGET/.claude/commands"
+
+  # Create thin wrappers for all mae-* commands
+  for cmd in "$TARGET/.maestro/commands/"mae-*.md; do
+    [ -f "$cmd" ] || continue
+    BASENAME="$(basename "$cmd")"
+    CMDNAME="${BASENAME%.md}"
+    cat > "$TARGET/.claude/commands/$BASENAME" <<EOF
 # $CMDNAME
 Follow the protocol defined in \`.maestro/commands/$BASENAME\`.
 Pass \$ARGUMENTS through as-is.
 EOF
-done
+  done
 
-# Create wrappers for utility commands (non-mae- prefixed)
-for cmd in decide sync status md; do
-  if [ -f "$TARGET/.maestro/commands/$cmd.md" ]; then
-    cat > "$TARGET/.claude/commands/$cmd.md" <<EOF
+  # Create wrappers for utility commands (non-mae- prefixed)
+  for cmd in decide sync status md; do
+    if [ -f "$TARGET/.maestro/commands/$cmd.md" ]; then
+      cat > "$TARGET/.claude/commands/$cmd.md" <<EOF
 # $cmd
 Follow the protocol defined in \`.maestro/commands/$cmd.md\`.
 Pass \$ARGUMENTS through as-is.
 EOF
-  fi
-done
+    fi
+  done
 
-# Create aliases
-for pair in mex:mae-explore mrq:mae-req mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review; do
-  alias_name="${pair%%:*}"
-  canonical="${pair##*:}"
-  cat > "$TARGET/.claude/commands/$alias_name.md" <<EOF
+  # Create aliases
+  for pair in mex:mae-explore mrq:mae-req mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review; do
+    alias_name="${pair%%:*}"
+    canonical="${pair##*:}"
+    cat > "$TARGET/.claude/commands/$alias_name.md" <<EOF
 # $alias_name
 Follow the protocol defined in \`.maestro/commands/$canonical.md\`.
 Pass \$ARGUMENTS through as-is.
 EOF
-done
+  done
 
-echo "  Created: .claude/commands/ (wrappers + aliases)"
+  echo "  Created: .claude/commands/ (wrappers + aliases)"
+fi
 
 # ─────────────────────────────────────────────
 # Cursor adapters
 # ─────────────────────────────────────────────
 
+if $SETUP_CURSOR; then
 section "Setting up Cursor"
+
+mkdir -p "$TARGET/.cursor/rules"
+mkdir -p "$TARGET/.cursor/commands"
 
 # Copy Cursor rules from source if they exist, otherwise generate
 if [ -d "$SOURCE_DIR/.cursor/rules" ]; then
@@ -328,12 +401,16 @@ EOF
 done
 
 echo "  Created: .cursor/commands/ (slash commands + aliases)"
+fi
 
 # ─────────────────────────────────────────────
-# Codex adapter
+# Copilot / Codex adapter
 # ─────────────────────────────────────────────
 
-section "Setting up Codex"
+if $SETUP_COPILOT || $SETUP_CODEX; then
+section "Setting up Copilot / Codex"
+
+mkdir -p "$TARGET/.github"
 
 cat > "$TARGET/.github/copilot-instructions.md" <<'EOF'
 # Maestro — AI-Assisted Delivery Framework
@@ -370,6 +447,7 @@ Always read the file before executing — do not guess the protocol.
 EOF
 
 echo "  Created: .github/copilot-instructions.md"
+fi
 
 # ─────────────────────────────────────────────
 # Tracking files (never overwrite)
@@ -422,9 +500,19 @@ create_if_missing "$TARGET/WORKLOG.md" "# Work Log
 
 section "Creating config"
 
+# Build ai_tools list for toml
+AI_TOOLS_TOML=""
+$SETUP_CLAUDE  && AI_TOOLS_TOML="${AI_TOOLS_TOML}\"claude\", "
+$SETUP_CURSOR  && AI_TOOLS_TOML="${AI_TOOLS_TOML}\"cursor\", "
+$SETUP_COPILOT && AI_TOOLS_TOML="${AI_TOOLS_TOML}\"copilot\", "
+$SETUP_CODEX   && AI_TOOLS_TOML="${AI_TOOLS_TOML}\"codex\", "
+AI_TOOLS_TOML="[${AI_TOOLS_TOML%, }]"
+
 create_if_missing "$TARGET/maestro.toml" "[project]
 name = \"$PROJECT_NAME\"
 session_visibility = \"$SESSION_VISIBILITY\"
+question_style = \"$QUESTION_STYLE\"
+ai_tools = $AI_TOOLS_TOML
 
 # Uncomment and fill in to enable profile-aware behavior:
 # [user]
@@ -499,14 +587,22 @@ fi
 # Summary
 # ─────────────────────────────────────────────
 
+ADAPTERS=""
+$SETUP_CLAUDE  && ADAPTERS="${ADAPTERS}Claude Code, "
+$SETUP_CURSOR  && ADAPTERS="${ADAPTERS}Cursor, "
+$SETUP_COPILOT && ADAPTERS="${ADAPTERS}Copilot, "
+$SETUP_CODEX   && ADAPTERS="${ADAPTERS}Codex, "
+ADAPTERS="${ADAPTERS%, }"
+
 echo ""
 echo "╔══════════════════════════════════════╗"
 echo "║    Maestro installed successfully    ║"
 echo "╚══════════════════════════════════════╝"
 echo ""
-echo "Project: $PROJECT_NAME"
-echo "Sessions: $SESSION_VISIBILITY"
-echo "Adapters: Claude Code, Cursor, Codex"
+echo "Project:    $PROJECT_NAME"
+echo "Sessions:   $SESSION_VISIBILITY"
+echo "Questions:  $QUESTION_STYLE"
+echo "Adapters:   $ADAPTERS"
 echo ""
 echo "── Next steps ──────────────────────────"
 echo "  1. Edit CLAUDE.md with your project details"
