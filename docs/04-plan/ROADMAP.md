@@ -37,7 +37,7 @@ First-class iterative development support. Strengthen command reliability.
 | # | Item | Priority | Effort | Depends | Status | Source |
 |---|------|----------|--------|---------|--------|--------|
 | 2.1 | **Add `poc` flag to all delivery commands (explore, req, design, plan, do, review)** | P1 | M | 1.2 | ☐ todo | 005 decision |
-| 2.2 | **Add implementation folder (`delivery/05-implementation/`)** | P1 | S | — | ✅ done | 005 decision |
+| 2.2 | **Add implementation folder (`docs/05-implementation/`)** | P1 | S | — | ✅ done | 005 decision |
 | 2.3 | **Strengthen context loading with MUST/SHOULD/MAY tiers per command** | P2 | S | — | ☐ todo | 005/009 review |
 | 2.4 | **Add post-do state sync (checklist or required /sync after implementation)** | P2 | S | — | ☐ todo | 009 pattern |
 | 2.5 | **Enforce definition of done: acceptance criteria checked before status → done** | P2 | S | — | ☐ todo | 009 recommendation |

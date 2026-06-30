@@ -147,10 +147,10 @@ The user or client fills in responses directly in the file. On next explore, the
 ```
 
 1. Read ALL explore working artifacts from the current and previous sessions
-2. Read any existing material in `delivery/01-explore/`
+2. Read any existing material in `docs/01-explore/`
 3. Produce structured report using `templates/explore.md`
 4. Save to session folder
-5. Ask: "Ready to promote to delivery/01-explore/?"
+5. Ask: "Ready to promote to docs/01-explore/?"
 
 The explore report is a **living document** — running `explore doc` again replaces the previous version (session keeps the history via numbered files).
 
@@ -158,7 +158,7 @@ The explore report is a **living document** — running `explore doc` again repl
 
 1. **Read context:**
 
-   - `delivery/01-explore/` (confirmed artifacts)
+   - `docs/01-explore/` (confirmed artifacts)
    - Current session files (working artifacts)
    - `DECISIONS.md`, `OPEN_QUESTIONS.md`
    - `maestro.toml` (project context, user profile if configured)
@@ -169,7 +169,7 @@ The explore report is a **living document** — running `explore doc` again repl
 3. **Every artifact MUST include a questions section** — questions the agent needs answered to deepen understanding. This is not optional. The goal is to build mutual understanding through iterative Q&A.
 4. **Save to session folder** (numbered file, e.g., `03_scope-analysis.md`)
 5. **Update readiness indicator** in `_summary.md`
-6. **For `doc` mode only:** offer promotion to `delivery/01-explore/`
+6. **For `doc` mode only:** offer promotion to `docs/01-explore/`
 
 ## Output Behaviors
 
@@ -187,7 +187,7 @@ The explore report is a **living document** — running `explore doc` again repl
 ## Artifact Flow
 
 All explore artifacts → .sessions/ (working material)
-Final report (`doc`) → .sessions/ → user promotes to delivery/01-explore/
+Final report (`doc`) → .sessions/ → user promotes to docs/01-explore/
 When ready → user runs `/mae-req` to formalize requirements
 
 ## Rules

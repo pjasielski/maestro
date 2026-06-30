@@ -24,7 +24,7 @@ After installation, you have three "zones":
 | Zone | Location | Purpose | Editable? |
 |------|----------|---------|-----------|
 | **Framework** | `MAESTRO.md`, `.claude/commands/`, `templates/` | Framework behavior and commands | Don't edit MAESTRO.md; customize templates |
-| **Delivery** | `delivery/` | Confirmed, canonical artifacts | Only via promotion from sessions |
+| **Delivery** | `docs/` | Confirmed, canonical artifacts | Only via promotion from sessions |
 | **Working** | `sessions/`, `notes/` | Drafts, analysis, working material | Freely editable |
 
 ---
@@ -61,7 +61,7 @@ Choose what fits your project. The phases below describe each tool, not a mandat
 
 **Readiness tracking:** After each explore, the agent updates a readiness indicator in `_summary.md` showing what's covered, what's missing, and whether you're ready for doc synthesis.
 
-**Promotion:** After `explore doc`, the agent asks if you want to promote to `delivery/01-explore/`. Say yes when you're satisfied.
+**Promotion:** After `explore doc`, the agent asks if you want to promote to `docs/01-explore/`. Say yes when you're satisfied.
 
 ### Phase 2: PRD (Requirements)
 
@@ -71,7 +71,7 @@ Choose what fits your project. The phases below describe each tool, not a mandat
 /mae-req
 ```
 
-Reads your explore artifacts and generates a Product Requirements Document using `templates/requirements.md`. The PRD is saved as a draft in your session — review it, request changes, then promote to `delivery/02-requirements/REQUIREMENTS.md`.
+Reads your explore artifacts and generates a Product Requirements Document using `templates/requirements.md`. The PRD is saved as a draft in your session — review it, request changes, then promote to `docs/02-requirements/REQUIREMENTS.md`.
 
 **Template sections:** 7 core (always included) + 3 optional (constraints, release strategy, glossary — include when relevant).
 
@@ -85,7 +85,7 @@ Reads your explore artifacts and generates a Product Requirements Document using
 /mae-design src/api/routes.py     # File-level spec
 ```
 
-Works top-down: full architecture first, then drill into components and files. The agent reads both the PRD and the explore report's technical sections for context. Before generating the SDD, it presents a technical questionnaire for decisions it can't make from available information (tech stack, architecture patterns, deployment model). The SDD is drafted in your session, then promoted to `delivery/03-design/DESIGN.md`.
+Works top-down: full architecture first, then drill into components and files. The agent reads both the PRD and the explore report's technical sections for context. Before generating the SDD, it presents a technical questionnaire for decisions it can't make from available information (tech stack, architecture patterns, deployment model). The SDD is drafted in your session, then promoted to `docs/03-design/DESIGN.md`.
 
 If the design process reveals missing information, the agent suggests running additional explore commands to fill the gap.
 
@@ -97,7 +97,7 @@ If the design process reveals missing information, the agent suggests running ad
 /mae-plan
 ```
 
-Reads the SDD and creates task files in `delivery/04-plan/tasks/`. Each task is a markdown file — your Jira replacement. Tasks go directly to delivery/ because they're meant to be immediately actionable.
+Reads the SDD and creates task files in `docs/04-plan/tasks/`. Each task is a markdown file — your Jira replacement. Tasks go directly to docs/ because they're meant to be immediately actionable.
 
 ### Execution: Do & Review
 
@@ -232,7 +232,7 @@ Generate effort estimates for planned tasks.
 
 ## Behavior
 
-1. Read task files in delivery/04-plan/tasks/
+1. Read task files in docs/04-plan/tasks/
 2. For each task, estimate: time, complexity, risk
 3. Generate summary table
 4. Save report to session folder
@@ -245,11 +245,11 @@ Name it `mae-estimate.md` and it becomes `/mae-estimate`.
 Add folders for project-specific needs:
 
 ```
-delivery/05-implementation/ # Implementation reports from /mae-do
-delivery/06-review/      # Formal review cycles
-delivery/07-test/        # Test plans and strategies
-delivery/08-deploy/      # Deployment configuration
-delivery/09-maintenance/ # Bugs, tech debt, maintenance
+docs/05-implementation/ # Implementation reports from /mae-do
+docs/06-review/      # Formal review cycles
+docs/07-test/        # Test plans and strategies
+docs/08-deploy/      # Deployment configuration
+docs/09-maintenance/ # Bugs, tech debt, maintenance
 ```
 
 ---

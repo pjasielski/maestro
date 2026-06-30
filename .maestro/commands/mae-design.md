@@ -40,17 +40,17 @@ Generates implementation specs for a specific file:
 - Test scenarios
 
 ## Prerequisites
-- Full solution: `delivery/02-requirements/REQUIREMENTS.md` must exist
-- Component: `delivery/03-design/DESIGN.md` must exist (run full first)
+- Full solution: `docs/02-requirements/REQUIREMENTS.md` must exist
+- Component: `docs/03-design/DESIGN.md` must exist (run full first)
 - File-level: DESIGN.md with relevant component section
 
 ## Behavior
 
 1. **Read inputs (prioritized):**
-   - `delivery/02-requirements/REQUIREMENTS.md` (requirements — primary input)
-   - `delivery/01-explore/` — final explore report, especially Technical Analysis sections (3.1-3.4: current state, data landscape, integrations, constraints)
+   - `docs/02-requirements/REQUIREMENTS.md` (requirements — primary input)
+   - `docs/01-explore/` — final explore report, especially Technical Analysis sections (3.1-3.4: current state, data landscape, integrations, constraints)
    - If many files in explore folder: read the final report; ask user which others to include
-   - `delivery/03-design/DESIGN.md` (if exists — for component/file-level modes)
+   - `docs/03-design/DESIGN.md` (if exists — for component/file-level modes)
    - `DECISIONS.md` (confirmed technical decisions)
    - `maestro.toml` (project context, user profile, tech preferences if configured)
    - `templates/design.md` (output structure for full solution mode)
@@ -78,11 +78,11 @@ Generates implementation specs for a specific file:
 
 4. **Save design draft to session folder** (numbered file)
 
-5. **Offer promotion:** "Design draft saved to session. Ready to promote to delivery/03-design/DESIGN.md?"
-   - If user confirms → copy to `delivery/03-design/DESIGN.md`
+5. **Offer promotion:** "Design draft saved to session. Ready to promote to docs/03-design/DESIGN.md?"
+   - If user confirms → copy to `docs/03-design/DESIGN.md`
    - If user wants changes → iterate in session first
-   - If user says "save directly to delivery" in the original prompt → skip the ask
-   - For component/file-level: update the existing DESIGN.md in delivery/ (with review)
+   - If user says "save directly to docs" in the original prompt → skip the ask
+   - For component/file-level: update the existing DESIGN.md in docs/ (with review)
 
 6. **Save report** to session folder
 

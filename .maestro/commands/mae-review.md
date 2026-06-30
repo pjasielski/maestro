@@ -30,7 +30,7 @@ Review existing code or delivery artifacts for quality, consistency, and complet
    - Code matches DESIGN.md? Flag `DRIFT:` if not.
    - DESIGN.md matches REQUIREMENTS.md? Flag `CONSISTENCY:` if not.
 5. **Save report** to session folder
-6. **On-demand folder:** If creating `delivery/06-review/` for the first time, offer to create it.
+6. **On-demand folder:** If creating `docs/06-review/` for the first time, offer to create it.
 
 ## Output Behaviors
 

@@ -107,7 +107,7 @@ git clone https://github.com/pjasielski/maestro.git /tmp/maestro
 ```
 
 What install.sh does:
-1. Creates the folder structure (delivery/, sessions/, notes/, templates/)
+1. Creates the folder structure (docs/, sessions/, notes/, templates/)
 2. Copies MAESTRO.md, command files, and templates into your project
 3. Creates tracking files (HANDOFF.md, DECISIONS.md, etc.) — only if they don't exist
 4. Creates CLAUDE.md with a reference to MAESTRO.md — only if it doesn't exist
@@ -164,7 +164,7 @@ your-project/
 ├── OPEN_QUESTIONS.md            ← Questions needing answers
 ├── WORKLOG.md                   ← Activity log
 │
-├── delivery/                    ← Confirmed, canonical artifacts
+├── docs/                    ← Confirmed, canonical artifacts
 │   ├── 01-explore/              ← Explore report + confirmed analysis
 │   ├── 02-requirements/                  ← REQUIREMENTS.md
 │   ├── 03-design/               ← DESIGN.md
@@ -229,7 +229,7 @@ your-project/
 
 | Zone | Editing | Purpose |
 |------|---------|---------|
-| **delivery/** | Review required | Canonical, confirmed artifacts |
+| **docs/** | Review required | Canonical, confirmed artifacts |
 | **sessions/** | Free | Working material, drafts, analysis |
 | **notes/** | Free | Ideas, parking lot |
 | **templates/** | User customizable | Document structure templates |
@@ -273,7 +273,7 @@ Generates PRD from explore artifacts using `templates/requirements.md`.
 - Prioritizes reading the final explore report over individual artifacts
 - Warns if explore report has unresolved gaps
 - Populates user stories (Section 6) with concrete stories and acceptance criteria
-- Saves draft to session, offers promotion to `delivery/02-requirements/REQUIREMENTS.md`
+- Saves draft to session, offers promotion to `docs/02-requirements/REQUIREMENTS.md`
 
 ### /mae-design — Technical Architecture
 
@@ -288,13 +288,13 @@ Creates SDD from PRD + explore report using `templates/design.md`.
 - Reads both PRD and explore report (technical sections)
 - Presents technical questionnaire before generating SDD (for decisions it can't make)
 - Cross-phase awareness: suggests running `/mae-explore` when information is missing
-- Saves draft to session, offers promotion to `delivery/03-design/DESIGN.md`
+- Saves draft to session, offers promotion to `docs/03-design/DESIGN.md`
 
 ### /mae-plan — Break Into Tasks
 
-Reads SDD and creates task files in `delivery/04-plan/tasks/`.
+Reads SDD and creates task files in `docs/04-plan/tasks/`.
 
-**Exception:** Tasks go directly to delivery/ (not sessions-first) because they're immediately actionable.
+**Exception:** Tasks go directly to docs/ (not sessions-first) because they're immediately actionable.
 
 ### /mae-do — Execute Work
 
@@ -330,7 +330,7 @@ Records a decision in `DECISIONS.md` and updates `_summary.md`. Creates an audit
 
 ### /sync — Push to Canonical Files
 
-Batch-updates canonical files (HANDOFF.md, delivery/ artifacts) based on accumulated decisions. Every edit requires user review and approval.
+Batch-updates canonical files (HANDOFF.md, docs/ artifacts) based on accumulated decisions. Every edit requires user review and approval.
 
 ### /status — Project Overview
 
@@ -443,7 +443,7 @@ If the design reveals missing information, the agent suggests returning to explo
 
 ## 10. The Plan Phase
 
-Creates task files from the SDD. Each task is a markdown file in `delivery/04-plan/tasks/` — your Jira replacement.
+Creates task files from the SDD. Each task is a markdown file in `docs/04-plan/tasks/` — your Jira replacement.
 
 Tasks have: description, acceptance criteria, referenced files, effort estimate, dependencies, status (todo → in-progress → done).
 
@@ -641,7 +641,7 @@ Every response follows these rules:
 
 ### File Permissions
 - **Free zone:** Create new files anywhere. Edit sessions/, notes/. Append to WORKLOG.md, DECISIONS.md.
-- **Review required:** Edit HANDOFF.md, delivery/ files, source code, maestro.toml, OPEN_QUESTIONS.md.
+- **Review required:** Edit HANDOFF.md, docs/ files, source code, maestro.toml, OPEN_QUESTIONS.md.
 
 ### Context Budget
 - Target: 4,000-8,000 words of reference material per task
@@ -669,7 +669,7 @@ Ask without a command only when:
 For post-delivery maintenance, bugs, and tech debt:
 
 ```
-delivery/09-maintenance/
+docs/09-maintenance/
 └── issues/
     ├── bug-001-login-timeout.md
     ├── bug-002-csv-export-encoding.md
@@ -700,11 +700,11 @@ Edit files in `templates/` to match your domain. Add industry-specific sections,
 ### Extending Delivery Structure
 
 Add folders for project-specific needs:
-- `delivery/05-implementation/` — implementation reports from /mae-do
-- `delivery/06-review/` — formal reviews
-- `delivery/07-test/` — test plans
-- `delivery/08-deploy/` — deployment config
-- `delivery/09-maintenance/issues/` — bugs, tech debt
+- `docs/05-implementation/` — implementation reports from /mae-do
+- `docs/06-review/` — formal reviews
+- `docs/07-test/` — test plans
+- `docs/08-deploy/` — deployment config
+- `docs/09-maintenance/issues/` — bugs, tech debt
 
 ---
 
@@ -722,7 +722,7 @@ Key decisions made during framework development:
 | 6 | Template pattern | Core + optional sections | Flexible without being overwhelming |
 | 7 | MVP scope | 8 delivery + 4 utility commands | Minimal overhead, covers full lifecycle |
 | 8 | Config format | TOML | Python native, no indent bugs |
-| 9 | Task management | Files in delivery/04-plan/ | Lightweight Jira replacement in your repo |
+| 9 | Task management | Files in docs/04-plan/ | Lightweight Jira replacement in your repo |
 | 10 | Pathways | Flexible, not sequential | AI-assisted delivery is inherently iterative |
 | 11 | User profiles | Optional [user]/[[team.members]] | Adapts without requiring configuration |
 | 12 | Question handling | explore ask + natural conversation | Questions are first-class, not an afterthought |
@@ -736,13 +736,13 @@ For full rationale on each decision, see `sessions/001-framework-bootstrap/11_de
 | Term | Definition |
 |------|-----------|
 | **Artifact** | A document or file produced during delivery (analysis, PRD, SDD, task, etc.) |
-| **Canonical** | The confirmed, authoritative version of an artifact (lives in delivery/) |
-| **Delivery** | The delivery/ folder — confirmed artifacts organized by phase |
+| **Canonical** | The confirmed, authoritative version of an artifact (lives in docs/) |
+| **Delivery** | The full project lifecycle managed by Maestro. Canonical artifacts live in `docs/` organized by phase |
 | **Explore** | The initial phase of building project understanding |
 | **Flag** | An inline marker (GAP:, UNCLEAR:, etc.) highlighting issues |
 | **Pathway** | A chosen sequence through delivery phases (standard, PoC, iterative, etc.) |
 | **Phase** | A stage in the delivery lifecycle (explore, prd, design, plan, do, review) |
-| **Promote** | Moving an artifact from sessions/ to delivery/ after review |
+| **Promote** | Moving an artifact from sessions/ to docs/ after review |
 | **PRD** | Product Requirements Document |
 | **SDD** | Solution Design Document (also called technical architecture) |
 | **Session** | A working folder in sessions/ representing a stretch of related work |

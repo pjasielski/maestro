@@ -11,7 +11,7 @@
 ## Recent Changes (2026-06-19) — Session 010 continued
 
 ### Delivery Folder Restructure
-- Added `delivery/05-implementation/` — mae-do's output folder for implementation reports
+- Added `docs/05-implementation/` — mae-do's output folder for implementation reports
 - Renumbered: review→06, test→07, deploy→08, maintenance→09
 - Updated across 13 files (MAESTRO.md, DESIGN.md, REQUIREMENTS.md, ROADMAP.md, install.sh, README.md, mae-do.md, mae-review.md, cursor rules, 3 docs files)
 
@@ -50,11 +50,11 @@
 | `mae-review` | `mrv` |
 
 ### File/Folder Structure
-- `delivery/02-prd/` → `delivery/02-requirements/` (REQUIREMENTS.md)
-- `delivery/03-design/` → `delivery/03-design/` (DESIGN.md, was SDD.md)
-- `delivery/05-implementation/` added (mae-do output)
+- `docs/02-prd/` → `docs/02-requirements/` (REQUIREMENTS.md)
+- `docs/03-design/` → `docs/03-design/` (DESIGN.md, was SDD.md)
+- `docs/05-implementation/` added (mae-do output)
 - Folders renumbered: review→06, test→07, deploy→08, maintenance→09
-- `ROADMAP.md` moved from root → `delivery/04-plan/ROADMAP.md`
+- `ROADMAP.md` moved from root → `docs/04-plan/ROADMAP.md`
 - ROADMAP now has Status column: ☐ todo | 🔄 in progress | ⏳ blocked | ✅ done | ⊘ dropped
 - PLAN.md eliminated — execution notes go into ROADMAP milestone sections
 - Templates renamed: `prd.md` → `requirements.md`, `sdd.md` → `design.md`
@@ -78,8 +78,8 @@
 | Config format | TOML | Python native, no indent bugs |
 | Command naming | Activity-based (`mae-req`, `mae-design`) | Universal, not tied to doc format names |
 | Artifact naming | Universal terms (`REQUIREMENTS.md`, `DESIGN.md`) | Works across companies regardless of internal naming |
-| Artifact flow | Sessions-first | All output to .sessions/, promote to delivery/ when ready |
-| ROADMAP location | `delivery/04-plan/ROADMAP.md` | Consistent with delivery folder convention |
+| Artifact flow | Sessions-first | All output to .sessions/, promote to docs/ when ready |
+| ROADMAP location | `docs/04-plan/ROADMAP.md` | Consistent with docs folder convention |
 | PLAN.md | Eliminated — merged into ROADMAP | One file for strategic + tactical view |
 | Checkpoint | Absorbed into `/sync` | Sync is the natural end-of-session save point |
 | Aliases | 3-letter shortcuts (mex, mrq, mds, mpl, mdo, mrv) | Faster typing; canonical names for docs |
@@ -113,12 +113,12 @@
 | Framework instructions | `MAESTRO.md` |
 | Project config | `CLAUDE.md` |
 | Framework settings | `maestro.toml` |
-| Explore artifacts | `delivery/01-explore/` |
-| Requirements | `delivery/02-requirements/REQUIREMENTS.md` |
-| Design/Architecture | `delivery/03-design/DESIGN.md` |
-| Roadmap | `delivery/04-plan/ROADMAP.md` |
-| Tasks | `delivery/04-plan/tasks/` |
-| Implementation reports | `delivery/05-implementation/` |
+| Explore artifacts | `docs/01-explore/` |
+| Requirements | `docs/02-requirements/REQUIREMENTS.md` |
+| Design/Architecture | `docs/03-design/DESIGN.md` |
+| Roadmap | `docs/04-plan/ROADMAP.md` |
+| Tasks | `docs/04-plan/tasks/` |
+| Implementation reports | `docs/05-implementation/` |
 | Templates | `templates/` (requirements, design, explore, task, summary, report, roadmap) |
 | Framework commands | `.maestro/commands/` |
 | Claude Code adapters | `.claude/commands/` (wrappers + aliases) |

@@ -72,16 +72,16 @@ Every delivery command has a 3-letter shortcut for faster typing:
 
 ### Sessions-First Workflow
 
-Commands save artifacts to `.sessions/` (your workbench). You review, then **promote** to `delivery/` when ready.
+Commands save artifacts to `.sessions/` (your workbench). You review, then **promote** to `docs/` when ready.
 
 ```
-/mae-explore  → session artifacts  ──promote──→  delivery/01-explore/
-/mae-req      → requirements draft ──promote──→  delivery/02-requirements/REQUIREMENTS.md
-/mae-design   → design draft       ──promote──→  delivery/03-design/DESIGN.md
-/mae-plan     → roadmap + tasks    ──────────→  delivery/04-plan/
+/mae-explore  → session artifacts  ──promote──→  docs/01-explore/
+/mae-req      → requirements draft ──promote──→  docs/02-requirements/REQUIREMENTS.md
+/mae-design   → design draft       ──promote──→  docs/03-design/DESIGN.md
+/mae-plan     → roadmap + tasks    ──────────→  docs/04-plan/
 ```
 
-This keeps delivery/ clean — only confirmed, reviewed artifacts live there.
+This keeps docs/ clean — only confirmed, reviewed artifacts live there.
 
 ### Decision Pipeline
 
@@ -117,7 +117,7 @@ your-project/
 ├── DECISIONS.md              ← Decision audit trail
 ├── OPEN_QUESTIONS.md         ← Questions needing answers
 ├── WORKLOG.md                ← Activity log
-├── delivery/
+├── docs/
 │   ├── 01-explore/           ← Confirmed explore artifacts
 │   ├── 02-requirements/      ← REQUIREMENTS.md
 │   ├── 03-design/            ← DESIGN.md

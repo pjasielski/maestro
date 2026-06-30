@@ -78,9 +78,9 @@ Technical professionals working with AI tools experience:
 | FR-01 | Provide 8 delivery commands covering explore→PRD→design→plan→do→review→checkpoint→init | Must | All commands produce structured artifacts following templates |
 | FR-02 | Provide 4 utility commands (decide, sync, status, md) for project management | Must | Decision tracking, state sync, status overview, and file saving work reliably |
 | FR-03 | Maintain project context via HANDOFF.md as single source of truth | Must | New sessions restore full context by reading HANDOFF.md + session summary |
-| FR-04 | Sessions-first artifact flow with promotion to delivery/ | Must | All command output goes to .sessions/; promotion to delivery/ requires user confirmation |
+| FR-04 | Sessions-first artifact flow with promotion to docs/ | Must | All command output goes to .sessions/; promotion to docs/ requires user confirmation |
 | FR-05 | Decision pipeline: ideas → open questions → decisions → canonical files | Must | Full audit trail from initial idea to implemented decision |
-| FR-06 | Task management via markdown files in delivery/04-plan/tasks/ | Must | Tasks have statuses (todo/in-progress/done/blocked), are created by /mae-plan |
+| FR-06 | Task management via markdown files in docs/04-plan/tasks/ | Must | Tasks have statuses (todo/in-progress/done/blocked), are created by /mae-plan |
 | FR-07 | Session visibility configuration (committed or gitignored) with team support via `[[team.members]]` | Must | Session visibility set in maestro.toml; team behavior (WORKLOG "who" column, /sync required) inferred from team members being defined |
 | FR-08 | Install via curl pipe bash with simplified setup (one question: session visibility) | Must | Fresh install creates complete framework scaffold with all tool adapters; re-install is non-destructive for user files |
 | FR-09 | Support multiple AI tools via adapter pattern (all adapters installed by default) | Should | Claude Code, Cursor, and Codex adapters installed automatically; unused adapters are inert |
@@ -89,7 +89,7 @@ Technical professionals working with AI tools experience:
 | FR-12 | Template system for all delivery artifacts (PRD, SDD, explore, task, roadmap, etc.) | Must | Templates are customizable, ship with core + optional section pattern |
 | FR-13 | Auto-save substantive responses to numbered session files | Must | Every proposal/analysis/draft saved as NN_description.md in session folder |
 | FR-14 | Consistency flags (CONSISTENCY, GAP, UNCLEAR, STALE, DRIFT) | Should | Agent automatically flags contradictions between artifacts |
-| FR-15 | PoC workflow via `poc` flag on existing commands | Should | All delivery commands accept `poc` flag; PoC artifacts use separate files (PRD-poc.md), archived to delivery/poc/ when production versions replace them |
+| FR-15 | PoC workflow via `poc` flag on existing commands | Should | All delivery commands accept `poc` flag; PoC artifacts use separate files (PRD-poc.md), archived to docs/poc/ when production versions replace them |
 | FR-16 | Browser-based setup wizard for non-technical users | Nice | setup/index.html generates install command from user selections |
 | FR-17 | Integration with ai-deck presentation framework | Should | /mae-deck command delegates to ai-deck for presentation generation |
 
@@ -102,7 +102,7 @@ Technical professionals working with AI tools experience:
 | NFR-03 | File sizes | Delivery artifacts stay within defined limits | PRD: 1,500–3,000 words; SDD: 2,000–4,000 words; Tasks: 200–500 words |
 | NFR-04 | Install time | Fresh installation completes quickly | < 30 seconds for curl pipe bash |
 | NFR-05 | Tool neutrality | Framework instructions (MAESTRO.md) contain no tool-specific language | MAESTRO.md is tool-agnostic; tool-specific code lives in adapters only |
-| NFR-06 | Git friendliness | All artifacts are plain text, diffable, and merge-friendly | No binary files in delivery/ or .sessions/ |
+| NFR-06 | Git friendliness | All artifacts are plain text, diffable, and merge-friendly | No binary files in docs/ or .sessions/ |
 
 ---
 
@@ -111,7 +111,7 @@ Technical professionals working with AI tools experience:
 ### 5.1 In Scope (v0.1.0–v0.5.0)
 
 - 8 delivery commands + 4 utility commands (all as markdown files)
-- Sessions-first artifact flow with delivery/ promotion (`.sessions/` canonical)
+- Sessions-first artifact flow with docs/ promotion (`.sessions/` canonical)
 - HANDOFF.md / DECISIONS.md / OPEN_QUESTIONS.md / WORKLOG.md tracking system
 - maestro.toml configuration (session_visibility, user/team profile)
 - Template system (PRD, SDD, explore, task, summary, report, review, issue, roadmap)
@@ -120,7 +120,7 @@ Technical professionals working with AI tools experience:
 - Claude Code native support + Cursor/Codex adapters (all installed automatically)
 - Output tiers (standard, verbose, caveman)
 - PoC flag on all delivery commands with separate artifact files
-- Implementation reports in delivery/05-implementation/
+- Implementation reports in docs/05-implementation/
 - ai-deck integration via /mae-deck wrapper command
 - Documentation (README, user guide, tool capability matrix)
 
@@ -163,7 +163,7 @@ Technical professionals working with AI tools experience:
 | US-1.1 | As a developer, I want to run /mae-explore to analyze documents and build understanding so that I don't start designing with incomplete knowledge | Explore command produces structured analysis with questions, gaps, and readiness assessment | Must |
 | US-1.2 | As a developer, I want /mae-req to generate a requirements document from explore artifacts so that requirements are formalized and traceable | PRD follows template, references explore findings, flags ambiguities | Must |
 | US-1.3 | As an architect, I want /mae-design to produce an SDD with a technical questionnaire so that design decisions are explicit and reasoned | SDD covers architecture, tech stack, data model, source structure; questionnaire surfaces decisions needing human input | Must |
-| US-1.4 | As a developer, I want /mae-plan to break the SDD into task files so that I have actionable work items | Task files created in delivery/04-plan/tasks/ with statuses, effort estimates, and dependency info | Must |
+| US-1.4 | As a developer, I want /mae-plan to break the SDD into task files so that I have actionable work items | Task files created in docs/04-plan/tasks/ with statuses, effort estimates, and dependency info | Must |
 | US-1.5 | As a developer, I want /mae-do to execute tasks (planned or ad-hoc) so that I can implement with AI assistance while maintaining traceability | Execution reports saved to session; task status updated on completion | Must |
 | US-1.6 | As a lead, I want /mae-review to evaluate code or artifacts against the SDD/PRD so that quality is maintained | Review produces severity-sorted findings with concrete fix suggestions | Must |
 
@@ -216,7 +216,7 @@ Technical professionals working with AI tools experience:
 | Story ID | User Story | Acceptance Criteria | Priority |
 |---|---|---|---|
 | US-6.1 | As a developer, I want to add `poc` to any delivery command so that I get a lighter, prototype-focused version of the artifact | All delivery commands accept `poc` flag; output includes PoC banner, limitations section, and production delta section | Should |
-| US-6.2 | As a developer, I want PoC artifacts stored as separate files so that they can coexist with production artifacts during transition | PoC artifacts named `REQUIREMENTS-poc.md`, `SDD-poc.md`, etc.; archived to `delivery/poc/` when production versions are ready | Should |
+| US-6.2 | As a developer, I want PoC artifacts stored as separate files so that they can coexist with production artifacts during transition | PoC artifacts named `REQUIREMENTS-poc.md`, `SDD-poc.md`, etc.; archived to `docs/poc/` when production versions are ready | Should |
 | US-6.3 | As a developer, I want production commands to use my PoC artifact as a starting point so that I don't redo work | Running `/mae-req` when `REQUIREMENTS-poc.md` exists reads the PoC version and expands it | Should |
 
 ---
@@ -273,10 +273,10 @@ Technical professionals working with AI tools experience:
 
 | Term | Definition |
 |---|---|
-| Session | A working folder (.sessions/NNN-name/) containing artifacts for one work period; material is promoted to delivery/ when confirmed |
-| Delivery folder | Canonical artifact storage (delivery/01-explore/ through delivery/09-maintenance/) — only confirmed, reviewed content lives here |
-| Promotion | Moving a draft artifact from .sessions/ to delivery/ after user review |
-| Artifact flow | The pipeline: .sessions/ (workbench) → delivery/ (confirmed) |
+| Session | A working folder (.sessions/NNN-name/) containing artifacts for one work period; material is promoted to docs/ when confirmed |
+| Delivery folder | Canonical artifact storage (docs/01-explore/ through docs/09-maintenance/) — only confirmed, reviewed content lives here |
+| Promotion | Moving a draft artifact from .sessions/ to docs/ after user review |
+| Artifact flow | The pipeline: .sessions/ (workbench) → docs/ (confirmed) |
 | HANDOFF.md | Single source of truth for project status, decisions, architecture — read at the start of every session |
 | Adapter | A thin wrapper file that translates Maestro's tool-neutral commands into a specific AI tool's format |
 | Output tier | Density level for command output: standard (default), verbose (-v), caveman (-c) |

@@ -5,14 +5,14 @@ Generate a Requirements Document from confirmed explore artifacts.
 $ARGUMENTS — optional: topic focus, flags
 
 ## Prerequisites
-- `delivery/01-explore/` should contain confirmed artifacts (ideally the final explore report)
+- `docs/01-explore/` should contain confirmed artifacts (ideally the final explore report)
 - If empty: warn and suggest running `/mae-explore` first
 - If the explore report contains unresolved `GAP:` or `UNCLEAR:` tags, warn: "The explore report has N unresolved gaps. Consider resolving these first, or I'll flag them in the requirements."
 
 ## Behavior
 
 1. **Read inputs (prioritized):**
-   - Final explore report in `delivery/01-explore/` (primary input — this is the synthesis)
+   - Final explore report in `docs/01-explore/` (primary input — this is the synthesis)
    - If no final report exists: read all individual explore artifacts (warn if >5 files about context budget)
    - `DECISIONS.md` (relevant prior decisions)
    - `OPEN_QUESTIONS.md` (check for unresolved items affecting requirements)
@@ -29,10 +29,10 @@ $ARGUMENTS — optional: topic focus, flags
 
 3. **Save draft to session folder** (numbered file, e.g., `04_requirements-draft.md`)
 
-4. **Offer promotion:** "Requirements draft saved to session. Ready to promote to delivery/02-requirements/REQUIREMENTS.md?"
-   - If user confirms → copy to `delivery/02-requirements/REQUIREMENTS.md`
+4. **Offer promotion:** "Requirements draft saved to session. Ready to promote to docs/02-requirements/REQUIREMENTS.md?"
+   - If user confirms → copy to `docs/02-requirements/REQUIREMENTS.md`
    - If user wants changes → iterate in session first
-   - If user says "save directly to delivery" in the original prompt → skip the ask
+   - If user says "save directly to docs" in the original prompt → skip the ask
 
 5. **Save report** to session folder
 

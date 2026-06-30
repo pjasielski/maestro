@@ -30,13 +30,13 @@ Open questions              → OPEN_QUESTIONS.md
 Activity log                → WORKLOG.md
 Project config              → maestro.toml
 
-Exploration artifacts       → delivery/01-explore/
-Requirements                → delivery/02-requirements/REQUIREMENTS.md
-Architecture/Design         → delivery/03-design/DESIGN.md
-Plan, roadmap & tasks       → delivery/04-plan/ROADMAP.md, delivery/04-plan/tasks/
-Implementation reports     → delivery/05-implementation/  (on demand)
-Review artifacts            → delivery/06-review/  (on demand)
-Test artifacts              → delivery/07-test/    (on demand)
+Exploration artifacts       → docs/01-explore/
+Requirements                → docs/02-requirements/REQUIREMENTS.md
+Architecture/Design         → docs/03-design/DESIGN.md
+Plan, roadmap & tasks       → docs/04-plan/ROADMAP.md, docs/04-plan/tasks/
+Implementation reports     → docs/05-implementation/  (on demand)
+Review artifacts            → docs/06-review/  (on demand)
+Test artifacts              → docs/07-test/    (on demand)
 
 Templates                   → templates/
 Session history             → .sessions/{NNN}-{name}/
@@ -54,7 +54,7 @@ Framework commands          → .maestro/commands/mae-*.md
 
 - NEVER change architecture decisions without user approval
 - Flag inconsistencies: `CONSISTENCY:`, `GAP:`, `UNCLEAR:`, `STALE:`, `DRIFT:`
-- Treat `delivery/` artifacts as canonical truth
+- Treat `docs/` artifacts as canonical truth
 - `.sessions/` and `notes/` are working material, NOT canonical
 - Creating new files is free; editing canonical/source files requires review
 

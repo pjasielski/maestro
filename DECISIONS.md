@@ -4,7 +4,7 @@
 |---|------|---------|----------|--------|
 | D1 | 2026-04-20 | 001 | Framework name: Maestro (`mae-` prefix) | confirmed |
 | D2 | 2026-04-20 | 001 | Config format: TOML (`maestro.toml`) | confirmed |
-| D3 | 2026-04-20 | 001 | Artifact flow: sessions-first, promote to delivery/ | confirmed |
+| D3 | 2026-04-20 | 001 | Artifact flow: sessions-first, promote to docs/ | confirmed |
 | D4 | 2026-04-20 | 001 | Command naming: dashes (`/mae-explore`), flat files | confirmed |
 | D5 | 2026-04-22 | 002 | Explore behavior: adaptive + readiness signals | confirmed |
 | D6 | 2026-04-22 | 002 | User profile: `[user]` / `[[team.members]]` in maestro.toml | confirmed |

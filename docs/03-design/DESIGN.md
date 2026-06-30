@@ -3,8 +3,8 @@
 **Date:** 2026-06-18
 **Version:** v0.2.0
 **Status:** Draft — reconciled
-**Requirements:** delivery/02-requirements/REQUIREMENTS.md
-**Changes from v0.1:** Renamed from SDD.md. DESIGN.md as universal artifact name. ROADMAP.md moved to delivery/04-plan/. Checkpoint absorbed into sync. Session 010 consolidation decisions.
+**Requirements:** docs/02-requirements/REQUIREMENTS.md
+**Changes from v0.1:** Renamed from SDD.md. DESIGN.md as universal artifact name. ROADMAP.md moved to docs/04-plan/. Checkpoint absorbed into sync. Session 010 consolidation decisions.
 
 ---
 
@@ -17,7 +17,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 ### 1.2 Scope
 
 - Command execution model (markdown-based instructions)
-- File system architecture (.sessions/, delivery/, tracking files)
+- File system architecture (.sessions/, docs/, tracking files)
 - Configuration system (maestro.toml)
 - Template system
 - Installer and setup (install.sh, setup wizard)
@@ -61,7 +61,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 │              FILE SYSTEM (State)                     │
 │                                                      │
 │  ┌───────────┐  ┌──────────┐  ┌───────────────┐    │
-│  │.sessions/ │  │ delivery/│  │ tracking files │    │
+│  │.sessions/ │  │ docs/│  │ tracking files │    │
 │  │ (working) │──│ (canon.) │  │ HANDOFF.md     │    │
 │  └───────────┘  └──────────┘  │ DECISIONS.md   │    │
 │       promote ──────►         │ WORKLOG.md     │    │
@@ -73,7 +73,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 
 | Component | Responsibility | Technology | Notes |
 |---|---|---|---|
-| **Command files** | Define behavior for each delivery/utility command | Markdown (.md) | Source of truth in .maestro/commands/; adapters in .claude/commands/ etc. |
+| **Command files** | Define behavior for each docs/utility command | Markdown (.md) | Source of truth in .maestro/commands/; adapters in .claude/commands/ etc. |
 | **MAESTRO.md** | Framework-level instructions: rules, context loading, output standards | Markdown | Read by AI tool at session start; tool-agnostic |
 | **CLAUDE.md** | Project-specific config and instructions | Markdown | Claude Code convention; other tools use their equivalents |
 | **maestro.toml** | Framework settings: session visibility, profile, project metadata | TOML | Optional; framework works with sensible defaults |
@@ -82,7 +82,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 | **Setup wizard** | Browser-based configuration UI | HTML + JS | setup/index.html; generates install command |
 | **Tracking files** | Project state: HANDOFF.md, DECISIONS.md, OPEN_QUESTIONS.md, WORKLOG.md | Markdown | Root-level files; HANDOFF.md is the primary context source |
 | **Session manager** | Organizes working artifacts into numbered sessions | Convention | .sessions/NNN-name/ with _summary.md and numbered files |
-| **Delivery folders** | Stores canonical, promoted artifacts | Convention | delivery/01-explore/ through delivery/09-maintenance/ |
+| **Delivery folders** | Stores canonical, promoted artifacts | Convention | docs/01-explore/ through docs/09-maintenance/ |
 
 ### 2.3 Data Flow
 
@@ -91,9 +91,9 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 | 1 | User | AI Tool | Command invocation (/mae-explore, /mae-req poc, etc.) | Slash command or prompt |
 | 2 | AI Tool | Adapter file | Dispatch | Tool reads .claude/commands/mae-explore.md |
 | 3 | Adapter | .maestro/commands/ | Delegation | Adapter says "follow .maestro/commands/mae-explore.md" |
-| 4 | Command file | File system | Context loading | Command reads specified inputs (HANDOFF.md, delivery/, etc.) |
+| 4 | Command file | File system | Context loading | Command reads specified inputs (HANDOFF.md, docs/, etc.) |
 | 5 | AI Tool | .sessions/ | Output | Numbered artifact saved to current session folder |
-| 6 | User | delivery/ | Promotion | User confirms; AI copies session artifact to delivery/ |
+| 6 | User | docs/ | Promotion | User confirms; AI copies session artifact to docs/ |
 | 7 | AI Tool | Tracking files | State update | HANDOFF.md, DECISIONS.md, WORKLOG.md updated via /sync or /decide |
 
 ---
@@ -117,9 +117,9 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 - **Consequences:** Output quality depends on AI model compliance. Commands cannot perform deterministic operations (file validation, API calls). Benefit: universal portability.
 
 **ADR-002: Sessions-First Artifact Flow**
-- **Context:** AI output quality varies. Directly writing to canonical delivery/ folders risks polluting the audit trail with draft-quality content.
-- **Decision:** All command output goes to .sessions/ first. User reviews, then explicitly promotes to delivery/.
-- **Consequences:** Extra step for the user (promotion). Benefit: delivery/ stays clean and trustworthy. Exception: /mae-plan writes tasks directly to delivery/04-plan/tasks/ (tasks are immediately actionable).
+- **Context:** AI output quality varies. Directly writing to canonical docs/ folders risks polluting the audit trail with draft-quality content.
+- **Decision:** All command output goes to .sessions/ first. User reviews, then explicitly promotes to docs/.
+- **Consequences:** Extra step for the user (promotion). Benefit: docs/ stays clean and trustworthy. Exception: /mae-plan writes tasks directly to docs/04-plan/tasks/ (tasks are immediately actionable).
 
 **ADR-003: TOML Over YAML for Configuration**
 - **Context:** Need a human-editable configuration format for project settings, user profiles, and team definitions.
@@ -138,7 +138,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 
 **ADR-006: PoC as Command Flag, Not Separate Command**
 - **Context:** Users need lightweight, prototype-focused artifacts. Two approaches: a dedicated `/mae-poc` command, or a `poc` flag on existing commands.
-- **Decision:** PoC is a flag on existing delivery commands (`/mae-req poc`, `/mae-design poc`, etc.). PoC artifacts use separate files (REQUIREMENTS-poc.md) and are archived to `delivery/poc/` when production versions replace them.
+- **Decision:** PoC is a flag on existing delivery commands (`/mae-req poc`, `/mae-design poc`, etc.). PoC artifacts use separate files (REQUIREMENTS-poc.md) and are archived to `docs/poc/` when production versions replace them.
 - **Consequences:** No new command to learn. Same workflow, lighter requirements. Natural upgrade path from PoC to production. Each command file needs a `## PoC Mode` section.
 
 ---
@@ -152,10 +152,10 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 | **Project** | name, session_visibility, description | Has sessions, delivery artifacts, config | Defined by maestro.toml + directory structure |
 | **Session** | number, name, started date | Contains artifacts, summary | Folder: .sessions/NNN-name/ |
 | **Session Artifact** | number, description, type | Belongs to session; may be promoted to delivery | File: NN_description.md |
-| **Delivery Artifact** | phase, type (PRD/SDD/task/etc.) | Belongs to delivery phase | File in delivery/NN-phase/ |
-| **PoC Artifact** | phase, type, poc flag | Delivery artifact with -poc suffix | File: REQUIREMENTS-poc.md; archived to delivery/poc/ |
-| **Task** | ID, title, status, priority, effort | Belongs to plan; references SDD components | File: delivery/04-plan/tasks/task-NNN.md |
-| **Implementation Report** | date, task reference, findings | Belongs to implementation phase | File: delivery/05-implementation/YYYYMMDD_task-name.md |
+| **Delivery Artifact** | phase, type (PRD/SDD/task/etc.) | Belongs to delivery phase | File in docs/NN-phase/ |
+| **PoC Artifact** | phase, type, poc flag | Delivery artifact with -poc suffix | File: REQUIREMENTS-poc.md; archived to docs/poc/ |
+| **Task** | ID, title, status, priority, effort | Belongs to plan; references SDD components | File: docs/04-plan/tasks/task-NNN.md |
+| **Implementation Report** | date, task reference, findings | Belongs to implementation phase | File: docs/05-implementation/YYYYMMDD_task-name.md |
 | **Decision** | date, session, decision text, status | Referenced by HANDOFF.md | Row in DECISIONS.md |
 | **Open Question** | priority, question text, blocks | May become a decision | Row in OPEN_QUESTIONS.md |
 | **User Profile** | description, strengths, needs_help | Belongs to project config | Section in maestro.toml |
@@ -181,9 +181,9 @@ HANDOFF.md ──references──► DECISIONS.md
 .sessions/
   └─── NNN-name/
         ├─── _summary.md (decisions, open items, files)
-        └─── NN_artifact.md ───may promote to──► delivery/NN-phase/
+        └─── NN_artifact.md ───may promote to──► docs/NN-phase/
 
-delivery/
+docs/
   ├─── 01-explore/  ──► explore reports, transcripts
   ├─── 02-requirements/ ──► REQUIREMENTS.md (and REQUIREMENTS-poc.md during PoC)
   ├─── 03-design/   ──► DESIGN.md (and DESIGN-poc.md during PoC)
@@ -242,7 +242,7 @@ maestro/                          ← Framework repository root
 ├── .github/                      ← Codex adapter (generated by installer)
 │   └── copilot-instructions.md
 │
-├── delivery/                     ← Canonical delivery artifacts
+├── docs/                     ← Canonical delivery artifacts
 │   ├── 01-explore/
 │   ├── 02-requirements/          ← REQUIREMENTS.md
 │   ├── 03-design/                ← DESIGN.md
@@ -332,7 +332,7 @@ Cursor adapters use `.cursor/rules/maestro-dispatch.mdc` which maps command name
 - **Self-download** (curl pipe bash): Downloads files from GitHub, then runs installation
 
 **What the installer always does:**
-- Creates full folder structure (delivery/01 through 08, .sessions/, notes/, templates/, .maestro/commands/)
+- Creates full folder structure (docs/01 through 08, .sessions/, notes/, templates/, .maestro/commands/)
 - Installs all tool adapters (.claude/commands/, .cursor/rules/, .github/copilot-instructions.md)
 - Copies framework files (MAESTRO.md, .maestro/commands/) — always updates to latest
 - Copies templates using `create_if_missing` — never overwrites user customizations

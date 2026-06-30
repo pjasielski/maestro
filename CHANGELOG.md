@@ -33,7 +33,7 @@ Initial alpha release. Tagged on current `main` state.
 ### Features
 - 8 delivery commands: init, explore, prd, design, plan, do, review, checkpoint
 - 4 utility commands: decide, sync, status, md
-- Sessions-first artifact flow with promotion to delivery/
+- Sessions-first artifact flow with promotion to docs/
 - Multi-tool support: Claude Code, Cursor, Codex adapters
 - Setup wizard (HTML + Python server)
 - Output tiers: standard, verbose (-v), caveman (-c)

@@ -8,8 +8,8 @@ Batch-update canonical project files based on accumulated decisions and progress
    - Current session's `_summary.md`
    - `DECISIONS.md` — identify entries not yet reflected in canonical files
    - `HANDOFF.md` for current state
-   - `delivery/04-plan/ROADMAP.md` for task/milestone status
-   - `delivery/04-plan/tasks/` for task status changes
+   - `docs/04-plan/ROADMAP.md` for task/milestone status
+   - `docs/04-plan/tasks/` for task status changes
 
 2. **Update HANDOFF.md:**
    - Current phase, status, recent changes
@@ -46,4 +46,4 @@ Batch-update canonical project files based on accumulated decisions and progress
 - **Every edit to canonical files requires review** — show diff, wait for approval
 - Group related changes for review efficiency
 - If a decision contradicts an existing canonical entry, flag the conflict explicitly
-- Never auto-apply changes to delivery/ artifacts
+- Never auto-apply changes to docs/ artifacts

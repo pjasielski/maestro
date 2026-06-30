@@ -14,8 +14,8 @@ $ARGUMENTS — optional: milestone number, "roadmap", or specific items
 ```
 
 ## Prerequisites
-- `delivery/03-design/DESIGN.md` must exist (architecture informs the plan)
-- `delivery/02-requirements/REQUIREMENTS.md` should exist (requirements inform priorities)
+- `docs/03-design/DESIGN.md` must exist (architecture informs the plan)
+- `docs/02-requirements/REQUIREMENTS.md` should exist (requirements inform priorities)
 - If neither exists: warn and suggest running `/mae-design` first
 
 ## Behavior
@@ -23,12 +23,12 @@ $ARGUMENTS — optional: milestone number, "roadmap", or specific items
 ### Create Roadmap (no roadmap exists)
 
 1. **Read inputs:**
-   - `delivery/03-design/DESIGN.md` (components, tech stack, architecture)
-   - `delivery/02-requirements/REQUIREMENTS.md` (requirements, epics, priorities)
+   - `docs/03-design/DESIGN.md` (components, tech stack, architecture)
+   - `docs/02-requirements/REQUIREMENTS.md` (requirements, epics, priorities)
    - `DECISIONS.md` (confirmed decisions)
    - `templates/roadmap.md` (output structure)
 
-2. **Generate `delivery/04-plan/ROADMAP.md`:**
+2. **Generate `docs/04-plan/ROADMAP.md`:**
    - Group work into milestones by theme (foundation, features, polish, etc.)
    - Each milestone gets a version target, description, and item table
    - Items include: priority, effort estimate, dependencies, status (☐ todo)
@@ -39,9 +39,9 @@ $ARGUMENTS — optional: milestone number, "roadmap", or specific items
 ### Enrich Milestone (roadmap exists)
 
 1. **Read inputs:**
-   - `delivery/04-plan/ROADMAP.md` (the milestone to enrich)
-   - `delivery/03-design/DESIGN.md` (architecture details)
-   - Existing tasks in `delivery/04-plan/tasks/` (avoid duplicates)
+   - `docs/04-plan/ROADMAP.md` (the milestone to enrich)
+   - `docs/03-design/DESIGN.md` (architecture details)
+   - Existing tasks in `docs/04-plan/tasks/` (avoid duplicates)
 
 2. **Add execution notes** to the milestone section in ROADMAP.md:
    ```markdown
@@ -54,7 +54,7 @@ $ARGUMENTS — optional: milestone number, "roadmap", or specific items
    **Parallelizable:** 1.2, 1.4, 1.6
    ```
 
-3. **Generate task files** directly in `delivery/04-plan/tasks/`:
+3. **Generate task files** directly in `docs/04-plan/tasks/`:
    - One file per task: task-001.md, task-002.md, etc.
    - Using `templates/task.md` format
    - If tasks already exist, continue from highest number
@@ -75,7 +75,7 @@ When invoked with `roadmap` argument on an existing roadmap:
 - Identify tasks that can run in parallel
 - Status column uses: ☐ todo | 🔄 in progress | ⏳ blocked | ✅ done | ⊘ dropped
 
-## Why tasks go directly to delivery/
+## Why tasks go directly to docs/
 Task files are immediately actionable — they ARE the plan. Saving drafts to .sessions/ adds friction with no safety benefit since tasks are small, easily edited, and meant to be picked up by `/mae-do`.
 
 ## Skip When

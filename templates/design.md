@@ -3,7 +3,7 @@
 **Date:** {YYYY-MM-DD}
 **Version:** {v1}
 **Status:** Draft | In Review | Approved
-**Requirements:** {link to delivery/02-requirements/REQUIREMENTS.md}
+**Requirements:** {link to docs/02-requirements/REQUIREMENTS.md}
 
 <!--
   Maestro Design Template (Technical Architecture)

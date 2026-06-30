@@ -3,7 +3,7 @@
 **Date:** {YYYY-MM-DD}
 **Version:** {v1}
 **Status:** Draft | In Review | Approved
-**Explore report:** {link to delivery/01-explore/ if applicable}
+**Explore report:** {link to docs/01-explore/ if applicable}
 
 <!--
   Maestro Requirements Template

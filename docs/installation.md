@@ -157,7 +157,7 @@ your-project/
 ├── .cursor/rules/                    ← Cursor integration (if selected)
 ├── .github/copilot-instructions.md   ← Copilot/Codex integration (if selected)
 │
-├── delivery/
+├── docs/
 │   ├── 01-explore/
 │   ├── 02-requirements/
 │   ├── 03-design/
@@ -180,7 +180,7 @@ One person installs and commits. Others pull and configure their own tool.
 ```
 ✓  MAESTRO.md, CLAUDE.md, maestro.toml
 ✓  HANDOFF.md, DECISIONS.md, OPEN_QUESTIONS.md, WORKLOG.md
-✓  delivery/, templates/
+✓  docs/, templates/
 ✓  .maestro/commands/, .claude/commands/, .cursor/rules/
 ✗  .sessions/  — personal working notes (when session_visibility = "gitignored")
 ```
@@ -234,7 +234,7 @@ Maestro is just files. To remove it:
 ```bash
 rm -rf .maestro/ .cursor/rules/maestro-*.mdc
 rm -f MAESTRO.md maestro.toml HANDOFF.md DECISIONS.md OPEN_QUESTIONS.md WORKLOG.md
-rm -rf delivery/ .sessions/ templates/
+rm -rf docs/ .sessions/ templates/
 rm -f .github/copilot-instructions.md
 ```
 

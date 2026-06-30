@@ -78,9 +78,9 @@ If the user doesn't provide a title and jumps into work, ask: "Should I open a s
 
 | Task                         | Load                                                                        | Skip                          |
 | ---------------------------- | --------------------------------------------------------------------------- | ----------------------------- |
-| **Exploration**        | HANDOFF.md, delivery/01-explore/                                                        | Code, design, plan                 |
-| **Requirements**       | HANDOFF.md, delivery/01-explore/, DECISIONS.md                                          | Code, design                       |
-| **Design**             | HANDOFF.md, REQUIREMENTS.md, delivery/01-explore/ (technical sections), maestro.toml    | Code, test files                   |
+| **Exploration**        | HANDOFF.md, docs/01-explore/                                                        | Code, design, plan                 |
+| **Requirements**       | HANDOFF.md, docs/01-explore/, DECISIONS.md                                          | Code, design                       |
+| **Design**             | HANDOFF.md, REQUIREMENTS.md, docs/01-explore/ (technical sections), maestro.toml    | Code, test files                   |
 | **Planning**           | HANDOFF.md, DESIGN.md, ROADMAP.md, existing tasks                                       | Full code, exploration             |
 | **Implementation**     | HANDOFF.md, task file, DESIGN.md (relevant section), source files                       | Other tasks, exploration, req      |
 | **Code review**        | HANDOFF.md, DESIGN.md, files being reviewed                                              | Exploration, planning              |
@@ -105,15 +105,15 @@ Open questions              → OPEN_QUESTIONS.md
 Activity log                → WORKLOG.md
 Project config              → maestro.toml
 
-Exploration artifacts       → delivery/01-explore/
-Requirements               → delivery/02-requirements/REQUIREMENTS.md
-Design (architecture)      → delivery/03-design/DESIGN.md
-Roadmap & tasks            → delivery/04-plan/ROADMAP.md and delivery/04-plan/tasks/
-Implementation reports     → delivery/05-implementation/  (created on demand)
-Review artifacts            → delivery/06-review/  (created on demand)
-Test artifacts              → delivery/07-test/    (created on demand)
-Deployment config           → delivery/08-deploy/  (created on demand)
-Maintenance & bugs          → delivery/09-maintenance/  (created on demand)
+Exploration artifacts       → docs/01-explore/
+Requirements               → docs/02-requirements/REQUIREMENTS.md
+Design (architecture)      → docs/03-design/DESIGN.md
+Roadmap & tasks            → docs/04-plan/ROADMAP.md and docs/04-plan/tasks/
+Implementation reports     → docs/05-implementation/  (created on demand)
+Review artifacts            → docs/06-review/  (created on demand)
+Test artifacts              → docs/07-test/    (created on demand)
+Deployment config           → docs/08-deploy/  (created on demand)
+Maintenance & bugs          → docs/09-maintenance/  (created on demand)
 
 Templates                   → templates/
 Session history             → .sessions/{NNN}-{name}/_summary.md
@@ -127,11 +127,11 @@ Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-disp
 
 | Folder                       | Contains                                                       | Create when                                    |
 | ---------------------------- | -------------------------------------------------------------- | ---------------------------------------------- |
-| `delivery/05-implementation/` | Implementation reports from `/mae-do` execution              | First substantial implementation task          |
-| `delivery/06-review/`      | Review reports (code, docs, architecture), audit findings      | First formal review cycle                      |
-| `delivery/07-test/`        | Test plans, test reports, coverage summaries, QA checklists    | Test planning needed beyond inline tests       |
-| `delivery/08-deploy/`      | Deployment runbooks, environment configs, release checklists   | Deployment is non-trivial or multi-environment |
-| `delivery/09-maintenance/` | Bug reports (`issues/`), tech debt log, maintenance runbooks | First bug filed or maintenance task identified |
+| `docs/05-implementation/` | Implementation reports from `/mae-do` execution              | First substantial implementation task          |
+| `docs/06-review/`      | Review reports (code, docs, architecture), audit findings      | First formal review cycle                      |
+| `docs/07-test/`        | Test plans, test reports, coverage summaries, QA checklists    | Test planning needed beyond inline tests       |
+| `docs/08-deploy/`      | Deployment runbooks, environment configs, release checklists   | Deployment is non-trivial or multi-environment |
+| `docs/09-maintenance/` | Bug reports (`issues/`), tech debt log, maintenance runbooks | First bug filed or maintenance task identified |
 
 ---
 
@@ -141,7 +141,7 @@ Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-disp
 
 - NEVER change established architecture decisions without user approval
 - When you spot an inconsistency between code and DESIGN.md, flag it: `CONSISTENCY: [details]`
-- Treat `delivery/` artifacts as canonical truth for requirements and design
+- Treat `docs/` artifacts as canonical truth for requirements and design
 - `.sessions/` are working material, NOT canonical
 
 ### Code Standards
@@ -177,7 +177,7 @@ Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-disp
 **Review required (show changes, wait for approval):**
 
 - Editing HANDOFF.md
-- Editing any file in `delivery/` (canonical artifacts)
+- Editing any file in `docs/` (canonical artifacts)
 - Editing source code
 - Editing maestro.toml
 - Editing OPEN_QUESTIONS.md (when resolving questions)
@@ -295,11 +295,11 @@ These folders are created when first needed, not by `init`:
 
 | Phase       | Folder                              | Created when                       |
 | ----------- | ----------------------------------- | ---------------------------------- |
-| Implementation | `delivery/05-implementation/`  | First substantial `/mae-do` execution |
-| Review      | `delivery/06-review/`             | Formal review cycles or audits     |
-| Test        | `delivery/07-test/`               | Test plans need dedicated storage  |
-| Deploy      | `delivery/08-deploy/`             | Deployment is non-trivial          |
-| Maintenance | `delivery/09-maintenance/issues/` | Bugs, tech debt, maintenance tasks |
+| Implementation | `docs/05-implementation/`  | First substantial `/mae-do` execution |
+| Review      | `docs/06-review/`             | Formal review cycles or audits     |
+| Test        | `docs/07-test/`               | Test plans need dedicated storage  |
+| Deploy      | `docs/08-deploy/`             | Deployment is non-trivial          |
+| Maintenance | `docs/09-maintenance/issues/` | Bugs, tech debt, maintenance tasks |
 
 ---
 
@@ -309,31 +309,31 @@ These folders are created when first needed, not by `init`:
 Session (workbench)                     Delivery (confirmed)
 ────────────────                        ────────────────────
 /mae-explore
-  → working artifacts (session)  ──promote──→  delivery/01-explore/
-  → /mae-explore doc (session)   ──promote──→  delivery/01-explore/
+  → working artifacts (session)  ──promote──→  docs/01-explore/
+  → /mae-explore doc (session)   ──promote──→  docs/01-explore/
 
 /mae-req
-  ← reads delivery/01-explore/*
-  → requirements draft (session)  ──promote──→  delivery/02-requirements/REQUIREMENTS.md
+  ← reads docs/01-explore/*
+  → requirements draft (session)  ──promote──→  docs/02-requirements/REQUIREMENTS.md
 
 /mae-design
-  ← reads delivery/02-requirements/REQUIREMENTS.md
-  → design draft (session)        ──promote──→  delivery/03-design/DESIGN.md
+  ← reads docs/02-requirements/REQUIREMENTS.md
+  → design draft (session)        ──promote──→  docs/03-design/DESIGN.md
 
 /mae-plan
-  ← reads delivery/03-design/DESIGN.md
-  → ROADMAP.md                    ──────────→  delivery/04-plan/ROADMAP.md
-  → task files                    ──────────→  delivery/04-plan/tasks/
+  ← reads docs/03-design/DESIGN.md
+  → ROADMAP.md                    ──────────→  docs/04-plan/ROADMAP.md
+  → task files                    ──────────→  docs/04-plan/tasks/
 
 /mae-do
   ← reads task file + DESIGN.md (relevant section) + source files
   → code, docs, config           ──────────→  in-place
-  → implementation report         ──promote──→  delivery/05-implementation/
+  → implementation report         ──promote──→  docs/05-implementation/
 ```
 
-All commands save to `.sessions/` first. User reviews, then promotes to `delivery/` when ready.
-Exceptions: `/mae-plan` saves ROADMAP and tasks directly to delivery/ (immediately actionable).
-`/mae-do` saves reports to session; substantial reports can be promoted to `delivery/05-implementation/`.
+All commands save to `.sessions/` first. User reviews, then promotes to `docs/` when ready.
+Exceptions: `/mae-plan` saves ROADMAP and tasks directly to docs/ (immediately actionable).
+`/mae-do` saves reports to session; substantial reports can be promoted to `docs/05-implementation/`.
 
 ### Adaptive Workflow Guidance
 
@@ -439,7 +439,7 @@ Every command saves a report to the session folder:
 
 ## Task Management
 
-Tasks are markdown files in `delivery/04-plan/tasks/`. Each file IS the ticket.
+Tasks are markdown files in `docs/04-plan/tasks/`. Each file IS the ticket.
 
 **Template:** `templates/task.md`
 
