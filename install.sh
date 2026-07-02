@@ -6,10 +6,14 @@
 #   ./install.sh [target-directory] --quick  # skip prompts, defaults
 #   ./install.sh [target-directory] --preconfigured  # read settings from env vars
 #   curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
+#
+# To install from a specific branch:
+#   MAESTRO_BRANCH=feat/my-branch curl -fsSL "https://raw.githubusercontent.com/pjasielski/maestro/$MAESTRO_BRANCH/install.sh" | bash
 
 set -e
 
-MAESTRO_URL="${MAESTRO_URL:-https://raw.githubusercontent.com/pjasielski/maestro/main}"
+MAESTRO_BRANCH="${MAESTRO_BRANCH:-main}"
+MAESTRO_URL="${MAESTRO_URL:-https://raw.githubusercontent.com/pjasielski/maestro/$MAESTRO_BRANCH}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-/dev/null}")" 2>/dev/null && pwd || pwd)"
 TARGET="${1:-.}"
 mkdir -p "$TARGET"
