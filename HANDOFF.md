@@ -119,7 +119,7 @@
 | Roadmap | `docs/04-plan/ROADMAP.md` |
 | Tasks | `docs/04-plan/tasks/` |
 | Implementation reports | `docs/05-implementation/` |
-| Templates | `templates/` (requirements, design, explore, task, summary, report, roadmap) |
+| Templates | `.maestro/templates/` (requirements, design, explore, task, summary, report, roadmap) |
 | Framework commands | `.maestro/commands/` |
 | Claude Code adapters | `.claude/commands/` (wrappers + aliases) |
 | Cursor adapters | `.cursor/rules/` (core + dispatch) + `.cursor/commands/` (slash commands) |

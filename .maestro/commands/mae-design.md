@@ -8,7 +8,7 @@ Design the technical solution. Works at three levels of granularity, top-down an
 ```
 /mae-design
 ```
-Reads REQUIREMENTS.md. Generates DESIGN.md using `templates/design.md` as structure:
+Reads REQUIREMENTS.md. Generates DESIGN.md using `.maestro/templates/design.md` as structure:
 - Core sections (1-6) always included
 - Optional sections (7-11) included when relevant — omit if not applicable
 - Architecture overview (system boundaries, high-level flow)
@@ -53,7 +53,7 @@ Generates implementation specs for a specific file:
    - `docs/03-design/DESIGN.md` (if exists — for component/file-level modes)
    - `DECISIONS.md` (confirmed technical decisions)
    - `maestro.toml` (project context, user profile, tech preferences if configured)
-   - `templates/design.md` (output structure for full solution mode)
+   - `.maestro/templates/design.md` (output structure for full solution mode)
 
 2. **Technical questionnaire (full solution mode only):**
    Before generating the SDD, identify technical decisions the agent cannot make from available information:

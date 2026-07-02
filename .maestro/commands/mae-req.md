@@ -17,10 +17,10 @@ $ARGUMENTS — optional: topic focus, flags
    - `DECISIONS.md` (relevant prior decisions)
    - `OPEN_QUESTIONS.md` (check for unresolved items affecting requirements)
    - `maestro.toml` (project context, user profile if configured)
-   - `templates/requirements.md` (output structure)
+   - `.maestro/templates/requirements.md` (output structure)
    - Do NOT read raw sources (docs/, data/) — that's explore's job
 
-2. **Generate REQUIREMENTS.md** using `templates/requirements.md` as the structure:
+2. **Generate REQUIREMENTS.md** using `.maestro/templates/requirements.md` as the structure:
    - Core sections (1-7) always included
    - Optional sections (8-9, Glossary) included when relevant to the project
    - Omit optional sections that don't apply — don't leave empty placeholders

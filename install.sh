@@ -13,6 +13,8 @@
 
 set -e
 
+_BRANCH_EXPLICIT=false
+[ -n "${MAESTRO_BRANCH:-}" ] && _BRANCH_EXPLICIT=true
 MAESTRO_BRANCH="${MAESTRO_BRANCH:-main}"
 MAESTRO_URL="${MAESTRO_URL:-https://raw.githubusercontent.com/pjasielski/maestro/$MAESTRO_BRANCH}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-/dev/null}")" 2>/dev/null && pwd || pwd)"
@@ -32,7 +34,10 @@ PRECONFIGURED_MODE=""
 
 _CLEANUP_SOURCE=false
 if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
-  echo "Downloading framework files..."
+  echo "Downloading framework files from branch: $MAESTRO_BRANCH"
+  if [ "$MAESTRO_BRANCH" = "main" ] && ! $_BRANCH_EXPLICIT; then
+    echo "  (To install from a different branch, set MAESTRO_BRANCH=<branch>)"
+  fi
   SOURCE_DIR="$(mktemp -d)"
   _CLEANUP_SOURCE=true
   _DL_FAIL=0
@@ -51,16 +56,22 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
     fi
   done
 
-  mkdir -p "$SOURCE_DIR/templates"
+  mkdir -p "$SOURCE_DIR/.maestro/templates"
   for _tmpl in requirements design explore task summary report review roadmap; do
-    if ! curl -fsSL "$MAESTRO_URL/templates/$_tmpl.md" -o "$SOURCE_DIR/templates/$_tmpl.md" 2>/dev/null; then
+    if ! curl -fsSL "$MAESTRO_URL/.maestro/templates/$_tmpl.md" -o "$SOURCE_DIR/.maestro/templates/$_tmpl.md" 2>/dev/null; then
       echo "  Warning: failed to download template $_tmpl.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
     fi
   done
 
   if [ "$_DL_FAIL" -gt 0 ]; then
-    echo "  $_DL_FAIL file(s) failed to download. Install will continue with available files."
+    echo "  $_DL_FAIL file(s) failed to download." >&2
+    if [ "$MAESTRO_BRANCH" = "main" ] && ! $_BRANCH_EXPLICIT; then
+      echo "  This may be because the files have different names on 'main'." >&2
+      echo "  If you meant to install from a different branch, re-run with:" >&2
+      echo "    MAESTRO_BRANCH=<branch> bash -c 'curl -fsSL \"https://raw.githubusercontent.com/pjasielski/maestro/\$MAESTRO_BRANCH/install.sh\" | bash'" >&2
+    fi
+    echo "  Install will continue with available files."
   fi
 else
   SOURCE_DIR="$SCRIPT_DIR"
@@ -242,9 +253,9 @@ mkdir -p "$TARGET/docs/09-maintenance/issues"
 echo "  Created: docs/ (full structure)"
 
 mkdir -p "$TARGET/.sessions"
-mkdir -p "$TARGET/templates"
+mkdir -p "$TARGET/.maestro/templates"
 mkdir -p "$TARGET/.maestro/commands"
-echo "  Created: .sessions/, templates/, .maestro/commands/"
+echo "  Created: .sessions/, .maestro/commands/, .maestro/templates/"
 
 # ─────────────────────────────────────────────
 # Copy framework files (always update)
@@ -267,6 +278,53 @@ done
 echo "  Copied: .maestro/commands/ ($(ls "$TARGET/.maestro/commands/" | wc -l | tr -d ' ') files)"
 
 # ─────────────────────────────────────────────
+# Clean up deprecated files from earlier versions
+# ─────────────────────────────────────────────
+
+_MIGRATED=0
+for _old in mae-prd.md mae-checkpoint.md; do
+  if [ -f "$TARGET/.maestro/commands/$_old" ]; then
+    rm "$TARGET/.maestro/commands/$_old"
+    echo "  Removed: .maestro/commands/$_old (renamed)"
+    _MIGRATED=$((_MIGRATED + 1))
+  fi
+done
+for _old in prd.md sdd.md; do
+  if [ -f "$TARGET/templates/$_old" ]; then
+    rm "$TARGET/templates/$_old"
+    echo "  Removed: templates/$_old (renamed)"
+    _MIGRATED=$((_MIGRATED + 1))
+  fi
+done
+for _old in mae-prd.md mae-checkpoint.md; do
+  [ -f "$TARGET/.claude/commands/$_old" ] && rm "$TARGET/.claude/commands/$_old"
+  [ -f "$TARGET/.cursor/commands/$_old" ] && rm "$TARGET/.cursor/commands/$_old"
+done
+if [ -d "$TARGET/templates" ]; then
+  if [ -n "$(ls -A "$TARGET/templates/" 2>/dev/null)" ]; then
+    cp "$TARGET/templates/"*.md "$TARGET/.maestro/templates/" 2>/dev/null || true
+    echo "  Migrated: templates/ → .maestro/templates/"
+  fi
+  rm -rf "$TARGET/templates"
+  _MIGRATED=$((_MIGRATED + 1))
+fi
+if [ -d "$TARGET/delivery" ]; then
+  echo "  Note: delivery/ folder found — contents now belong in docs/"
+  echo "        Move your files manually: mv delivery/* docs/"
+  _MIGRATED=$((_MIGRATED + 1))
+fi
+if [ -d "$TARGET/sessions" ]; then
+  echo "  Note: sessions/ folder found — renamed to .sessions/ in new version"
+  echo "        Move your files manually: mv sessions/* .sessions/"
+  _MIGRATED=$((_MIGRATED + 1))
+fi
+if [ -d "$TARGET/notes" ]; then
+  echo "  Note: notes/ folder found — no longer used in new version"
+  _MIGRATED=$((_MIGRATED + 1))
+fi
+[ "$_MIGRATED" -eq 0 ] && echo "  No deprecated files found"
+
+# ─────────────────────────────────────────────
 # Copy templates (overwrite only with --force)
 # ─────────────────────────────────────────────
 
@@ -275,16 +333,16 @@ section "Copying templates"
 TMPL_NEW=0
 TMPL_SKIP=0
 TMPL_REPLACED=0
-for tmpl in "$SOURCE_DIR/templates/"*.md; do
+for tmpl in "$SOURCE_DIR/.maestro/templates/"*.md; do
   [ -f "$tmpl" ] || continue
   BASENAME="$(basename "$tmpl")"
-  if [ -f "$TARGET/templates/$BASENAME" ] && ! $FORCE_MODE; then
+  if [ -f "$TARGET/.maestro/templates/$BASENAME" ] && ! $FORCE_MODE; then
     TMPL_SKIP=$((TMPL_SKIP + 1))
-  elif [ -f "$TARGET/templates/$BASENAME" ]; then
-    cp "$tmpl" "$TARGET/templates/$BASENAME"
+  elif [ -f "$TARGET/.maestro/templates/$BASENAME" ]; then
+    cp "$tmpl" "$TARGET/.maestro/templates/$BASENAME"
     TMPL_REPLACED=$((TMPL_REPLACED + 1))
   else
-    cp "$tmpl" "$TARGET/templates/$BASENAME"
+    cp "$tmpl" "$TARGET/.maestro/templates/$BASENAME"
     TMPL_NEW=$((TMPL_NEW + 1))
   fi
 done

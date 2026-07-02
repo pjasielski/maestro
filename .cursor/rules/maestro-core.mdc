@@ -38,7 +38,7 @@ Implementation reports     → docs/05-implementation/  (on demand)
 Review artifacts            → docs/06-review/  (on demand)
 Test artifacts              → docs/07-test/    (on demand)
 
-Templates                   → templates/
+Templates                   → .maestro/templates/
 Session history             → .sessions/{NNN}-{name}/
 Framework commands          → .maestro/commands/mae-*.md
 ```

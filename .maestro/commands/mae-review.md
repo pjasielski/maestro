@@ -20,7 +20,7 @@ Review existing code or delivery artifacts for quality, consistency, and complet
    - For code: DESIGN.md (architecture), coding standards
    - For requirements: explore artifacts, DECISIONS.md
    - For design: REQUIREMENTS.md (does design match requirements?)
-3. **Generate review** using `templates/review.md` structure, findings categorized:
+3. **Generate review** using `.maestro/templates/review.md` structure, findings categorized:
 
    - 🔴 **Critical** — must fix (security, correctness, data loss risk)
    - 🟡 **Important** — should fix (consistency, maintainability, performance)

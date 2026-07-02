@@ -92,7 +92,7 @@ Maestro is "installed" when these files exist in your project:
 - `MAESTRO.md` — the framework instructions (the agent reads this)
 - `.claude/commands/mae-*.md` — delivery command files (8 commands)
 - `.claude/commands/{status,decide,sync,md}.md` — utility commands (4 commands)
-- `templates/*.md` — document templates (6 templates)
+- `.maestro/templates/*.md` — document templates (6 templates)
 
 That's it. Maestro is a set of files. The AI agent reads `MAESTRO.md` on startup and follows its instructions. The commands are Claude Code slash commands that trigger specific behaviors.
 
@@ -120,7 +120,7 @@ The installer is idempotent — running it again won't overwrite existing files.
 Copy the framework files from the Maestro repo into your project manually. You need:
 - `MAESTRO.md` → project root
 - `.claude/commands/*.md` → `.claude/commands/` in your project
-- `templates/*.md` → `templates/` in your project
+- `.maestro/templates/*.md` → `.maestro/templates/` in your project
 
 Then create the tracking files and folder structure yourself, or run `/mae-init` in your first conversation.
 
@@ -188,7 +188,7 @@ your-project/
 ├── notes/                       ← Raw ideas, parking lot
 │   └── ideas.md
 │
-├── templates/                   ← Document templates (customizable)
+├── .maestro/templates/          ← Document templates (customizable)
 │   ├── task.md
 │   ├── summary.md
 │   ├── report.md
@@ -232,7 +232,7 @@ your-project/
 | **docs/** | Review required | Canonical, confirmed artifacts |
 | **sessions/** | Free | Working material, drafts, analysis |
 | **notes/** | Free | Ideas, parking lot |
-| **templates/** | User customizable | Document structure templates |
+| **.maestro/templates/** | User customizable | Document structure templates |
 
 ---
 
@@ -263,11 +263,11 @@ The most sophisticated command. Adapts to project state and produces the most us
 - On first explore: scans for existing resources (docs/, data/, src/), asks before reading
 - Every artifact includes questions to deepen understanding
 - Tracks readiness signals (scope, coverage, gaps) and updates `_summary.md`
-- Final report uses `templates/explore.md`
+- Final report uses `.maestro/templates/explore.md`
 
 ### /mae-req — Formalize Requirements
 
-Generates PRD from explore artifacts using `templates/requirements.md`.
+Generates PRD from explore artifacts using `.maestro/templates/requirements.md`.
 
 **Key behaviors:**
 - Prioritizes reading the final explore report over individual artifacts
@@ -277,7 +277,7 @@ Generates PRD from explore artifacts using `templates/requirements.md`.
 
 ### /mae-design — Technical Architecture
 
-Creates SDD from PRD + explore report using `templates/design.md`.
+Creates SDD from PRD + explore report using `.maestro/templates/design.md`.
 
 **Modes:**
 - No arguments → full solution design
@@ -362,7 +362,7 @@ Build mutual understanding between the user and the AI agent. Understand the pro
 
 3. **Ask mode:** Explicit question generation. Produces structured question documents with space for async responses. The user or client fills in answers in the file. Next explore reads the answers and incorporates them.
 
-4. **Final report:** `explore doc` synthesizes all exploration artifacts into a structured report using `templates/explore.md`. This report becomes the input for the PRD phase.
+4. **Final report:** `explore doc` synthesizes all exploration artifacts into a structured report using `.maestro/templates/explore.md`. This report becomes the input for the PRD phase.
 
 ### Readiness Signals
 
@@ -393,7 +393,7 @@ Formalize what you're building. Transform the understanding from exploration int
 2. Individual explore artifacts (fallback if no report)
 3. DECISIONS.md, OPEN_QUESTIONS.md
 4. maestro.toml (project context)
-5. templates/requirements.md (structure)
+5. .maestro/templates/requirements.md (structure)
 
 The PRD does NOT read raw sources (docs/, data/). That's explore's job. The explore report should contain everything the PRD needs.
 
@@ -419,7 +419,7 @@ Define how to build it. Translate product requirements into technical architectu
 2. Explore report (technical context — current state, constraints, integrations)
 3. DECISIONS.md (confirmed technical decisions)
 4. maestro.toml (user profile for adaptation)
-5. templates/design.md (structure)
+5. .maestro/templates/design.md (structure)
 
 ### Technical Questionnaire
 
@@ -526,7 +526,7 @@ All templates use the **core + optional** pattern:
 | `report.md` | Command Report | 5 sections | — |
 | `issue.md` | Bug/Maintenance Issue | 5 fields | Steps to Reproduce |
 
-Templates are customizable — edit them in `templates/` to match your domain.
+Templates are customizable — edit them in `.maestro/templates/` to match your domain.
 
 ---
 
@@ -676,7 +676,7 @@ docs/09-maintenance/
     └── debt-001-refactor-auth-module.md
 ```
 
-Issues use `templates/issue.md` with types: bug, tech-debt, improvement, maintenance.
+Issues use `.maestro/templates/issue.md` with types: bug, tech-debt, improvement, maintenance.
 Statuses: open → investigating → in-progress → resolved → closed (or wont-fix).
 
 **Assignment:** Each issue has an `Assigned:` field. In team mode, `/status` shows issues grouped by assignee.
@@ -695,7 +695,7 @@ Create a `.md` file in `.claude/commands/`:
 
 ### Custom Templates
 
-Edit files in `templates/` to match your domain. Add industry-specific sections, compliance requirements, etc.
+Edit files in `.maestro/templates/` to match your domain. Add industry-specific sections, compliance requirements, etc.
 
 ### Extending Delivery Structure
 

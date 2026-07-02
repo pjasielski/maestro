@@ -195,7 +195,7 @@ Technical professionals working with AI tools experience:
 | Story ID | User Story | Acceptance Criteria | Priority |
 |---|---|---|---|
 | US-4.1 | As a developer, I want to install Maestro with a single curl command so that setup is frictionless | `curl ... \| bash` creates full framework scaffold; one question (session visibility); all tool adapters installed automatically | Must |
-| US-4.2 | As a developer, I want re-running the installer to be safe so that I can update without losing my work | Re-install never overwrites user-customized files (HANDOFF.md, maestro.toml, templates/); framework files update to latest | Must |
+| US-4.2 | As a developer, I want re-running the installer to be safe so that I can update without losing my work | Re-install never overwrites user-customized files (HANDOFF.md, maestro.toml, .maestro/templates/); framework files update to latest | Must |
 | US-4.3 | As a non-technical user, I want a browser-based setup wizard so that I can configure Maestro without memorizing command flags | setup/index.html generates a preconfigured install command | Nice |
 | US-4.4 | As a developer, I want /mae-init to set up my profile conversationally so that the agent adapts to my expertise without me editing TOML | Init asks natural questions ("What's your role?", "What are you good at?") and generates maestro.toml profile sections | Must |
 

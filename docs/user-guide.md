@@ -23,7 +23,7 @@ After installation, you have three "zones":
 
 | Zone | Location | Purpose | Editable? |
 |------|----------|---------|-----------|
-| **Framework** | `MAESTRO.md`, `.claude/commands/`, `templates/` | Framework behavior and commands | Don't edit MAESTRO.md; customize templates |
+| **Framework** | `MAESTRO.md`, `.maestro/commands/`, `.maestro/templates/` | Framework behavior and commands | Don't edit MAESTRO.md; customize templates |
 | **Delivery** | `docs/` | Confirmed, canonical artifacts | Only via promotion from sessions |
 | **Working** | `sessions/`, `notes/` | Drafts, analysis, working material | Freely editable |
 
@@ -71,7 +71,7 @@ Choose what fits your project. The phases below describe each tool, not a mandat
 /mae-req
 ```
 
-Reads your explore artifacts and generates a Product Requirements Document using `templates/requirements.md`. The PRD is saved as a draft in your session — review it, request changes, then promote to `docs/02-requirements/REQUIREMENTS.md`.
+Reads your explore artifacts and generates a Product Requirements Document using `.maestro/templates/requirements.md`. The PRD is saved as a draft in your session — review it, request changes, then promote to `docs/02-requirements/REQUIREMENTS.md`.
 
 **Template sections:** 7 core (always included) + 3 optional (constraints, release strategy, glossary — include when relevant).
 
@@ -216,9 +216,9 @@ mode = "team"
 
 ### Editing Templates
 
-Templates in `templates/` are starting points. Edit them to match your domain:
-- Add industry-specific sections to `prd.md` (e.g., regulatory requirements)
-- Add compliance sections to `sdd.md`
+Templates in `.maestro/templates/` are starting points. Edit them to match your domain:
+- Add industry-specific sections to `requirements.md` (e.g., regulatory requirements)
+- Add compliance sections to `design.md`
 - Change the explore report structure in `explore.md`
 
 ### Adding Custom Commands

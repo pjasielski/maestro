@@ -145,7 +145,7 @@ The user or client fills in responses directly in the file. On next explore, the
 
 1. Read ALL explore working artifacts from the current and previous sessions
 2. Read any existing material in `docs/01-explore/`
-3. Produce structured report using `templates/explore.md`
+3. Produce structured report using `.maestro/templates/explore.md`
 4. Save to session folder
 5. Ask: "Ready to promote to docs/01-explore/?"
 
@@ -160,7 +160,7 @@ The explore report is a **living document** — running `explore doc` again repl
    - `maestro.toml` (project context, user profile if configured)
    - `README.md` (if exists)
    - On first explore (no prior artifacts): scan `docs/`, `data/`, `src/` — report what's available, ask before reading
-   - For `doc` mode: `templates/explore.md` (report structure)
+   - For `doc` mode: `.maestro/templates/explore.md` (report structure)
 
 2. **Generate artifact** — type depends on mode (see above)
 

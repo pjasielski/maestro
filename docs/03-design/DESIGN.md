@@ -77,7 +77,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 | **MAESTRO.md** | Framework-level instructions: rules, context loading, output standards | Markdown | Read by AI tool at session start; tool-agnostic |
 | **CLAUDE.md** | Project-specific config and instructions | Markdown | Claude Code convention; other tools use their equivalents |
 | **maestro.toml** | Framework settings: session visibility, profile, project metadata | TOML | Optional; framework works with sensible defaults |
-| **Templates** | Structural templates for delivery artifacts | Markdown | templates/ directory; core + optional section pattern |
+| **Templates** | Structural templates for delivery artifacts | Markdown | .maestro/templates/ directory; core + optional section pattern |
 | **Installer** | Sets up framework in a project directory | Shell (bash) | install.sh; supports curl pipe bash and local execution |
 | **Setup wizard** | Browser-based configuration UI | HTML + JS | setup/index.html; generates install command |
 | **Tracking files** | Project state: HANDOFF.md, DECISIONS.md, OPEN_QUESTIONS.md, WORKLOG.md | Markdown | Root-level files; HANDOFF.md is the primary context source |
@@ -161,7 +161,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 | **User Profile** | description, strengths, needs_help | Belongs to project config | Section in maestro.toml |
 | **Team Member** | name, role, strengths, needs_help | Part of team config; presence triggers team features | Entry in [[team.members]] in maestro.toml |
 | **Command** | name, behavior, prerequisites, outputs | References templates, delivery artifacts | File in .maestro/commands/ |
-| **Template** | name, sections (core + optional) | Used by commands to generate artifacts | File in templates/ |
+| **Template** | name, sections (core + optional) | Used by commands to generate artifacts | File in .maestro/templates/ |
 
 ### 4.2 File System as ER Diagram
 
@@ -262,7 +262,7 @@ maestro/                          ← Framework repository root
 │   ├── 005-review/               ← Current review session
 │   └── 009-prd-sdd-roadmap/
 │
-├── templates/                    ← Document templates
+├── .maestro/templates/           ← Document templates
 │   ├── prd.md
 │   ├── sdd.md
 │   ├── explore.md
@@ -342,7 +342,7 @@ Cursor adapters use `.cursor/rules/maestro-dispatch.mdc` which maps command name
 **File handling rules:**
 - **Tracking files** (HANDOFF.md, DECISIONS.md, etc.): `create_if_missing` — never overwrite
 - **Framework files** (MAESTRO.md, .maestro/commands/): Overwrite on install (they track upstream)
-- **Templates** (templates/*.md): `create_if_missing` — user may have customized
+- **Templates** (.maestro/templates/*.md): `create_if_missing` — user may have customized
 - **Config** (maestro.toml): `create_if_missing` — user's settings
 - **Adapters** (.claude/, .cursor/, .github/): Regenerated on install (generated from commands)
 

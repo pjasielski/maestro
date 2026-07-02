@@ -26,7 +26,7 @@ $ARGUMENTS — optional: milestone number, "roadmap", or specific items
    - `docs/03-design/DESIGN.md` (components, tech stack, architecture)
    - `docs/02-requirements/REQUIREMENTS.md` (requirements, epics, priorities)
    - `DECISIONS.md` (confirmed decisions)
-   - `templates/roadmap.md` (output structure)
+   - `.maestro/templates/roadmap.md` (output structure)
 
 2. **Generate `docs/04-plan/ROADMAP.md`:**
    - Group work into milestones by theme (foundation, features, polish, etc.)
@@ -56,7 +56,7 @@ $ARGUMENTS — optional: milestone number, "roadmap", or specific items
 
 3. **Generate task files** directly in `docs/04-plan/tasks/`:
    - One file per task: task-001.md, task-002.md, etc.
-   - Using `templates/task.md` format
+   - Using `.maestro/templates/task.md` format
    - If tasks already exist, continue from highest number
 
 4. **Save report** to session folder

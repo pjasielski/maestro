@@ -128,7 +128,7 @@ your-project/
 │   ├── 08-deploy/            ← Deployment config (on demand)
 │   └── 09-maintenance/       ← Bugs, tech debt (on demand)
 ├── .sessions/                ← Working material (per-session)
-├── templates/                ← Document templates (customizable)
+├── .maestro/templates/       ← Document templates (customizable)
 ├── .maestro/commands/        ← Canonical command files
 ├── .claude/commands/         ← Claude Code adapters + aliases
 └── .cursor/rules/            ← Cursor adapters
@@ -146,7 +146,7 @@ your-project/
 | `summary.md` | Session summary | `_summary.md` |
 | `review.md` | Review report | Session artifact |
 
-Edit templates in `templates/` to match your team's standards.
+Edit templates in `.maestro/templates/` to match your team's standards.
 
 ## Session Visibility
 

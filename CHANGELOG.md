@@ -18,7 +18,7 @@ All notable changes to the Maestro framework.
 - CHANGELOG.md — this file
 - ROADMAP.md — strategic backlog
 - maestro.toml — framework config for this repo
-- `templates/roadmap.md` — roadmap template
+- `.maestro/templates/roadmap.md` — roadmap template
 
 ### Fixed
 - Installer: silent download failures (removed `|| true` from loops)

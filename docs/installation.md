@@ -129,7 +129,7 @@ git clone https://github.com/pjasielski/maestro.git /tmp/maestro
 |------|-------------|
 | `CLAUDE.md` | Project description, stack, current phase |
 | `maestro.toml` | Session visibility, AI tools, question style, user profile |
-| `templates/` | Document templates to match your team's standards |
+| `.maestro/templates/` | Document templates to match your team's standards |
 
 ---
 
@@ -179,7 +179,7 @@ your-project/
 │   └── 04-plan/tasks/
 │
 ├── .sessions/                        ← Working notes (gitignored or committed)
-└── templates/                        ← Document templates
+└── .maestro/templates/               ← Document templates
 ```
 
 Maestro **never overwrites** files that already exist. Re-running the installer is safe.
@@ -195,7 +195,7 @@ One person installs and commits. Others pull and configure their own tool.
 ```
 ✓  MAESTRO.md, CLAUDE.md, maestro.toml
 ✓  HANDOFF.md, DECISIONS.md, OPEN_QUESTIONS.md, WORKLOG.md
-✓  docs/, templates/
+✓  docs/, .maestro/templates/
 ✓  .maestro/commands/, .claude/commands/, .cursor/rules/
 ✗  .sessions/  — personal working notes (when session_visibility = "gitignored")
 ```
@@ -249,7 +249,7 @@ Maestro is just files. To remove it:
 ```bash
 rm -rf .maestro/ .cursor/rules/maestro-*.mdc
 rm -f MAESTRO.md maestro.toml HANDOFF.md DECISIONS.md OPEN_QUESTIONS.md WORKLOG.md
-rm -rf docs/ .sessions/ templates/
+rm -rf docs/ .sessions/
 rm -f .github/copilot-instructions.md
 ```
 

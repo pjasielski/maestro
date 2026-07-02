@@ -115,7 +115,7 @@ Test artifacts              → docs/07-test/    (created on demand)
 Deployment config           → docs/08-deploy/  (created on demand)
 Maintenance & bugs          → docs/09-maintenance/  (created on demand)
 
-Templates                   → templates/
+Templates                   → .maestro/templates/
 Session history             → .sessions/{NNN}-{name}/_summary.md
 Source code                 → src/ (or project-specific path)
 Framework commands          → .maestro/commands/mae-*.md
@@ -441,7 +441,7 @@ Every command saves a report to the session folder:
 
 Tasks are markdown files in `docs/04-plan/tasks/`. Each file IS the ticket.
 
-**Template:** `templates/task.md`
+**Template:** `.maestro/templates/task.md`
 
 **Statuses:** ☐ todo → 🔄 in-progress → ✅ done (or ⏳ blocked)
 
