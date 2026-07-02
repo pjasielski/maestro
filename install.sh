@@ -2,13 +2,14 @@
 # install.sh — Install Maestro framework into a project
 #
 # Usage:
-#   ./install.sh [target-directory]          # interactive setup
-#   ./install.sh [target-directory] --quick  # skip prompts, defaults
+#   ./install.sh [target-directory]            # interactive setup
+#   ./install.sh [target-directory] --quick    # skip prompts, defaults
+#   ./install.sh [target-directory] --force    # overwrite ALL files (full reinstall)
 #   ./install.sh [target-directory] --preconfigured  # read settings from env vars
 #   curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 #
 # To install from a specific branch:
-#   MAESTRO_BRANCH=feat/my-branch curl -fsSL "https://raw.githubusercontent.com/pjasielski/maestro/$MAESTRO_BRANCH/install.sh" | bash
+#   MAESTRO_BRANCH=feat/my-branch bash -c 'curl -fsSL "https://raw.githubusercontent.com/pjasielski/maestro/$MAESTRO_BRANCH/install.sh" | bash'
 
 set -e
 
@@ -19,9 +20,11 @@ TARGET="${1:-.}"
 mkdir -p "$TARGET"
 TARGET="$(cd "$TARGET" && pwd)"
 QUICK_MODE="${2:-}"
+FORCE_MODE=false
 
 PRECONFIGURED_MODE=""
 [ "$QUICK_MODE" = "--preconfigured" ] && PRECONFIGURED_MODE="yes"
+[ "$QUICK_MODE" = "--force" ] && FORCE_MODE=true
 
 # ─────────────────────────────────────────────
 # Self-download when running via curl (no local source files)
@@ -147,7 +150,11 @@ SETUP_CURSOR=true
 SETUP_COPILOT=true
 SETUP_CODEX=true
 
-if [ "$QUICK_MODE" = "--quick" ]; then
+if [ "$QUICK_MODE" = "--force" ]; then
+  echo "Force mode: overwriting all framework files (templates, adapters, MAESTRO.md, commands)."
+  echo "Project files preserved: HANDOFF.md, DECISIONS.md, OPEN_QUESTIONS.md, WORKLOG.md, maestro.toml, CLAUDE.md"
+  echo ""
+elif [ "$QUICK_MODE" = "--quick" ]; then
   echo "Quick mode: all adapters, sessions committed, async questions."
 elif [ -n "$PRECONFIGURED_MODE" ]; then
   PROJECT_NAME="${PROJECT_NAME:-$(basename "$TARGET")}"
@@ -260,24 +267,32 @@ done
 echo "  Copied: .maestro/commands/ ($(ls "$TARGET/.maestro/commands/" | wc -l | tr -d ' ') files)"
 
 # ─────────────────────────────────────────────
-# Copy templates (never overwrite user customizations)
+# Copy templates (overwrite only with --force)
 # ─────────────────────────────────────────────
 
 section "Copying templates"
 
 TMPL_NEW=0
 TMPL_SKIP=0
+TMPL_REPLACED=0
 for tmpl in "$SOURCE_DIR/templates/"*.md; do
   [ -f "$tmpl" ] || continue
   BASENAME="$(basename "$tmpl")"
-  if [ ! -f "$TARGET/templates/$BASENAME" ]; then
+  if [ -f "$TARGET/templates/$BASENAME" ] && ! $FORCE_MODE; then
+    TMPL_SKIP=$((TMPL_SKIP + 1))
+  elif [ -f "$TARGET/templates/$BASENAME" ]; then
+    cp "$tmpl" "$TARGET/templates/$BASENAME"
+    TMPL_REPLACED=$((TMPL_REPLACED + 1))
+  else
     cp "$tmpl" "$TARGET/templates/$BASENAME"
     TMPL_NEW=$((TMPL_NEW + 1))
-  else
-    TMPL_SKIP=$((TMPL_SKIP + 1))
   fi
 done
-echo "  New: $TMPL_NEW | Preserved: $TMPL_SKIP"
+if $FORCE_MODE; then
+  echo "  New: $TMPL_NEW | Replaced: $TMPL_REPLACED | Preserved: $TMPL_SKIP"
+else
+  echo "  New: $TMPL_NEW | Preserved: $TMPL_SKIP"
+fi
 
 # ─────────────────────────────────────────────
 # Claude Code adapters (wrappers + aliases)

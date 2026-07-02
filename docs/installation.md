@@ -86,6 +86,21 @@ curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh 
 
 Defaults: all adapters, sessions committed, async questions.
 
+**Force reinstall (overwrite all framework files):**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash -s -- . --force
+```
+
+Replaces MAESTRO.md, commands, templates, and adapters. Project files (HANDOFF.md, DECISIONS.md, maestro.toml, CLAUDE.md) are preserved.
+
+**Install from a specific branch:**
+
+```bash
+MAESTRO_BRANCH=feat/my-branch bash -c \
+  'curl -fsSL "https://raw.githubusercontent.com/pjasielski/maestro/$MAESTRO_BRANCH/install.sh" | bash'
+```
+
 ### Step 3 — Follow the printed instructions
 
 The installer prints tool-specific next steps when it finishes.
