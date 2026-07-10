@@ -1,8 +1,8 @@
 # ROADMAP — Maestro Framework
 
-**Version:** v0.2.0
-**Updated:** 2026-06-18
-**Sources:** Session 005 (review + analysis), Session 009 (PRD/SDD/roadmap), Session 006 (ai-deck), Session 010 (consolidation)
+**Version:** v0.3.0
+**Updated:** 2026-07-02
+**Sources:** Session 005 (review + analysis), Session 009 (PRD/SDD/roadmap), Session 006 (ai-deck), Session 010 (consolidation), Session 012 (installer & restructure)
 
 ---
 
@@ -30,7 +30,26 @@ Fix what's broken. Establish versioning. Standardize conventions.
 
 ---
 
-## Milestone 2: PoC Workflow & Command Improvements (v0.3.0)
+## Milestone 1.5: Installer & Restructure (v0.3.0)
+
+New installer questions, folder restructure, migration support.
+
+| # | Item | Priority | Effort | Depends | Status | Source |
+|---|------|----------|--------|---------|--------|--------|
+| 1.13 | **Installer questions: AI tool selection (multi-select), question style (async/sync)** | P1 | M | 1.1 | ✅ done | 012 |
+| 1.14 | **Conditional adapter creation based on AI tool selection** | P1 | S | 1.13 | ✅ done | 012 |
+| 1.15 | **Move delivery/ into docs/ — numbered folders directly under docs** | P1 | M | 1.9 | ✅ done | 012 |
+| 1.16 | **Move templates/ into .maestro/templates/** | P1 | S | — | ✅ done | 012 |
+| 1.17 | **Add MAESTRO_BRANCH support for cross-branch installation** | P1 | S | 1.1 | ✅ done | 012 |
+| 1.18 | **Add --force flag for full framework reinstall** | P1 | S | 1.1 | ✅ done | 012 |
+| 1.19 | **Migration cleanup: remove deprecated files (mae-prd, mae-checkpoint, prd.md, sdd.md, templates/)** | P1 | S | 1.15, 1.16 | ✅ done | 012 |
+| 1.20 | **Add question_style and ai_tools to maestro.toml config** | P1 | S | 1.13 | ✅ done | 012 |
+
+**Done when:** Installer handles fresh install, reinstall, and upgrade from v0.2.0 cleanly. Framework files live under .maestro/. Deprecated files auto-cleaned.
+
+---
+
+## Milestone 2: PoC Workflow & Command Improvements (v0.4.0)
 
 First-class iterative development support. Strengthen command reliability.
 
@@ -46,7 +65,7 @@ First-class iterative development support. Strengthen command reliability.
 
 ---
 
-## Milestone 3: Documentation & Onboarding (v0.4.0)
+## Milestone 3: Documentation & Onboarding (v0.5.0)
 
 Make the framework easy to adopt. Strengthen multi-tool story.
 
@@ -63,7 +82,7 @@ Make the framework easy to adopt. Strengthen multi-tool story.
 
 ---
 
-## Milestone 4: ai-deck Integration (v0.4-0.5)
+## Milestone 4: ai-deck Integration (v0.5-0.6)
 
 Presentation generation via the ai-deck framework.
 
@@ -79,7 +98,7 @@ Presentation generation via the ai-deck framework.
 
 ---
 
-## Milestone 5: Task & PM Features (v0.5.0)
+## Milestone 5: Task & PM Features (v0.7.0)
 
 Strengthen "lightweight Jira" capabilities.
 
@@ -94,7 +113,7 @@ Strengthen "lightweight Jira" capabilities.
 
 ---
 
-## Future (post v0.5)
+## Future (post v0.7)
 
 | # | Item | Priority | Effort | Depends | Source |
 |---|------|----------|--------|---------|--------|

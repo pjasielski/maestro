@@ -1,11 +1,11 @@
 # HANDOFF.md — Maestro Framework
 
 ## Current Status
-- **Phase:** bootstrap → packaging (v0.2.0 complete, M2+M3 next)
-- **Last worked on:** 2026-06-19 — Delivery folder restructure, Cursor slash commands, ROADMAP status icons, mae-do file argument
-- **Active branch:** `dev`
-- **Version:** v0.2.0 (Milestone 1 complete)
-- **Next priorities:** Milestone 2 (PoC workflow) + Milestone 3 (docs & onboarding) — batch implementation
+- **Phase:** bootstrap → packaging (v0.3.0 complete, M2+M3 next)
+- **Last worked on:** 2026-07-02 — Installer restructure, delivery/→docs/, templates/→.maestro/templates/, migration cleanup, --force flag
+- **Active branch:** `main`
+- **Version:** v0.3.0 (Milestone 1.5 complete)
+- **Next priorities:** Milestone 2 (PoC workflow, v0.4.0) + Milestone 3 (docs & onboarding, v0.5.0)
 - **Blockers:** None
 
 ## Recent Changes (2026-06-19) — Session 010 continued

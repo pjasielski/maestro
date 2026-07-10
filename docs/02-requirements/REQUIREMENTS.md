@@ -108,7 +108,7 @@ Technical professionals working with AI tools experience:
 
 ## 5. Scope
 
-### 5.1 In Scope (v0.1.0–v0.5.0)
+### 5.1 In Scope (v0.1.0–v0.7.0)
 
 - 8 delivery commands + 4 utility commands (all as markdown files)
 - Sessions-first artifact flow with docs/ promotion (`.sessions/` canonical)
@@ -252,11 +252,12 @@ Technical professionals working with AI tools experience:
 
 **Phasing:**
 
-- **v0.1.0 (current):** Alpha — core commands working, installer functional but with known bugs, Claude Code primary support.
+- **v0.1.0:** Alpha — core commands working, installer functional but with known bugs, Claude Code primary support.
 - **v0.2.0:** Foundation fixes — installer rework, .sessions/ standardization, session visibility model, versioning setup.
-- **v0.3.0:** PoC workflow — `poc` flag on all commands, implementation reports folder, context loading strictness, post-do sync.
-- **v0.4.0:** Documentation & onboarding — mae-init profile rework, capability matrix, README update, user guide. ai-deck Phase 1 integration.
-- **v0.5.0:** PM features — task metadata expansion, status filters, rolling project digest. ai-deck Phase 2.
+- **v0.3.0 (current):** Installer & restructure — delivery/→docs/, templates/→.maestro/templates/, AI tool selection, question style, --force reinstall, migration cleanup.
+- **v0.4.0:** PoC workflow — `poc` flag on all commands, context loading strictness, post-do sync.
+- **v0.5.0:** Documentation & onboarding — mae-init profile rework, capability matrix, README update, user guide. ai-deck Phase 1 integration.
+- **v0.7.0:** PM features — task metadata expansion, status filters, rolling project digest. ai-deck Phase 2.
 - **v1.0:** Public release — all the above validated on 3+ projects, documentation polished, known limitations documented.
 
 **Post-v1.0:**

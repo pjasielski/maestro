@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm -rf /tmp/maestro-test3)"
+    ],
+    "additionalDirectories": [
+      "/private/tmp/maestro-test3"
+    ]
+  }
+}
