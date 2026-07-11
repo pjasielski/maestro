@@ -1,12 +1,31 @@
 # HANDOFF.md — Maestro Framework
 
 ## Current Status
-- **Phase:** bootstrap → packaging (v0.3.0 complete, M2+M3 next)
-- **Last worked on:** 2026-07-02 — Installer restructure, delivery/→docs/, templates/→.maestro/templates/, migration cleanup, --force flag
+- **Phase:** bootstrap → packaging (v0.3.0 complete; strategy set, skills refactor next)
+- **Last worked on:** 2026-07-11 — Competitive analysis (OpenSpec), skill-first architecture decision, roadmap plan draft for handoff
 - **Active branch:** `main`
 - **Version:** v0.3.0 (Milestone 1.5 complete)
-- **Next priorities:** Milestone 2 (PoC workflow, v0.4.0) + Milestone 3 (docs & onboarding, v0.5.0)
+- **Next priorities:** Confirm 5 strategy decisions (D17–D21, proposed) → promote plan via /mae-plan → WS1 skill-first refactor (spike: mae-explore as SKILL.md). M2 (PoC workflow) + M3 (docs) continue in parallel.
 - **Blockers:** None
+
+## Recent Changes (2026-07-11) — Sessions 014 + 015
+
+### Competitive Analysis (014-competition)
+- OpenSpec comparison: overlap narrower than feared — Maestro uncontested in exploration, decision governance, state continuity, PM persona; OpenSpec wins on living spec + validating CLI + distribution
+- Proposed positioning: complement/superset of OpenSpec, interop over competition ("Maestro plans it, OpenSpec executes it")
+- Pitch doc: `.sessions/014-competition/03-why-maestro-pitch.md`
+
+### Skills Architecture (015-skills)
+- Agent Skills / SKILL.md is an open standard (agentskills.io, Dec 2025; 30+ tools incl. Claude Code, Codex CLI, Cursor, Gemini CLI) — proposed skill-first refactor: canonical logic → `.maestro/skills/*/SKILL.md`, slash commands become thin aliases
+- Two-tier invocation preserves "user decides": explore/review/status auto-trigger; req/design/plan/decide suggest-only; do/sync/init slash-only
+- Competitive roadmap plan (handoff entry point for next chat): `.sessions/015-skills/02-skill-spec-plan.md` — 5 workstreams: skills refactor, living-doc lifecycle, CLI validate, OpenSpec interop, app
+
+### Proposed Decisions (D17–D21, pending confirmation)
+1. Skill-first architecture + two-tier invocation table
+2. Complement/superset positioning vs OpenSpec
+3. ADDED/MODIFIED/REMOVED delta format for canonical docs
+4. `/sync` becomes the archive/merge step (living-doc lifecycle)
+5. Capability-sharded requirements files
 
 ## Recent Changes (2026-06-19) — Session 010 continued
 

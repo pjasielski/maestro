@@ -18,3 +18,8 @@
 | D14 | 2026-06-10 | 005 | Versioning starts at v0.1.0 (semver, alpha) | confirmed |
 | D15 | 2026-06-10 | 005 | mae-init becomes profile-only (installer handles scaffolding) | confirmed |
 | D16 | 2026-06-10 | 005 | Roadmap = strategic (no checkboxes); Plan = tactical (checkboxes) | confirmed |
+| D17 | 2026-07-11 | 015 | Skill-first architecture: canonical logic as SKILL.md (Agent Skills standard), commands as thin aliases, two-tier invocation (auto/suggest/explicit) | proposed |
+| D18 | 2026-07-11 | 014 | Positioning vs OpenSpec: complement/superset + interop, not head-on competitor | proposed |
+| D19 | 2026-07-11 | 014 | Adopt ADDED/MODIFIED/REMOVED delta format for canonical doc updates | proposed |
+| D20 | 2026-07-11 | 014 | /sync becomes the archive/merge step — living-doc lifecycle for docs/ | proposed |
+| D21 | 2026-07-11 | 015 | Capability-sharded requirements files (docs/02-requirements/{capability}.md) | proposed |
