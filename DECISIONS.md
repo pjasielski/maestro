@@ -18,8 +18,10 @@
 | D14 | 2026-06-10 | 005 | Versioning starts at v0.1.0 (semver, alpha) | confirmed |
 | D15 | 2026-06-10 | 005 | mae-init becomes profile-only (installer handles scaffolding) | confirmed |
 | D16 | 2026-06-10 | 005 | Roadmap = strategic (no checkboxes); Plan = tactical (checkboxes) | confirmed |
-| D17 | 2026-07-11 | 015 | Skill-first architecture: canonical logic as SKILL.md (Agent Skills standard), commands as thin aliases, two-tier invocation (auto/suggest/explicit) | proposed |
-| D18 | 2026-07-11 | 014 | Positioning vs OpenSpec: complement/superset + interop, not head-on competitor | proposed |
-| D19 | 2026-07-11 | 014 | Adopt ADDED/MODIFIED/REMOVED delta format for canonical doc updates | proposed |
-| D20 | 2026-07-11 | 014 | /sync becomes the archive/merge step — living-doc lifecycle for docs/ | proposed |
-| D21 | 2026-07-11 | 015 | Capability-sharded requirements files (docs/02-requirements/{capability}.md) | proposed |
+| D17 | 2026-07-11 | 015 | Skill-first architecture: canonical logic as SKILL.md (Agent Skills standard), commands as thin aliases, two-tier invocation (auto/suggest/explicit) | confirmed 2026-07-13 |
+| D18 | 2026-07-11 | 014 | Positioning vs OpenSpec: complement/superset + interop, not head-on competitor | confirmed 2026-07-13 |
+| D19 | 2026-07-11 | 014 | Adopt ADDED/MODIFIED/REMOVED delta format for canonical doc updates | confirmed 2026-07-13 |
+| D20 | 2026-07-11 | 014 | /sync becomes the archive/merge step — living-doc lifecycle for docs/ | confirmed 2026-07-13 |
+| D21 | 2026-07-11 | 015 | Capability-sharded canonical docs — requirements AND design split by capability when size warrants | confirmed 2026-07-14 |
+| D22 | 2026-07-14 | 015 | Artifact-first capture: commands generate files (per each command's definition — may be several); user queries stay in chat; extensive chat answers → agent asks before saving; /md saves on demand | confirmed |
+| D23 | 2026-07-14 | 015 | Unified task IDs: `M{MM}.{NN}` identical in ROADMAP # column, task filename (`M{MM}.{NN}-{slug}.md`), and task title; zero-padded; sub-tasks `M{MM}.{NN}a` | confirmed |

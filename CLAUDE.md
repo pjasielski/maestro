@@ -4,7 +4,7 @@
 
 See `MAESTRO.md` for all delivery framework behavior, commands, output standards, and conventions. MAESTRO.md is the canonical framework reference.
 
-Always save substantive responses (> 80 words) as a numbered file in the current session folder. Chat output = brief summary only.
+Artifact capture: commands save their artifact as a numbered session file; direct chat queries are answered in chat only (if an answer is extensive, ask whether to save it). `/md` saves a response on demand. When a file is produced, chat output = brief summary only.
 
 ## Project
 

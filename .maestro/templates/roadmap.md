@@ -10,8 +10,10 @@
   this is *what to build*; task files are *how to build it*.
 
   Columns:
-  - #: Item number within milestone (1.1, 1.2, ...)
+  - #: Item ID `M{MM}.{NN}` — zero-padded (M01.01, M01.02, ...). The SAME ID is used
+    in the task filename (`M01.01-{slug}.md`) and task title, so one search finds all.
   - Item: Short, descriptive name (bold)
+  - Task: link to the task file once generated via /mae-plan, or "—"
   - Priority: P0 (bug) | P1 (required) | P2 (improvement) | P3 (future)
   - Effort: S (hours) | M (a session) | L (multiple sessions) | XL (multi-day)
   - Depends: Item numbers that must complete first, or "—"
@@ -26,26 +28,26 @@
 
 ---
 
-## Milestone 1: {Theme} ({target version})
+## Milestone M01: {Theme} ({target version})
 
 {One-line description of this milestone's goal.}
 
-| # | Item | Priority | Effort | Depends | Status | Source |
-|---|------|----------|--------|---------|--------|--------|
-| 1.1 | **{Item name — concise but descriptive enough to stand alone}** | P0 | S | — | ☐ todo | {session/review} |
-| 1.2 | **{Item name}** | P1 | M | 1.1 | ☐ todo | {source} |
+| # | Item | Priority | Effort | Depends | Status | Task | Source |
+|---|------|----------|--------|---------|--------|------|--------|
+| M01.01 | **{Item name — concise but descriptive enough to stand alone}** | P0 | S | — | ☐ todo | — | {session/review} |
+| M01.02 | **{Item name}** | P1 | M | M01.01 | ☐ todo | — | {source} |
 
 **Done when:** {One-line definition of done for this milestone.}
 
 ---
 
-## Milestone 2: {Theme} ({target version})
+## Milestone M02: {Theme} ({target version})
 
 {One-line description.}
 
-| # | Item | Priority | Effort | Depends | Status | Source |
-|---|------|----------|--------|---------|--------|--------|
-| 2.1 | **{Item name}** | P1 | M | — | ☐ todo | {source} |
+| # | Item | Priority | Effort | Depends | Status | Task | Source |
+|---|------|----------|--------|---------|--------|------|--------|
+| M02.01 | **{Item name}** | P1 | M | — | ☐ todo | — | {source} |
 
 **Done when:** {Definition of done.}
 

@@ -55,9 +55,9 @@ $ARGUMENTS — optional: milestone number, "roadmap", or specific items
    ```
 
 3. **Generate task files** directly in `docs/04-plan/tasks/`:
-   - One file per task: task-001.md, task-002.md, etc.
-   - Using `.maestro/templates/task.md` format
-   - If tasks already exist, continue from highest number
+   - One file per task: `M{MM}.{NN}-{slug}.md` (e.g., `M03.01-skill-spike.md`) — the ID matches the ROADMAP `#` column exactly; sub-tasks append a letter (`M03.01a-…`)
+   - Using `.maestro/templates/task.md` format (ID + Milestone fields filled)
+   - Add a link to the new task file in the ROADMAP item's Task column
 
 4. **Save report** to session folder
 

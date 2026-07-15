@@ -38,8 +38,8 @@ Apply per-command: `/mae-explore -v` produces a verbose report. `/mae-explore -c
 - No hedging ("You might want to consider" → "Recommendation:")
 - Fragments OK in lists and bullets
 - Technical terms stay exact
-- Every substantive response saved as a numbered file in the session folder
-- Chat output = brief summary only, not a duplicate of the file
+- Command artifacts saved as numbered session files; conversational answers stay in chat (see Artifact Capture)
+- When a file is produced, chat output = brief summary only, not a duplicate of the file
 
 ### Output Behaviors by Command Type
 
@@ -209,9 +209,17 @@ Update the session's `_summary.md` when:
 
 Do NOT update for quick Q&A or minor exchanges.
 
-### Always Save to File
+### Artifact Capture
 
-Every substantive response (proposal, analysis, draft, comparison) MUST be saved as a numbered file in the session folder. Chat = brief summary. File = full content. Sequential numbering: `NN_kebab-case-description.md`.
+**Commands generate files; conversation does not.**
+
+- Every delivery/utility command saves its artifacts as numbered session files (explore report + question files, requirements draft + report, design draft + report, plan report, review findings, implementation report) — per the command's definition.
+- Direct user queries (questions, discussion, analysis asked in chat) are answered in chat only.
+- Exception: if a chat answer is extensive (~300+ words), ask whether to save it to a session file.
+- `/md` saves the previous response on demand — verbatim, never summarized.
+- `response_capture = "all"` in `maestro.toml` restores save-everything behavior.
+
+Sequential numbering: `NN_kebab-case-description.md`.
 
 ### Question Style
 
@@ -440,6 +448,8 @@ Every command saves a report to the session folder:
 ## Task Management
 
 Tasks are markdown files in `docs/04-plan/tasks/`. Each file IS the ticket.
+
+**Naming & IDs — one ID everywhere.** Task ID = `M{MM}.{NN}` (zero-padded, e.g., `M03.01`). The identical string appears in the ROADMAP `#` column, the task filename `M{MM}.{NN}-{slug}.md` (e.g., `M03.01-skill-spike.md`), and the task title (`# Task M03.01: …`) — searching one ID finds all three. Sub-tasks append a letter: `M03.01a`. Milestone headers use `M{MM}`.
 
 **Template:** `.maestro/templates/task.md`
 
