@@ -25,3 +25,4 @@
 | D21 | 2026-07-11 | 015 | Capability-sharded canonical docs — requirements AND design split by capability when size warrants | confirmed 2026-07-14 |
 | D22 | 2026-07-14 | 015 | Artifact-first capture: commands generate files (per each command's definition — may be several); user queries stay in chat; extensive chat answers → agent asks before saving; /md saves on demand | confirmed |
 | D23 | 2026-07-14 | 015 | Unified task IDs: `M{MM}.{NN}` identical in ROADMAP # column, task filename (`M{MM}.{NN}-{slug}.md`), and task title; zero-padded; sub-tasks `M{MM}.{NN}a` | confirmed |
+| D24 | 2026-07-18 | 015 | Git workflow: branch per milestone (`milestone/mNN-{slug}`) → merge to dev → after testing → main + version tag; no direct work on main | confirmed |
