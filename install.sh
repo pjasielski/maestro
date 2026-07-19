@@ -646,6 +646,7 @@ if [ ! -f "$TARGET/.gitignore" ]; then
     cat > "$TARGET/.gitignore" <<'EOF'
 # Maestro: personal working artifacts (gitignored)
 .sessions/
+sessions/
 .DS_Store
 EOF
     echo "  Created: .gitignore (.sessions/ gitignored)"
@@ -656,8 +657,26 @@ EOF
 EOF
     echo "  Created: .gitignore (.sessions/ committed)"
   fi
+elif [ "$SESSION_VISIBILITY" = "gitignored" ]; then
+  # Existing .gitignore: the chosen visibility must still be honored (append, idempotent)
+  if grep -qE '^\.?sessions/' "$TARGET/.gitignore"; then
+    echo "  Exists:  .gitignore (.sessions/ already ignored)"
+  else
+    cat >> "$TARGET/.gitignore" <<'EOF'
+
+# Maestro: personal working artifacts (gitignored)
+.sessions/
+sessions/
+EOF
+    echo "  Updated: .gitignore (appended .sessions/)"
+  fi
 else
-  echo "  Exists:  .gitignore (preserved)"
+  if grep -qE '^\.?sessions/' "$TARGET/.gitignore"; then
+    echo "  WARNING: session_visibility is 'committed' but .gitignore ignores .sessions/"
+    echo "           Remove the .sessions/ line from .gitignore to commit sessions."
+  else
+    echo "  Exists:  .gitignore (preserved)"
+  fi
 fi
 
 # ─────────────────────────────────────────────

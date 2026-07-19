@@ -34,6 +34,7 @@ Commands become skills per the Agent Skills open standard (D17, D22, D23). Inclu
 | M03.08 | **Question-budget rules in req/design/plan (explore exempt)** | P2 | S | M03.03 | ☐ todo | [M03.08](tasks/M03.08-question-budget.md) | 015 |
 | M03.09 | **Installer hotfix: Windows story — document Git Bash/WSL requirement, evaluate install.ps1 (interim until M05 CLI)** | P1 | S | — | ☐ todo | [M03.09](tasks/M03.09-installer-windows-support.md) | 015/08 field report |
 | M03.10 | **Installer hotfix: graceful non-interactive fallback — detect missing/unreadable /dev/tty, announce defaults loudly, clarify reinstall skips questions** | P1 | S | — | ☐ todo | [M03.10](tasks/M03.10-installer-tty-fallback.md) | 015/08 field report |
+| M03.11 | **Installer hotfix: honor gitignored visibility when .gitignore already exists (append, idempotent; warn on committed-but-ignored conflict)** | P1 | S | — | ✅ done | [M03.11](tasks/M03.11-installer-gitignore-visibility.md) | 2026-07-19 field report |
 
 **Done when:** Every command is a standard skill; auto-trigger works for advisory tier; install works on ≥ 3 tools; personal preferences respected; Windows install path documented and non-interactive installs are explicit about defaults. (Artifact-capture rule + task-ID convention already landed 2026-07-14: D22, D23.)
 
