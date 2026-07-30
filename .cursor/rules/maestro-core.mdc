@@ -66,6 +66,7 @@ Framework commands          → .maestro/commands/mae-*.md
 | Phase | Command | Output |
 |-------|---------|--------|
 | Explore | `mae-explore` | Understanding, questions, gaps |
+| PoC spec | `mae-poc` | POC.md (requirements + design + roadmap) |
 | Requirements | `mae-req` | REQUIREMENTS.md |
 | Design | `mae-design` | DESIGN.md |
 | Plan | `mae-plan` | ROADMAP.md + task files |

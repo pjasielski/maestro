@@ -49,7 +49,7 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
   fi
 
   mkdir -p "$SOURCE_DIR/.maestro/commands"
-  for _cmd in mae-explore mae-req mae-design mae-plan mae-do mae-review mae-init mae-explore-lite status decide sync md; do
+  for _cmd in mae-explore mae-req mae-poc mae-design mae-plan mae-do mae-review mae-init mae-explore-lite status decide sync md; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/commands/$_cmd.md" -o "$SOURCE_DIR/.maestro/commands/$_cmd.md" 2>/dev/null; then
       echo "  Warning: failed to download $_cmd.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
@@ -57,7 +57,7 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
   done
 
   mkdir -p "$SOURCE_DIR/.maestro/templates"
-  for _tmpl in requirements design explore task summary report review roadmap; do
+  for _tmpl in requirements design explore poc task summary report review roadmap; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/templates/$_tmpl.md" -o "$SOURCE_DIR/.maestro/templates/$_tmpl.md" 2>/dev/null; then
       echo "  Warning: failed to download template $_tmpl.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
@@ -241,7 +241,9 @@ fi
 
 section "Creating folders"
 
+mkdir -p "$TARGET/docs/00-reference"
 mkdir -p "$TARGET/docs/01-explore"
+mkdir -p "$TARGET/docs/02-poc"
 mkdir -p "$TARGET/docs/02-requirements"
 mkdir -p "$TARGET/docs/03-design"
 mkdir -p "$TARGET/docs/04-plan/tasks"
@@ -251,6 +253,23 @@ mkdir -p "$TARGET/docs/07-test"
 mkdir -p "$TARGET/docs/08-deploy"
 mkdir -p "$TARGET/docs/09-maintenance/issues"
 echo "  Created: docs/ (full structure)"
+if [ ! -f "$TARGET/docs/00-reference/README.md" ]; then
+  cat > "$TARGET/docs/00-reference/README.md" <<'REFEOF'
+# Reference material
+
+Source materials you did **not** write: client briefs, specifications, meeting
+transcripts, exported tickets, API docs from a third party.
+
+`/mae-explore` reads this folder first and treats it as **authoritative on
+intent**. Where reference material conflicts with what the code implies, the
+reference wins — code describes the current state, reference describes what was
+asked for.
+
+Maestro never edits files in here. Drop things in and leave them as delivered.
+REFEOF
+  echo "  Created: docs/00-reference/README.md"
+fi
+
 
 mkdir -p "$TARGET/.sessions"
 mkdir -p "$TARGET/.maestro/templates"
@@ -385,7 +404,7 @@ EOF
   done
 
   # Create aliases
-  for pair in mex:mae-explore mrq:mae-req mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review; do
+  for pair in mex:mae-explore mrq:mae-req mpoc:mae-poc mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review; do
     alias_name="${pair%%:*}"
     canonical="${pair##*:}"
     cat > "$TARGET/.claude/commands/$alias_name.md" <<EOF
@@ -437,7 +456,7 @@ alwaysApply: true
 
 When the user types a Maestro command in chat, load the corresponding file from `.maestro/commands/` and follow its protocol.
 
-Commands: mae-explore (mex), mae-req (mrq), mae-design (mds), mae-plan (mpl), mae-do (mdo), mae-review (mrv), mae-init, sync, decide, status, md
+Commands: mae-explore (mex), mae-poc (mpoc), mae-req (mrq), mae-design (mds), mae-plan (mpl), mae-do (mdo), mae-review (mrv), mae-init, sync, decide, status, md
 
 Always read the command file before executing — do not guess the protocol.
 CURSOREOF
@@ -467,7 +486,7 @@ EOF
   fi
 done
 
-for pair in mex:mae-explore mrq:mae-req mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review; do
+for pair in mex:mae-explore mrq:mae-req mpoc:mae-poc mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review; do
   alias_name="${pair%%:*}"
   canonical="${pair##*:}"
   cat > "$TARGET/.cursor/commands/$alias_name.md" <<EOF
@@ -509,6 +528,7 @@ When user types any of these, read the corresponding file and follow its full pr
 | Command | Alias | File |
 |---------|-------|------|
 | mae-explore | mex | .maestro/commands/mae-explore.md |
+| mae-poc | mpoc | .maestro/commands/mae-poc.md |
 | mae-req | mrq | .maestro/commands/mae-req.md |
 | mae-design | mds | .maestro/commands/mae-design.md |
 | mae-plan | mpl | .maestro/commands/mae-plan.md |
@@ -621,7 +641,7 @@ Always save substantive responses to a file in the session folder unless the res
 
 ## Project
 
-- **Framework:** Maestro (command prefix: `mae-`, aliases: `mex`/`mrq`/`mds`/`mpl`/`mdo`/`mrv`)
+- **Framework:** Maestro (command prefix: `mae-`, aliases: `mex`/`mpoc`/`mrq`/`mds`/`mpl`/`mdo`/`mrv`)
 - **What this is:** {describe your project}
 - **Current phase:** exploration
 - **Stack:** {your tech stack}
@@ -703,10 +723,12 @@ echo ""
 echo "── Next steps ──────────────────────────"
 echo "  1. Edit CLAUDE.md with your project details"
 echo "  2. Run /mae-init to set up your profile (optional)"
-echo "  3. Run /mae-explore to start"
+echo "  3. Put any client briefs / specs in docs/00-reference/"
+echo "  4. Run /mae-explore to start"
 echo ""
 echo "── Commands ────────────────────────────"
 echo "  /mae-explore (mex)   Build project understanding"
+echo "  /mae-poc     (mpoc)  PoC spec: requirements + design + roadmap"
 echo "  /mae-req     (mrq)   Formalize requirements"
 echo "  /mae-design  (mds)   Create technical architecture"
 echo "  /mae-plan    (mpl)   Create roadmap and tasks"

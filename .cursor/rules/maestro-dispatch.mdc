@@ -12,6 +12,7 @@ Recognize these patterns (with or without `/` prefix):
 | User types | Load file |
 |-----------|-----------|
 | `mae-explore` or `mex` | `.maestro/commands/mae-explore.md` |
+| `mae-poc` or `mpoc` | `.maestro/commands/mae-poc.md` |
 | `mae-req` or `mrq` | `.maestro/commands/mae-req.md` |
 | `mae-design` or `mds` | `.maestro/commands/mae-design.md` |
 | `mae-plan` or `mpl` | `.maestro/commands/mae-plan.md` |
