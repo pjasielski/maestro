@@ -1,12 +1,29 @@
 # HANDOFF.md — Maestro Framework
 
 ## Current Status
-- **Phase:** bootstrap → packaging (v0.3.0 complete; strategy set, skills refactor next)
-- **Last worked on:** 2026-07-11 — Competitive analysis (OpenSpec), skill-first architecture decision, roadmap plan draft for handoff
+- **Phase:** bootstrap → packaging (v0.4.0 released; skills refactor next)
+- **Last worked on:** 2026-08-03 — v0.4.0 release: PoC track merged, roadmap renumbered, README rewritten (session 018, maestro-hq)
 - **Active branch:** `main`
-- **Version:** v0.3.0 (Milestone 1.5 complete)
-- **Next priorities:** Confirm 5 strategy decisions (D17–D21, proposed) → promote plan via /mae-plan → WS1 skill-first refactor (spike: mae-explore as SKILL.md). M2 (PoC workflow) + M3 (docs) continue in parallel.
+- **Version:** v0.4.0 (Milestone M03 complete — PoC workflow)
+- **Next priorities:** M04 skill-first refactor — start with M04.01 (spike: mae-explore as SKILL.md), then M04.02 frontmatter convention. Design work already done in `.sessions/015-skills/` (gitignored — `03-skills-files.md` holds the draft skill descriptions). Also queued: explore question pre-filling (M04.14), ADR migration (M04, lifecycle in M05).
 - **Blockers:** None
+
+## Recent Changes (2026-08-03) — Session 018 (maestro-hq), v0.4.0
+
+### PoC track shipped
+- `/mae-poc` (`mpoc`) → single-file spec at `docs/02-poc/POC.md`; `/mae-do poc` executes the milestone
+- `docs/00-reference/` — read-only source material, authoritative over inferences drawn from code
+- Built for a live client engagement (session 017, maestro-hq) and validated there before release
+
+### Roadmap renumbered
+- PoC M07/v0.8.0 → **M03/v0.4.0 ✅ shipped**; skills M03 → M04/v0.5.0; living docs → M05; CLI → M06; interop → M07
+- `mae-spec` dropped (⊘) — `/mae-poc` supersedes it; M04.04 left vacant
+- Task files renamed `M03.NN` → `M04.NN`; shipped installer fix moved M03.11 → M03.06
+- Full mapping in ROADMAP § Renumbering 2026-08-03
+
+### Documentation
+- README rewritten: logo, "spec-driven delivery" positioning, PoC track section, FAQ
+- LICENSE file added (MIT was claimed in three places, the file was missing)
 
 ## Recent Changes (2026-07-11) — Sessions 014 + 015
 

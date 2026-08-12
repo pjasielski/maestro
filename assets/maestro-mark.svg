@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Maestro">
+  <title>Maestro</title>
+  <defs><linearGradient id="mk" x1="6" y1="56" x2="56" y2="8" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8B5CF6"/><stop offset="1" stop-color="#F59E0B"/></linearGradient></defs>
+  <g fill="url(#mk)">
+    <ellipse cx="11" cy="48" rx="7.8" ry="5.8" transform="rotate(-20.0 11 48)"/>
+    <ellipse cx="40" cy="40" rx="7.8" ry="5.8" transform="rotate(-20.0 40 40)"/>
+    <rect x="13.79329996947428" y="18.95" width="4.8" height="29.05"/>
+    <rect x="42.79329996947428" y="13.34" width="4.8" height="26.66"/>
+    <path d="M13.79329996947428 17 L31 24 L47.59329996947428 9 L47.59329996947428 16.5 L31 31.5 L13.79329996947428 24.5 Z"/>
+  </g>
+</svg>

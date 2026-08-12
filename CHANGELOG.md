@@ -2,6 +2,31 @@
 
 All notable changes to the Maestro framework.
 
+## [0.4.0] — 2026-08-03
+
+The PoC track: a time-boxed path from idea to running code, using one spec file instead of three. Built ahead of schedule for a live client engagement and validated there before release.
+
+### Added
+- `/mae-poc` (`mpoc`) — collapses requirements, design, and roadmap into a single `docs/02-poc/POC.md`. Asks only blocking questions; records other judgement calls under § Risks & Assumptions. Capped at 4,000 words — past that it recommends the full track
+- `docs/00-reference/` — read-only folder for source material you did not write (client briefs, specs, transcripts). Authoritative over inferences drawn from code; read first by `/mae-explore`
+- `/mae-do poc` — execute a whole PoC milestone straight from POC.md
+- `.maestro/templates/poc.md` — PoC spec template, including § 6 Current State as the rehydration key for a fresh session
+- PoC track throughout MAESTRO.md — workflow paths, context-loading tiers, artifact flow, adaptive guidance
+- README: logo, positioning, PoC track section
+- D24 — git workflow: branch per milestone → dev → main + version tag
+
+### Changed
+- `/mae-explore` reads `docs/00-reference/` first, and treats it as authoritative where it conflicts with what the code implies
+- Installer creates `docs/00-reference/` and `docs/02-poc/`, seeds a reference README, and registers the `mpoc` alias
+- Roadmap renumbered: PoC shipped as M03 (was M07); skills → M04; everything between shifts by one. See ROADMAP § Renumbering 2026-08-03
+
+### Fixed
+- Installer honors gitignored session visibility when `.gitignore` already exists — appends idempotently instead of skipping, and warns on a committed-but-ignored conflict
+
+### Notes
+- PoC uses standard `M{MM}.{NN}` task IDs — the PoC is milestone M01, so `/mae-plan` continues at M02 when a prototype graduates and the PoC's history stays intact
+- `docs/02-poc/` and `docs/02-requirements/` share a number deliberately: the two tracks are mutually exclusive, so they never collide in a real project tree
+
 ## [0.3.0] — 2026-07-02
 
 ### Changed
