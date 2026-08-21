@@ -26,3 +26,12 @@
 | D22 | 2026-07-14 | 015 | Artifact-first capture: commands generate files (per each command's definition — may be several); user queries stay in chat; extensive chat answers → agent asks before saving; /md saves on demand | confirmed |
 | D23 | 2026-07-14 | 015 | Unified task IDs: `M{MM}.{NN}` identical in ROADMAP # column, task filename (`M{MM}.{NN}-{slug}.md`), and task title; zero-padded; sub-tasks `M{MM}.{NN}a` | confirmed |
 | D24 | 2026-07-18 | 015 | Git workflow: branch per milestone (`milestone/mNN-{slug}`) → merge to dev → after testing → main + version tag; no direct work on main | confirmed |
+| D25 | 2026-08-21 | 22 | Behavior changes ship as a v0.4.2 patch **before** the skill conversion — a command rewritten then converted is one rewrite; converted then rewritten is two | confirmed |
+| D26 | 2026-08-21 | 22 | Capture rule is work-product-based, not word-count-based; `response_capture` = `all` \| `artifacts` (default) \| `minimal`. Supersedes the "> 80 words" rule in D22 | confirmed |
+| D27 | 2026-08-21 | 22 | `[git]` policy in config: defaults commit=task, push=never, branch=milestone (asks once), pr=off, merge=never. Agent always reports git actions taken | confirmed |
+| D28 | 2026-08-21 | 22 | Layered config precedence: `maestro.local.toml` may only make a setting **more** conservative than `maestro.toml`, never less. Personal preference cannot weaken team policy | confirmed |
+| D29 | 2026-08-21 | 22 | Session state and decisions are append-only during work, reconciled at `/sync`: latest wins, superseded marked, **contradictions flagged** rather than silently resolved | confirmed |
+| D30 | 2026-08-21 | 22 | Four root tracking files → one: OPEN_QUESTIONS merges into HANDOFF, WORKLOG deleted (git log with task-ID messages replaces it), DECISIONS becomes `adr/_index.md`. Load-bearing half is the read path — ADR index added to context loading for Design/Implementation/Review | confirmed |
+| D31 | 2026-08-21 | 22 | ADRs are flat and chronological, never foldered by milestone; milestone recorded as frontmatter. A decision made during a milestone usually outlives it | confirmed |
+| D32 | 2026-08-21 | 22 | Cumulative commands rejected — chaining (`/mae-run a..b`, `/mae-yolo [stop-phase]`) covers the fast path. `/mae-until` explicitly not built: "until" implies a stopping condition the framework cannot evaluate | confirmed |
+| D33 | 2026-08-21 | 22 | Command surface grows, but discovery is solved by `/mae-help` showing 3 relevant commands rather than 11. Fewer commands visible ≠ fewer commands | confirmed |

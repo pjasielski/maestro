@@ -1,9 +1,9 @@
 # ROADMAP — Maestro Framework
 
 **Version:** v0.4.0 (current release — tags v0.1.0 / v0.2.0 / v0.3.0 / v0.4.0 match CHANGELOG)
-**Next release:** v0.5.0 (Milestone M04 — skill-first architecture)
-**Updated:** 2026-08-03
-**Sources:** Sessions 005, 006, 009, 010, 012, 014 (competition), 015 (skills), 017 (interview — PoC field test), 018 (reconciliation)
+**Next release:** v0.4.2 (behavior patch — see below), then v0.5.0 (Milestone M04 — skill-first architecture)
+**Updated:** 2026-08-21
+**Sources:** Sessions 005, 006, 009, 010, 012, 014 (competition), 015 (skills), 017 (interview — PoC field test), 018 (reconciliation), 22-new-scope (developer critique)
 **Note:** Renumbered 2026-07-18 to unified IDs (D23): `M{MM}.{NN}`, identical in ROADMAP, task filenames (`M{MM}.{NN}-{slug}.md`), and task titles.
 **Note:** Renumbered again 2026-08-03 — see "Renumbering 2026-08-03" at the foot of this file. PoC workflow shipped early as M03/v0.4.0; skills moved to M04 and everything between shifted by one. Session notes dated before 2026-08-03 use the old numbering.
 
@@ -42,7 +42,28 @@ Time-boxed delivery track: one spec file instead of three, plus `docs/00-referen
 
 ---
 
-## Milestone M04: Skill-First Architecture (v0.5.0) — ← NEXT · was M03 · branch `milestone/m04-skill-first`
+## Patch v0.4.2: Behavior Fixes from Developer Critique — ← NEXT · branch `feat/v0.4.2-scope`
+
+Six small behavior changes to command *content*, shipped before the skill conversion so M04 converts final behavior rather than converting twice. All items are S. Source: session 22-new-scope, driven by critique from two external developers.
+
+**Why before M04:** `015-skills/03-skills-files.md` flagged the dependency explicitly — *"these conventions should be settled before the WS1 skill conversion."* Rewriting a command then converting it is one rewrite; converting then rewriting is two.
+
+| # | Item | Priority | Effort | Depends | Status | Task | Source |
+|---|------|----------|--------|---------|--------|------|--------|
+| P42.01 | **`[git]` config block + per-task commits: commit/push/branch/pr/merge settings; defaults commit=task, push=never, branch=milestone (asks once), merge=never; agent reports git actions** | P1 | S | — | ☐ todo | [P42.01](tasks/P42.01-git-settings.md) | 22 §3 |
+| P42.02 | **`response_capture` = all \| artifacts (default) \| minimal; replace the "> 80 words" rule with a work-product rule; define the artifact per command** | P1 | S | — | ☐ todo | [P42.02](tasks/P42.02-response-capture.md) | 22 §1, 015/03 |
+| P42.03 | **Merge req/design double-save into one artifact with a report header; `/md` two-mode semantics; "link + one sentence, never duplicate the file in chat" as a global rule** | P1 | S | P42.02 | ☐ todo | [P42.03](tasks/P42.03-artifact-consolidation.md) | 22 §1 |
+| P42.04 | **Append-only session summary + decision log; two zones (curated top / log bottom); compact and reconcile at `/sync` with contradiction flagging** | P1 | S | — | ☐ todo | [P42.04](tasks/P42.04-append-only-state.md) | 22 §6a |
+| P42.05 | **`/mae-do`: generated README gets a verified `## Quickstart`; report running processes with stop instructions; `## Running Processes` in `_summary.md`, checked at `/sync`** | P1 | S | — | ☐ todo | [P42.05](tasks/P42.05-readme-and-processes.md) | 22 §10 |
+| P42.06 | **Explore question pre-filling: consequence-based rule, three markers, working-default-on-open, technical vs. business-logic audience split** (was M04.14 — earmarked for v0.4.1 and never shipped) | P2 | S | — | ☐ todo | [P42.06](tasks/P42.06-explore-prefill.md) | 018/05 |
+
+**Done when:** A developer who dislikes file noise can set `response_capture = "minimal"` in `maestro.local.toml` and get a chat-first experience without losing canonical artifacts; commits happen per task with task-ID messages; no generated README lies about how to run the app.
+
+**Note on IDs:** `P42.NN` (patch 0.4.2) rather than `M{MM}.{NN}` — these are not a milestone and should not consume a milestone number. The prefix keeps them sortable and greppable alongside task files.
+
+---
+
+## Milestone M04: Skill-First Architecture (v0.5.0) — was M03 · branch `milestone/m04-skill-first`
 
 Commands become skills per the Agent Skills open standard (D17, D22, D23). Includes installer hotfixes from field reports (Windows, TTY) — not skills work, but they ship with v0.5.0.
 
@@ -62,11 +83,19 @@ Commands become skills per the Agent Skills open standard (D17, D22, D23). Inclu
 | M04.11 | **`poc` flag on the remaining delivery commands (carried from M03)** | P2 | M | M04.03 | ☐ todo | — | 005 |
 | M04.12 | **Post-do state sync (checklist or required /sync) (carried from M03)** | P2 | S | — | ☐ todo | — | 009 |
 | M04.13 | **Definition of done: acceptance criteria checked before status → done (carried from M03)** | P2 | S | — | ☐ todo | — | 009 |
-| M04.14 | **Explore question pre-filling: consequence-based rule + response markers; split technical vs. business-logic audience** | P2 | S | — | ☐ todo | — | 018 |
+| M04.14 | ⊘ **Explore question pre-filling — moved to P42.06 (v0.4.2 patch)** | — | — | — | ⊘ moved | — | 018 |
+| M04.15 | **`/mae-help` — state-aware next-step suggestion; `/mae-help {command}`; shows 3 relevant commands, not 11. Build FIRST in this milestone** | P1 | S | — | ☐ todo | [M04.15](tasks/M04.15-mae-help.md) | 22 §4 |
+| M04.16 | *(vacant — held both aliases; `/mae-arch` promoted to M05.12 as primary name, `/mae-spec` dropped as unnecessary once chaining exists)* | — | — | — | ⊘ vacant | — | 22 §2, §7 |
+| M04.17 | **`/mae-approve` (triage-only): read inline comments, show interpretation table, wait for confirmation. No stamping — that's M05.10** | P2 | S | — | ☐ todo | — | 22 §8 |
+| M04.18 | **Dependency graph (Mermaid) emitted by `/mae-plan` into ROADMAP.md; milestone-level graph at file head** | P2 | S | — | ☐ todo | — | 22 §5 |
 
 **Done when:** Every command is a standard skill; auto-trigger works for advisory tier; install works on ≥ 3 tools; personal preferences respected; Windows install path documented and non-interactive installs are explicit about defaults. (Artifact-capture rule + task-ID convention already landed 2026-07-14: D22, D23.)
 
-**Note:** M04.04 is intentionally vacant — it was `mae-spec`, dropped as superseded by `/mae-poc`. Numbering preserved so pre-2026-08-03 session notes stay resolvable.
+**Build order note:** M04.15 (`/mae-help`) first — its state table ("user is at state X, skill Y is relevant") *is* the auto-trigger heuristic that M04.02's frontmatter convention must encode. Building it first gives M04.02 a tested state machine instead of a guess.
+
+**Note:** M04.04 is intentionally vacant — it was `mae-spec`, dropped as superseded by `/mae-poc`. M04.16 is now also vacant. Numbering preserved so pre-2026-08-03 session notes stay resolvable.
+
+**Branch note (2026-08-21):** `milestone/m03-skill-first` contains **nothing** — zero commits ahead of main, zero file differences. It appears in `git branch --merged` only because its tip is an ancestor of main. No skills work was ever written on it. Create `milestone/m04-skill-first` fresh; do not reuse.
 
 ## Milestone M05: Living Docs & Sync (v0.6.0) — was M04
 
@@ -80,9 +109,17 @@ Canonical docs stay current transactionally (D19, D20, D21).
 | M05.04 | **Mechanical drift report in /sync (unmerged deltas)** | P2 | S | M05.02 | ☐ todo | — | 014 |
 | M05.05 | **PoC graduation via delta merge (carried from M03 — currently graduates by `/mae-plan` at M02)** | P2 | M | M05.02 | ☐ todo | — | 015/018 |
 | M05.06 | **ADR supersession lifecycle: superseded-by graph, ADR ↔ DESIGN.md drift reporting in /sync** | P1 | M | M05.02, M04 ADR migration | ☐ todo | — | 018 (hq 11 §3) |
-| M05.07 | **Scope-change intake (`/mae-iterate`-style): new requirement set → impact analysis → delta across REQUIREMENTS/DESIGN/ROADMAP/tasks** | P1 | M | M05.01 | ☐ todo | — | 018 (absorbs F.6) |
+| M05.07 | **`/mae-scope` — scope-change intake: intake → classify (additive/modifying/conflicting) → `scope-delta.md` impact analysis → apply on confirmation. Emits ADRs for conflicts; consumes partial approval from `/mae-approve`; detects when the change is large enough to warrant `/mae-explore` first** | P1 | M | M05.01 | ☐ todo | — | 018 (absorbs F.6), 22 §9 |
+| M05.08 | **Canonical-file consolidation: OPEN_QUESTIONS → HANDOFF section; delete WORKLOG (git log with task-ID messages replaces it); DECISIONS → `adr/_index.md`; add ADR index to context-loading for Design/Implementation/Review; mechanical staleness reporting in `/sync`** | P1 | M | M05.06 | ☐ todo | — | 22 §6b |
+| M05.09 | **`/mae-mock` — standalone HTML mockups, self-contained, `_screens.md` index mapping screens to requirements; two destinations (`01-explore/mock/` pre-requirements, `03-design/mock/` post)** | P2 | M | M05.12 | ☐ todo | — | 22 §7 |
+| M05.10 | **`/mae-approve` full: frontmatter approval stamp; approved sections are never silently regenerated — conflict flagged instead** | P2 | S | M04.17, M05.01 | ☐ todo | — | 22 §8 |
+| M05.11 | **`/mae-run {a}..{b}` chaining + `->` syntax + `/mae-yolo [stop-phase]`: one question round at the front, one review at the end; never skips explore; commits per task** | P2 | M | M04.03, P42.01 | ☐ todo | — | 22 §2 |
+| M05.12 | **⚠️ DECISION-GATED — design/architecture naming + phase placement.** Needs its own session before any task spec exists. `/mae-arch` as primary with `/mae-design` alias (research: Anthropic shipped `frontend-design`, not `design`; Kiro/spec-kit keep `design.md` for architecture). Artifact names stay. Decide before M05.09 | P1 | S | — | ⏳ blocked (needs decision session) | — | 22 §7 |
+| M05.13 | **Parallel-work view: ready-now vs. blocked, with file-overlap conflict warnings derived from task acceptance criteria** (promoted from M10 — 8-person team test upcoming) | P2 | M | M04.18 | ☐ todo | — | 22 §5 |
 
-**Done when:** Shipping a change updates canonical docs as part of /sync; drift is reported, not noticed; a mid-project scope addition lands in every canonical file without hand-editing.
+**Done when:** Shipping a change updates canonical docs as part of /sync; drift is reported, not noticed; a mid-project scope addition lands in every canonical file without hand-editing; the root holds one tracking file instead of four.
+
+**Design-together note:** M05.06 (ADR supersession), M05.07 (`/mae-scope`), and M05.10 (`/mae-approve` stamping) are three faces of one mechanism — a decision changes and canonical docs must follow. Design them in one pass or you will build three overlapping audit trails, which is the exact failure DECISIONS.md already demonstrated.
 
 ## Milestone M06: CLI (v0.7.0) — was M05
 
@@ -143,8 +180,11 @@ Feeds the future Hub app (session 015/05, 015/09 handoff).
 | M10.02 | **Add status command filters (`--assignee`, `--priority`, `--blocked`)** | P2 | M | M10.01 | ☐ todo | — | 005/009 review |
 | M10.03 | **Integrate issue lifecycle into /status views** | P3 | M | — | ☐ todo | — | 009 review |
 | M10.04 | **Add rolling project digest for long-running projects** | P2 | M | — | ☐ todo | — | 009 review |
+| M10.05 | **Task `Owner` field + profile-based owner suggestion from `[[team.members]]` strengths/needs_help (suggestion only, never auto-assign)** | P2 | S | M05.13 | ☐ todo | — | 22 §5 |
 
 **Done when:** A PM can create, filter, and track tasks without editing markdown by hand.
+
+**Note:** the parallel-work view with file-overlap detection was promoted out of this milestone to **M05.13** (2026-08-21) — an 8-person team test is expected sooner than v0.9.0.
 
 ---
 

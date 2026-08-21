@@ -1,12 +1,32 @@
 # HANDOFF.md — Maestro Framework
 
 ## Current Status
-- **Phase:** bootstrap → packaging (v0.4.0 released; skills refactor next)
-- **Last worked on:** 2026-08-03 — v0.4.0 release: PoC track merged, roadmap renumbered, README rewritten (session 018, maestro-hq)
-- **Active branch:** `main`
+- **Phase:** bootstrap → packaging (v0.4.0 released; behavior patch v0.4.2 planned, then skills refactor)
+- **Last worked on:** 2026-08-21 — scoped developer critique into a v0.4.2 patch + M04/M05 additions (session 22-new-scope, maestro-hq)
+- **Active branch:** `feat/v0.4.2-scope`
 - **Version:** v0.4.0 (Milestone M03 complete — PoC workflow)
-- **Next priorities:** M04 skill-first refactor — start with M04.01 (spike: mae-explore as SKILL.md), then M04.02 frontmatter convention. Design work already done in `.sessions/015-skills/` (gitignored — `03-skills-files.md` holds the draft skill descriptions). Also queued: explore question pre-filling (M04.14), ADR migration (M04, lifecycle in M05).
-- **Blockers:** None
+- **Next priorities:** **v0.4.2 patch first** (P42.01–P42.06 — git settings, response_capture, artifact consolidation, append-only state, README/process reporting, explore pre-fill), then M04 skill-first starting with **M04.15 `/mae-help`** (its state table is the auto-trigger heuristic M04.02 needs), then the M04.01 spike. Skills design already done in `.sessions/015-skills/` (gitignored — `03-skills-files.md` holds the draft skill descriptions).
+- **Blockers:** None. One decision-gated item: **M05.12** (design/architecture naming) needs its own session before M05.09 `/mae-mock` can be specced.
+
+## Recent Changes (2026-08-21) — Session 22-new-scope (maestro-hq)
+
+Critique from two external developers plus accumulated own observations, scoped into the roadmap. Analysis: `maestro-hq/.sessions/22-new-scope/02-scope-analysis.md` + `03-responses.md`.
+
+### New: v0.4.2 behavior patch (6 items, all S) — sequenced BEFORE the skill conversion
+- Rationale: rewriting a command then converting it is one rewrite; converting then rewriting is two. `015-skills/03` flagged this dependency explicitly.
+- P42.01 `[git]` config + per-task commits · P42.02 `response_capture` three tiers + work-product rule · P42.03 artifact consolidation + `/md` two-mode · P42.04 append-only state + sync reconciliation · P42.05 README quickstart + running-process reporting · P42.06 explore pre-fill (was M04.14)
+
+### Added to M04
+- **M04.15 `/mae-help`** — state-aware next-step guidance. Build first in the milestone
+- M04.17 `/mae-approve` (triage-only) · M04.18 Mermaid dependency graph
+- M04.14 moved to P42.06; **M04.16 vacant** (aliases redistributed)
+
+### Added to M05
+- M05.08 canonical-file consolidation (4 root files → 1 + ADR folder) · M05.09 `/mae-mock` · M05.10 `/mae-approve` stamping · M05.11 `/mae-run` + `/mae-yolo` chaining · **M05.12 decision-gated naming session** · M05.13 parallel-work view (promoted from M10)
+
+### Two corrections to the record
+- **`milestone/m03-skill-first` contains nothing** — zero commits ahead of main, zero file diffs. It appears in `git branch --merged` only because its tip is an ancestor of main. Consistent with session 018's forensic finding that no `SKILL.md` was ever written. Do not reuse the branch name; create `milestone/m04-skill-first` fresh.
+- **`/mae-poc` produces only `POC.md`** — a condensed single-file spec, not REQUIREMENTS + DESIGN + ROADMAP. An earlier claim that it doubles as a "fast path to the full artifacts" was wrong; chaining (M05.11) is that path.
 
 ## Recent Changes (2026-08-03) — Session 018 (maestro-hq), v0.4.0
 
