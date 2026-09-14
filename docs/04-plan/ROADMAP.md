@@ -86,8 +86,8 @@ Commands become skills per the Agent Skills open standard (D17, D22, D23). Inclu
 | M04.14 | ⊘ **Explore question pre-filling — moved to P42.06 (v0.4.2 patch)** | — | — | — | ⊘ moved | — | 018 |
 | M04.15 | **`/mae-help` — state-aware next-step suggestion; `/mae-help {command}`; shows 3 relevant commands, not 11. Build FIRST in this milestone** | P1 | S | — | ☐ todo | [M04.15](tasks/M04.15-mae-help.md) | 22 §4 |
 | M04.16 | *(vacant — held both aliases; `/mae-arch` promoted to M05.12 as primary name, `/mae-spec` dropped as unnecessary once chaining exists)* | — | — | — | ⊘ vacant | — | 22 §2, §7 |
-| M04.17 | **`/mae-approve` (triage-only): read inline comments, show interpretation table, wait for confirmation. No stamping — that's M05.10** | P2 | S | — | ☐ todo | — | 22 §8 |
-| M04.18 | **Dependency graph (Mermaid) emitted by `/mae-plan` into ROADMAP.md; milestone-level graph at file head** | P2 | S | — | ☐ todo | — | 22 §5 |
+| M04.17 | **`/mae-approve` (triage-only): read inline comments, show interpretation table, wait for confirmation. No stamping — that's M05.10** | P2 | S | — | ☐ todo | [M04.17](tasks/M04.17-mae-approve-triage.md) | 22 §8 |
+| M04.18 | **Dependency graph (Mermaid) emitted by `/mae-plan` into ROADMAP.md; milestone-level graph at file head** | P2 | S | — | ☐ todo | [M04.18](tasks/M04.18-dependency-graph.md) | 22 §5 |
 
 **Done when:** Every command is a standard skill; auto-trigger works for advisory tier; install works on ≥ 3 tools; personal preferences respected; Windows install path documented and non-interactive installs are explicit about defaults. (Artifact-capture rule + task-ID convention already landed 2026-07-14: D22, D23.)
 
@@ -109,15 +109,17 @@ Canonical docs stay current transactionally (D19, D20, D21).
 | M05.04 | **Mechanical drift report in /sync (unmerged deltas)** | P2 | S | M05.02 | ☐ todo | — | 014 |
 | M05.05 | **PoC graduation via delta merge (carried from M03 — currently graduates by `/mae-plan` at M02)** | P2 | M | M05.02 | ☐ todo | — | 015/018 |
 | M05.06 | **ADR supersession lifecycle: superseded-by graph, ADR ↔ DESIGN.md drift reporting in /sync** | P1 | M | M05.02, M04 ADR migration | ☐ todo | — | 018 (hq 11 §3) |
-| M05.07 | **`/mae-scope` — scope-change intake: intake → classify (additive/modifying/conflicting) → `scope-delta.md` impact analysis → apply on confirmation. Emits ADRs for conflicts; consumes partial approval from `/mae-approve`; detects when the change is large enough to warrant `/mae-explore` first** | P1 | M | M05.01 | ☐ todo | — | 018 (absorbs F.6), 22 §9 |
+| M05.07 | **`/mae-scope` — scope-change intake: intake → classify (additive/modifying/conflicting) → `scope-delta.md` impact analysis → apply on confirmation. Emits ADRs for conflicts; consumes partial approval from `/mae-approve`; detects when the change is large enough to warrant `/mae-explore` first** | P1 | M | M05.01 (soft) | ☐ todo | [M05.07](tasks/M05.07-mae-scope.md) | 018 (absorbs F.6), 22 §9 |
 | M05.08 | **Canonical-file consolidation: OPEN_QUESTIONS → HANDOFF section; delete WORKLOG (git log with task-ID messages replaces it); DECISIONS → `adr/_index.md`; add ADR index to context-loading for Design/Implementation/Review; mechanical staleness reporting in `/sync`** | P1 | M | M05.06 | ☐ todo | — | 22 §6b |
 | M05.09 | **`/mae-mock` — standalone HTML mockups, self-contained, `_screens.md` index mapping screens to requirements; two destinations (`01-explore/mock/` pre-requirements, `03-design/mock/` post)** | P2 | M | M05.12 | ☐ todo | — | 22 §7 |
 | M05.10 | **`/mae-approve` full: frontmatter approval stamp; approved sections are never silently regenerated — conflict flagged instead** | P2 | S | M04.17, M05.01 | ☐ todo | — | 22 §8 |
-| M05.11 | **`/mae-run {a}..{b}` chaining + `->` syntax + `/mae-yolo [stop-phase]`: one question round at the front, one review at the end; never skips explore; commits per task** | P2 | M | M04.03, P42.01 | ☐ todo | — | 22 §2 |
+| M05.11 | **`/mae-run {a}..{b}` chaining + `->` syntax + `/mae-yolo [stop-phase]`: one question round at the front, one review at the end; never skips explore; commits per task** | P1 | M | P42.01 (soft) | ☐ todo | [M05.11](tasks/M05.11-run-chaining-yolo.md) | 22 §2 |
 | M05.12 | **⚠️ DECISION-GATED — design/architecture naming + phase placement.** Needs its own session before any task spec exists. `/mae-arch` as primary with `/mae-design` alias (research: Anthropic shipped `frontend-design`, not `design`; Kiro/spec-kit keep `design.md` for architecture). Artifact names stay. Decide before M05.09 | P1 | S | — | ⏳ blocked (needs decision session) | — | 22 §7 |
 | M05.13 | **Parallel-work view: ready-now vs. blocked, with file-overlap conflict warnings derived from task acceptance criteria** (promoted from M10 — 8-person team test upcoming) | P2 | M | M04.18 | ☐ todo | — | 22 §5 |
 
 **Done when:** Shipping a change updates canonical docs as part of /sync; drift is reported, not noticed; a mid-project scope addition lands in every canonical file without hand-editing; the root holds one tracking file instead of four.
+
+**Sprint note (2026-09-14):** M05.07 and M05.11 were pulled forward into the September sprint — the M04.03 dependency on M05.11 was wrong (chaining orchestrates commands as well as skills; the v0.4.2 build-behavior-before-packaging rule applies). Sprint allocation by model tier: `maestro-hq/.sessions/22-new-scope/05-fable-tiered-scope.md`.
 
 **Design-together note:** M05.06 (ADR supersession), M05.07 (`/mae-scope`), and M05.10 (`/mae-approve` stamping) are three faces of one mechanism — a decision changes and canonical docs must follow. Design them in one pass or you will build three overlapping audit trails, which is the exact failure DECISIONS.md already demonstrated.
 

@@ -6,6 +6,7 @@
 - **Active branch:** `feat/v0.4.2-scope`
 - **Version:** v0.4.0 (Milestone M03 complete — PoC workflow)
 - **Next priorities:** **v0.4.2 patch first** (P42.01–P42.06 — git settings, response_capture, artifact consolidation, append-only state, README/process reporting, explore pre-fill), then M04 skill-first starting with **M04.15 `/mae-help`** (its state table is the auto-trigger heuristic M04.02 needs), then the M04.01 spike. Skills design already done in `.sessions/015-skills/` (gitignored — `03-skills-files.md` holds the draft skill descriptions).
+- **Sprint 2026-09-14:** allocation by model tier (Fable → design-heavy new commands; Opus → v0.4.2 + conversion; Sonnet → mechanical) in `maestro-hq/.sessions/22-new-scope/05-fable-tiered-scope.md`. That file's order overrides the "v0.4.2 first" line above for the sprint.
 - **Blockers:** None. One decision-gated item: **M05.12** (design/architecture naming) needs its own session before M05.09 `/mae-mock` can be specced.
 
 ## Recent Changes (2026-08-21) — Session 22-new-scope (maestro-hq)
