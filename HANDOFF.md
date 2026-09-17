@@ -1,13 +1,30 @@
 # HANDOFF.md — Maestro Framework
 
 ## Current Status
-- **Phase:** bootstrap → packaging (v0.4.0 released; behavior patch v0.4.2 planned, then skills refactor)
-- **Last worked on:** 2026-08-21 — scoped developer critique into a v0.4.2 patch + M04/M05 additions (session 22-new-scope, maestro-hq)
+- **Phase:** bootstrap → packaging (v0.4.0 released; v0.4.2 behavior patch pending; M04 skill-first started)
+- **Last worked on:** 2026-09-17 — M04.01 skill spike + M04.02 frontmatter convention (session 017-skill-spike, Fable tier F2/F3)
 - **Active branch:** `feat/v0.4.2-scope`
 - **Version:** v0.4.0 (Milestone M03 complete — PoC workflow)
-- **Next priorities:** **v0.4.2 patch first** (P42.01–P42.06 — git settings, response_capture, artifact consolidation, append-only state, README/process reporting, explore pre-fill), then M04 skill-first starting with **M04.15 `/mae-help`** (its state table is the auto-trigger heuristic M04.02 needs), then the M04.01 spike. Skills design already done in `.sessions/015-skills/` (gitignored — `03-skills-files.md` holds the draft skill descriptions).
-- **Sprint 2026-09-14:** allocation by model tier (Fable → design-heavy new commands; Opus → v0.4.2 + conversion; Sonnet → mechanical) in `maestro-hq/.sessions/22-new-scope/05-fable-tiered-scope.md`. That file's order overrides the "v0.4.2 first" line above for the sprint.
-- **Blockers:** None. One decision-gated item: **M05.12** (design/architecture naming) needs its own session before M05.09 `/mae-mock` can be specced.
+- **Done this sprint:** M04.02 ✅ (`.maestro/skills/CONVENTIONS.md`). M04.01 ⏳ blocked — agent work complete (`mae-explore` SKILL.md validated, symlinked into `.claude/skills/` and `.agents/skills/`); two criteria wait on a keyboard test, procedure in the task Notes, eval kit in `docs/07-test/skill-trigger-eval/`.
+- **Next task:** the M04.01 keyboard test (user), then the Opus tier per `maestro-hq/.sessions/22-new-scope/05-fable-tiered-scope.md` §4 starting with O1 `P42.02`. M04.15 `/mae-help` was skipped for the spike (hq `06-fable-reallocation.md` §6); when built it must point at the state table in CONVENTIONS.md §3, not copy it.
+- **Sprint 2026-09-14:** allocation by model tier (Fable → design-heavy new commands; Opus → v0.4.2 + conversion; Sonnet → mechanical) in `maestro-hq/.sessions/22-new-scope/05-fable-tiered-scope.md`, reallocated by `06-fable-reallocation.md` (Fable: Hub requirements, F2/F3, review; everything else Opus).
+- **Blockers:** M04.01 keyboard test. Q8 (utility-skill `mae-` prefix) should be answered before M04.03 converts the utility commands. Decision-gated: **M05.12** (design/architecture naming) needs its own session before M05.09 `/mae-mock` can be specced.
+
+## Recent Changes (2026-09-17) — Session 017-skill-spike
+
+First SKILL.md in the framework, plus the convention every other conversion follows. Report: `docs/05-implementation/M04.01-skill-spike-report.md`.
+
+### M04.01 spike (⏳ blocked on keyboard test)
+- `.maestro/skills/mae-explore/SKILL.md` canonical, `references/question-format.md` as supporting file; passes `uvx --from skills-ref agentskills validate`, also through the symlinks
+- Placement: `.claude/skills/` (Claude Code, Cursor legacy) and `.agents/skills/` (Codex, Cursor) as symlinks; installer mechanism is M04.06
+- Old command file and wrappers untouched until M04.03; possible `/mae-explore` name clash with `.claude/commands/` is test step 1
+- Trigger-eval kit reusable for all conversions: `docs/07-test/skill-trigger-eval/`
+
+### M04.02 convention (✅)
+- Tier lives in `metadata.maestro-tier` and is enforced by a body section per tier: fit check (auto), gate (suggest), guard (explicit). Suggest cannot be expressed in frontmatter at all
+- `UNCLEAR:` the reference validator rejects `disable-model-invocation` (and every Claude/Cursor-specific field). Working default: keep it on explicit skills, accept one validator line, whitelist in `maestro validate` (M06.01)
+- Codex needs `{skill}/agents/openai.yaml` with `allow_implicit_invocation: false` for explicit skills
+- Tier table extended to poc/help/scope/mock/run/yolo/approve/md (provisional until each is built)
 
 ## Recent Changes (2026-08-21) — Session 22-new-scope (maestro-hq)
 
