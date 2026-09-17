@@ -1,0 +1,20 @@
+[
+  { "query": "help me explore this idea: an internal tool that turns meeting transcripts into action items", "should_trigger": true },
+  { "query": "I just got a 4-page brief from a client in docs/00-reference/brief.pdf — can you make sense of it and tell me what we don't know yet?", "should_trigger": true },
+  { "query": "we're kicking off a new engagement next week, what should I be asking the client before we commit to anything", "should_trigger": true },
+  { "query": "summarize ~/Downloads/kickoff-call.txt and pull out decisions and open questions", "should_trigger": true },
+  { "query": "what are the risks in this project so far? my manager wants a list by tomorrow", "should_trigger": true },
+  { "query": "im new to this repo, whats it actually for and where are the gaps in the docs", "should_trigger": true },
+  { "query": "before we write requirements, do a gap analysis of everything in docs/01-explore", "should_trigger": true },
+  { "query": "put together questions for the technical team about the data pipeline", "should_trigger": true },
+  { "query": "mex the auth system", "should_trigger": true },
+  { "query": "write the requirements doc for the transcript tool we discussed", "should_trigger": false },
+  { "query": "design the architecture for the ingestion service — components, data model, source layout", "should_trigger": false },
+  { "query": "break the design into milestones and tasks", "should_trigger": false },
+  { "query": "where is the retry logic for the API client defined?", "should_trigger": false },
+  { "query": "fix the failing test in tests/test_parser.py", "should_trigger": false },
+  { "query": "review my last commit for problems", "should_trigger": false },
+  { "query": "what does maestro.toml's session_visibility setting do?", "should_trigger": false },
+  { "query": "explain the difference between a PoC track and the full track in one paragraph", "should_trigger": false },
+  { "query": "rename the variable `cfg` to `config` across src/", "should_trigger": false }
+]
