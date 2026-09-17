@@ -124,6 +124,8 @@ Templates                   → .maestro/templates/
 Session history             → .sessions/{NNN}-{name}/_summary.md
 Source code                 → src/ (or project-specific path)
 Framework commands          → .maestro/commands/mae-*.md
+Framework skills            → .maestro/skills/{name}/SKILL.md  (Agent Skills standard; M04 migration in progress)
+Skill conventions           → .maestro/skills/CONVENTIONS.md  (tiers, description pattern, frontmatter)
 Claude Code adapters        → .claude/commands/mae-*.md  (thin wrappers → .maestro/commands/)
 Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-dispatch.mdc)
 ```

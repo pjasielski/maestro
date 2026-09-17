@@ -72,7 +72,7 @@ Commands become skills per the Agent Skills open standard (D17, D22, D23). Inclu
 | # | Item | Priority | Effort | Depends | Status | Task | Source |
 |---|------|----------|--------|---------|--------|------|--------|
 | M04.01 | **Spike: mae-explore as SKILL.md, test auto-trigger (Claude Code + one non-Claude tool)** | P1 | M | — | ⏳ blocked | [M04.01](tasks/M04.01-skill-spike.md) | 015 |
-| M04.02 | **Frontmatter convention: tiers (auto/suggest/explicit), trigger + anti-trigger phrases** | P1 | S | M04.01 | ☐ todo | [M04.02](tasks/M04.02-frontmatter-convention.md) | 015 |
+| M04.02 | **Frontmatter convention: tiers (auto/suggest/explicit), trigger + anti-trigger phrases** | P1 | S | M04.01 | ✅ done | [M04.02](tasks/M04.02-frontmatter-convention.md) | 015 |
 | M04.03 | **Convert all remaining commands to skills (incl. `/mae-poc`); templates as supporting files** | P1 | L | M04.02 | ☐ todo | [M04.03](tasks/M04.03-convert-commands-to-skills.md) | 015 |
 | M04.05 | **`mae-prd` / `mae-sdd` alias skills with synonym descriptions** | P2 | S | M04.03 | ☐ todo | [M04.05](tasks/M04.05-prd-sdd-aliases.md) | 015 |
 | M04.06 | **Installer: place skills per tool; retire .cursor dispatch where skills suffice** | P1 | M | M04.03 | ☐ todo | [M04.06](tasks/M04.06-installer-skill-placement.md) | 015 |
