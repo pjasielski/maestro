@@ -2,7 +2,7 @@
 
 Show current project state. Supports sub-commands for focused views.
 
-$ARGUMENTS — optional sub-command: tasks, decisions, questions
+$ARGUMENTS — optional sub-command: tasks, decisions, questions, or `--graph`
 
 ## Usage
 
@@ -11,6 +11,7 @@ $ARGUMENTS — optional sub-command: tasks, decisions, questions
 /status tasks        → task board
 /status decisions    → decision summary
 /status questions    → open questions
+/status --graph      → dependency graph (Mermaid) of the current milestone
 ```
 
 ## Behavior
@@ -99,6 +100,10 @@ LOW
 RESOLVED RECENTLY (last 5)
   [{id}] {question} — resolved: {date}
 ```
+
+### Graph (/status --graph)
+
+Print the `### Dependencies` block of the current milestone — the milestone that holds the next unblocked task per the state probe — verbatim from ROADMAP.md (the text between `<!-- deps:M{MM} -->` and `<!-- /deps:M{MM} -->`). If the milestone has no block: "No dependency graph for M{MM} yet — run `/mae-plan M{MM}`." Nothing is generated here; `/mae-plan` owns the graph.
 
 ## Rules
 

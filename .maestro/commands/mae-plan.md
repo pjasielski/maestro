@@ -33,6 +33,7 @@ $ARGUMENTS — optional: milestone number, "roadmap", or specific items
    - Each milestone gets a version target, description, and item table
    - Items include: priority, effort estimate, dependencies, status (☐ todo)
    - Include "Done when" definition for each milestone
+   - Emit the `## Milestone Map` block near the top of the file (see § Dependency Graphs)
 
 3. **Save report** to session folder
 
@@ -59,7 +60,9 @@ $ARGUMENTS — optional: milestone number, "roadmap", or specific items
    - Using `.maestro/templates/task.md` format (ID + Milestone fields filled)
    - Add a link to the new task file in the ROADMAP item's Task column
 
-4. **Save report** to session folder
+4. **Emit the dependency graph** (see § Dependency Graphs) — the `### Dependencies` block for this milestone, replacing any existing one
+
+5. **Save report** to session folder
 
 ### Update Roadmap
 
@@ -67,6 +70,31 @@ When invoked with `roadmap` argument on an existing roadmap:
 - Re-read requirements and design for changes
 - Suggest additions, removals, or reprioritizations
 - Show proposed changes for review before applying
+- Re-emit the `## Milestone Map` and any `### Dependencies` block whose milestone changed
+
+## Dependency Graphs
+
+`/mae-plan` already orders tasks by the `Depends` column to sequence them. Emit the graph it built, as Mermaid, so the plan renders on GitHub and in `/status --graph`. Nothing else derives dependency order; this is the single rendering.
+
+**Per milestone** — a `### Dependencies` block at the end of the milestone section, wrapped in HTML-comment markers so a re-run replaces it instead of appending a second one:
+
+````markdown
+### Dependencies
+<!-- deps:M04 -->
+```mermaid
+graph LR
+  M04_01["M04.01"] --> M04_02["M04.02"] --> M04_03["M04.03"]
+  M04_03 --> M04_05["M04.05"]
+  M04_07["M04.07"]
+```
+<!-- /deps:M04 -->
+````
+
+Rules: node id = task ID with `.` replaced by `_`; label = the task ID (Mermaid does not accept dots in ids); one edge per `Depends` entry, from the dependency to the dependent; a task with no dependencies is a standalone node, so "ready now" is visible at a glance; `⊘` rows are omitted; soft dependencies (`(soft)`) use a dotted edge `-.->`.
+
+**Milestone map** — one `## Milestone Map` block near the top of ROADMAP.md, markers `<!-- deps:map -->` … `<!-- /deps:map -->`, nodes = milestone IDs, edges from each milestone's declared dependencies or, failing that, its order in the file. Emitted on roadmap creation and re-emitted by `roadmap` updates.
+
+Re-running on a milestone that already has a block **replaces** the content between its markers. Never append a second block.
 
 ## Output Behaviors
 - Flag dependencies and blockers

@@ -9,6 +9,19 @@
 
 ---
 
+## Milestone Map
+<!-- deps:map -->
+```mermaid
+graph LR
+  M01 --> M02 --> M03 --> P42 --> M04 --> M05 --> M06 --> M07 --> M08
+  M04 --> M07
+  M05 --> M10
+  M09
+```
+<!-- /deps:map -->
+
+---
+
 ## Milestone M01: Foundation & Stability (v0.2.0) — ✅ complete
 
 All 12 items done (installer rework, `.sessions/` standardization, session visibility, tracking files, renames PRD→REQUIREMENTS / SDD→DESIGN, aliases, sync absorption, Cursor adapters). Details in git history and CHANGELOG (was "Milestone 1").
@@ -87,7 +100,7 @@ Commands become skills per the Agent Skills open standard (D17, D22, D23). Inclu
 | M04.15 | **`/mae-help` — state-aware next-step suggestion; `/mae-help {command}`; shows 3 relevant commands, not 11. Build FIRST in this milestone** | P1 | S | — | ✅ done | [M04.15](tasks/M04.15-mae-help.md) | 22 §4 |
 | M04.16 | *(vacant — held both aliases; `/mae-arch` promoted to M05.12 as primary name, `/mae-spec` dropped as unnecessary once chaining exists)* | — | — | — | ⊘ vacant | — | 22 §2, §7 |
 | M04.17 | **`/mae-approve` (triage-only): read inline comments, show interpretation table, wait for confirmation. No stamping — that's M05.10** | P2 | S | — | ☐ todo | [M04.17](tasks/M04.17-mae-approve-triage.md) | 22 §8 |
-| M04.18 | **Dependency graph (Mermaid) emitted by `/mae-plan` into ROADMAP.md; milestone-level graph at file head** | P2 | S | — | ☐ todo | [M04.18](tasks/M04.18-dependency-graph.md) | 22 §5 |
+| M04.18 | **Dependency graph (Mermaid) emitted by `/mae-plan` into ROADMAP.md; milestone-level graph at file head** | P2 | S | — | ✅ done | [M04.18](tasks/M04.18-dependency-graph.md) | 22 §5 |
 
 **Done when:** Every command is a standard skill; auto-trigger works for advisory tier; install works on ≥ 3 tools; personal preferences respected; Windows install path documented and non-interactive installs are explicit about defaults. (Artifact-capture rule + task-ID convention already landed 2026-07-14: D22, D23.)
 
@@ -96,6 +109,26 @@ Commands become skills per the Agent Skills open standard (D17, D22, D23). Inclu
 **Note:** M04.04 is intentionally vacant — it was `mae-spec`, dropped as superseded by `/mae-poc`. M04.16 is now also vacant. Numbering preserved so pre-2026-08-03 session notes stay resolvable.
 
 **Branch note (2026-08-21):** `milestone/m03-skill-first` contains **nothing** — zero commits ahead of main, zero file differences. It appears in `git branch --merged` only because its tip is an ancestor of main. No skills work was ever written on it. Create `milestone/m04-skill-first` fresh; do not reuse.
+
+### Dependencies
+<!-- deps:M04 -->
+```mermaid
+graph LR
+  M04_01["M04.01"] --> M04_02["M04.02"] --> M04_03["M04.03"]
+  M04_03 --> M04_05["M04.05"]
+  M04_03 --> M04_06["M04.06"]
+  M04_03 --> M04_08["M04.08"]
+  M04_03 --> M04_11["M04.11"]
+  M04_07["M04.07"]
+  M04_09["M04.09"]
+  M04_10["M04.10"]
+  M04_12["M04.12"]
+  M04_13["M04.13"]
+  M04_15["M04.15"]
+  M04_17["M04.17"]
+  M04_18["M04.18"]
+```
+<!-- /deps:M04 -->
 
 ## Milestone M05: Living Docs & Sync (v0.6.0) — was M04
 
