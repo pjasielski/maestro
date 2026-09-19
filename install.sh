@@ -49,7 +49,7 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
   fi
 
   mkdir -p "$SOURCE_DIR/.maestro/commands"
-  for _cmd in mae-explore mae-req mae-poc mae-design mae-plan mae-do mae-review mae-init mae-explore-lite mae-help mae-run mae-yolo status decide sync md; do
+  for _cmd in mae-explore mae-req mae-poc mae-design mae-plan mae-do mae-review mae-init mae-explore-lite mae-help mae-run mae-yolo mae-scope status decide sync md; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/commands/$_cmd.md" -o "$SOURCE_DIR/.maestro/commands/$_cmd.md" 2>/dev/null; then
       echo "  Warning: failed to download $_cmd.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
@@ -57,7 +57,7 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
   done
 
   mkdir -p "$SOURCE_DIR/.maestro/templates"
-  for _tmpl in requirements design explore poc task summary report review roadmap; do
+  for _tmpl in requirements design explore poc task summary report review roadmap scope-delta; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/templates/$_tmpl.md" -o "$SOURCE_DIR/.maestro/templates/$_tmpl.md" 2>/dev/null; then
       echo "  Warning: failed to download template $_tmpl.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
@@ -404,7 +404,7 @@ EOF
   done
 
   # Create aliases
-  for pair in mex:mae-explore mrq:mae-req mpoc:mae-poc mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review; do
+  for pair in mex:mae-explore mrq:mae-req mpoc:mae-poc mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review msc:mae-scope; do
     alias_name="${pair%%:*}"
     canonical="${pair##*:}"
     cat > "$TARGET/.claude/commands/$alias_name.md" <<EOF
@@ -486,7 +486,7 @@ EOF
   fi
 done
 
-for pair in mex:mae-explore mrq:mae-req mpoc:mae-poc mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review; do
+for pair in mex:mae-explore mrq:mae-req mpoc:mae-poc mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review msc:mae-scope; do
   alias_name="${pair%%:*}"
   canonical="${pair##*:}"
   cat > "$TARGET/.cursor/commands/$alias_name.md" <<EOF
@@ -531,6 +531,7 @@ When user types any of these, read the corresponding file and follow its full pr
 | mae-poc | mpoc | .maestro/commands/mae-poc.md |
 | mae-req | mrq | .maestro/commands/mae-req.md |
 | mae-design | mds | .maestro/commands/mae-design.md |
+| mae-scope | msc | .maestro/commands/mae-scope.md |
 | mae-plan | mpl | .maestro/commands/mae-plan.md |
 | mae-do | mdo | .maestro/commands/mae-do.md |
 | mae-review | mrv | .maestro/commands/mae-review.md |
@@ -735,6 +736,7 @@ echo "  /mae-explore (mex)   Build project understanding"
 echo "  /mae-poc     (mpoc)  PoC spec: requirements + design + roadmap"
 echo "  /mae-req     (mrq)   Formalize requirements"
 echo "  /mae-design  (mds)   Create technical architecture"
+echo "  /mae-scope   (msc)   Scope change: classify, impact analysis, apply"
 echo "  /mae-plan    (mpl)   Create roadmap and tasks"
 echo "  /mae-do      (mdo)   Execute tasks"
 echo "  /mae-review  (mrv)   Review code and artifacts"

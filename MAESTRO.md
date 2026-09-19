@@ -316,6 +316,7 @@ Rules that a chain cannot override: explore is never skipped; nothing is promote
 | 02 | PoC spec     | `/mae-poc`      | `mpoc` | POC.md — requirements + design + roadmap in one file (PoC track) |
 | 02 | Requirements | `/mae-req`      | `mrq` | REQUIREMENTS.md — formalized requirements                |
 | 03 | Design       | `/mae-design`   | `mds` | DESIGN.md — technical architecture                       |
+| 02+ | Scope change | `/mae-scope`    | `msc` | scope-delta.md (session, client-sendable) → deltas applied to REQUIREMENTS, DESIGN, ROADMAP, tasks on confirmation |
 | 04 | Plan         | `/mae-plan`     | `mpl` | ROADMAP.md + tasks/ — milestones and task files          |
 | 05 | Do           | `/mae-do`       | `mdo` | Executed work (code, docs, config, PoCs)                  |
 | 06 | Review       | `/mae-review`   | `mrv` | Review findings, suggestions                              |
@@ -380,6 +381,12 @@ docs/00-reference/  ← placed by the user before anything runs; read-only to Ma
   → code, docs, config           ──────────→  in-place
   → implementation report         ──promote──→  docs/05-implementation/
 ```
+
+── Scope change (either track, after requirements exist) ──────
+/mae-scope
+  ← reads the request + REQUIREMENTS.md, DESIGN.md (sections), ROADMAP.md, task index, DECISIONS.md
+  → NN_scope-delta.md (session)  ──apply on confirmation──→  REQUIREMENTS.md, DESIGN.md, ROADMAP.md, tasks/, DECISIONS.md
+  → capabilities not approved     ──────────→  HANDOFF.md § Deferred scope
 
 All commands save to `.sessions/` first. User reviews, then promotes to `docs/` when ready.
 Exceptions: `/mae-plan` saves ROADMAP and tasks directly to docs/ (immediately actionable).

@@ -15,6 +15,7 @@ Recognize these patterns (with or without `/` prefix):
 | `mae-poc` or `mpoc` | `.maestro/commands/mae-poc.md` |
 | `mae-req` or `mrq` | `.maestro/commands/mae-req.md` |
 | `mae-design` or `mds` | `.maestro/commands/mae-design.md` |
+| `mae-scope` or `msc` | `.maestro/commands/mae-scope.md` |
 | `mae-plan` or `mpl` | `.maestro/commands/mae-plan.md` |
 | `mae-do` or `mdo` | `.maestro/commands/mae-do.md` |
 | `mae-review` or `mrv` | `.maestro/commands/mae-review.md` |
