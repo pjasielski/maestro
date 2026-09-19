@@ -49,7 +49,7 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
   fi
 
   mkdir -p "$SOURCE_DIR/.maestro/commands"
-  for _cmd in mae-explore mae-req mae-poc mae-design mae-plan mae-do mae-review mae-init mae-explore-lite mae-help status decide sync md; do
+  for _cmd in mae-explore mae-req mae-poc mae-design mae-plan mae-do mae-review mae-init mae-explore-lite mae-help mae-run mae-yolo status decide sync md; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/commands/$_cmd.md" -o "$SOURCE_DIR/.maestro/commands/$_cmd.md" 2>/dev/null; then
       echo "  Warning: failed to download $_cmd.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
@@ -536,6 +536,8 @@ When user types any of these, read the corresponding file and follow its full pr
 | mae-review | mrv | .maestro/commands/mae-review.md |
 | mae-init | — | .maestro/commands/mae-init.md |
 | mae-help | — | .maestro/commands/mae-help.md |
+| mae-run | — | .maestro/commands/mae-run.md |
+| mae-yolo | — | .maestro/commands/mae-yolo.md |
 | status | — | .maestro/commands/status.md |
 | decide | — | .maestro/commands/decide.md |
 | sync | — | .maestro/commands/sync.md |

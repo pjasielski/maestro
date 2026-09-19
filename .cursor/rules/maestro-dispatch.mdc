@@ -20,6 +20,8 @@ Recognize these patterns (with or without `/` prefix):
 | `mae-review` or `mrv` | `.maestro/commands/mae-review.md` |
 | `mae-init` | `.maestro/commands/mae-init.md` |
 | `mae-help` | `.maestro/commands/mae-help.md` |
+| `mae-run` | `.maestro/commands/mae-run.md` |
+| `mae-yolo` | `.maestro/commands/mae-yolo.md` |
 | `sync` | `.maestro/commands/sync.md` |
 | `decide` | `.maestro/commands/decide.md` |
 | `status` | `.maestro/commands/status.md` |

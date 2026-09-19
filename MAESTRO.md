@@ -298,6 +298,18 @@ Iterative:  explore → req → do (MVP) → [feedback] → explore → req (rev
 
 The agent should suggest next steps based on what exists, but never block the user from choosing a different path.
 
+### Chaining (documented, not advertised)
+
+The same phases with the interruptions removed — **one question round at the front, one review after the last specifying phase, per-task commits inside `do`.** Not in the quickstart; `/mae-help all` lists it. Cumulative commands (`/mae-spec`) and `/mae-until` are not built (D32): a chain covers the fast path without a new artifact shape.
+
+```
+/mae-run req..plan                    REQUIREMENTS + DESIGN + ROADMAP + tasks, three interruptions → one
+/mae-req -> /mae-design -> /mae-plan  same thing, explicit list
+/mae-yolo [stop]                      /mae-run {current}..{stop}; default stop is do; ⚠️ never skips explore
+```
+
+Rules that a chain cannot override: explore is never skipped; nothing is promoted to `docs/` without the one review; `do` stops on first failure; every task is committed, nothing is pushed. Details: `.maestro/commands/mae-run.md`.
+
 | #  | Phase        | Command           | Alias  | Output                                                    |
 | -- | ------------ | ----------------- | ------ | --------------------------------------------------------- |
 | 01 | Explore      | `/mae-explore`  | `mex` | Understanding docs, questions, gaps, readiness assessment |
@@ -309,6 +321,8 @@ The agent should suggest next steps based on what exists, but never block the us
 | 06 | Review       | `/mae-review`   | `mrv` | Review findings, suggestions                              |
 | —  | Init         | `/mae-init`     | —      | Profile setup (run once at start)                         |
 | —  | Help         | `/mae-help`     | —      | State-aware next step; `all` lists every command; `{command}` explains one |
+| —  | Chain        | `/mae-run`      | —      | `/mae-run {a}..{b}` or `/mae-x -> /mae-y` — phases in one pass, one question round, one review (documented, not advertised) |
+| —  | Chain        | `/mae-yolo`     | —      | `/mae-yolo [stop]` = `/mae-run {current}..{stop}`; never skips explore; commits per task; ⚠️ unattended between questions and review |
 
 ### On-Demand Phases
 
