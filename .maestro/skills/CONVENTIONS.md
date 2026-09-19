@@ -46,19 +46,7 @@ The explore/review/status → req/design/plan/decide → do/sync/init split is D
 
 ## 3. State table (auto-trigger heuristic)
 
-Derived from the filesystem, cheapest check first. Owner: M04.15 `/mae-help` implements it and `/status` shares the reading logic. When M04.15 lands, this section becomes a pointer to `.maestro/commands/mae-help.md`; until then it is canonical here.
-
-| Project state | Expected next | Auto skills that should stay quiet or announce |
-|---|---|---|
-| No `docs/01-explore/`, no session | `mae-explore` | — |
-| Explore artifacts, no `REQUIREMENTS.md` and no `POC.md` | `mae-req`, or `mae-poc` if time-boxed | — |
-| `REQUIREMENTS.md`, no `DESIGN.md` | `mae-design` | `mae-explore` announces |
-| `DESIGN.md`, no `ROADMAP.md` | `mae-plan` | `mae-explore` announces |
-| `ROADMAP.md` with ☐ todo tasks | `mae-do {next unblocked id}` | `mae-explore` announces; `mae-review` fits |
-| Tasks done, unsynced decisions in `_summary.md` | `sync` | — |
-| Unanswered questions in the session | Answer them first | Every suggest-tier skill gates |
-
-A suggest-tier gate uses the same table: if the request matches the expected next step, the proposal names it; if not, the proposal says which state the project is in.
+The state probe and the state table live in `.maestro/commands/mae-help.md` (§ State probe, § State table) since M04.15 landed. They are not copied here. Fit checks (auto tier) compare the request with that table; suggest-tier gates use it the same way: if the request matches the expected next step, the proposal names it; if not, the proposal says which state the project is in. `/status`, `/mae-help`, and `/mae-yolo` all read the same probe.
 
 ## 4. Description pattern
 

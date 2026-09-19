@@ -84,7 +84,7 @@ Commands become skills per the Agent Skills open standard (D17, D22, D23). Inclu
 | M04.12 | **Post-do state sync (checklist or required /sync) (carried from M03)** | P2 | S | — | ☐ todo | — | 009 |
 | M04.13 | **Definition of done: acceptance criteria checked before status → done (carried from M03)** | P2 | S | — | ☐ todo | — | 009 |
 | M04.14 | ⊘ **Explore question pre-filling — moved to P42.06 (v0.4.2 patch)** | — | — | — | ⊘ moved | — | 018 |
-| M04.15 | **`/mae-help` — state-aware next-step suggestion; `/mae-help {command}`; shows 3 relevant commands, not 11. Build FIRST in this milestone** | P1 | S | — | ☐ todo | [M04.15](tasks/M04.15-mae-help.md) | 22 §4 |
+| M04.15 | **`/mae-help` — state-aware next-step suggestion; `/mae-help {command}`; shows 3 relevant commands, not 11. Build FIRST in this milestone** | P1 | S | — | ✅ done | [M04.15](tasks/M04.15-mae-help.md) | 22 §4 |
 | M04.16 | *(vacant — held both aliases; `/mae-arch` promoted to M05.12 as primary name, `/mae-spec` dropped as unnecessary once chaining exists)* | — | — | — | ⊘ vacant | — | 22 §2, §7 |
 | M04.17 | **`/mae-approve` (triage-only): read inline comments, show interpretation table, wait for confirmation. No stamping — that's M05.10** | P2 | S | — | ☐ todo | [M04.17](tasks/M04.17-mae-approve-triage.md) | 22 §8 |
 | M04.18 | **Dependency graph (Mermaid) emitted by `/mae-plan` into ROADMAP.md; milestone-level graph at file head** | P2 | S | — | ☐ todo | [M04.18](tasks/M04.18-dependency-graph.md) | 22 §5 |

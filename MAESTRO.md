@@ -60,7 +60,7 @@ Apply per-command: `/mae-explore -v` produces a verbose report. `/mae-explore -c
 
 1. Read `HANDOFF.md`
 2. Check `.sessions/` for the highest-numbered session folder
-3. Greet: "I've read the handoff. Last session was **{NNN}-{name}**. Current phase: **{phase}**. What would you like to work on?"
+3. Greet: "I've read the handoff. Last session was **{NNN}-{name}**. Current phase: **{phase}**. What would you like to work on?" — then run the `/mae-help` state probe and add its `NEXT` line, so the first thing a user sees is one suggestion, not a command list
 4. Wait for the user to provide a session title (e.g., `"003-api-design"`)
 5. Create folder: `.sessions/{NNN}-{title}/`
 6. Create file: `.sessions/{NNN}-{title}/_summary.md` using `templates/summary.md`
@@ -281,7 +281,7 @@ Use in `_summary.md` to track decision lifecycle:
 
 ## Delivery Phases
 
-7 delivery commands + 4 utility commands. Not all projects need all phases — the user decides which to use and in what order.
+Eight delivery commands, six utility commands (`init`, `help`, `status`, `decide`, `sync`, `md`), two chaining commands. `/mae-help` shows the three or four that matter now (D33). Not all projects need all phases — the user decides which to use and in what order.
 
 **Maestro does not enforce a rigid sequence.** Phases are tools, not gates. The user can revisit any phase, skip phases, or run them in any order that fits the project. Each command has a `## Skip When` section describing when to skip it. Common patterns:
 
@@ -308,6 +308,7 @@ The agent should suggest next steps based on what exists, but never block the us
 | 05 | Do           | `/mae-do`       | `mdo` | Executed work (code, docs, config, PoCs)                  |
 | 06 | Review       | `/mae-review`   | `mrv` | Review findings, suggestions                              |
 | —  | Init         | `/mae-init`     | —      | Profile setup (run once at start)                         |
+| —  | Help         | `/mae-help`     | —      | State-aware next step; `all` lists every command; `{command}` explains one |
 
 ### On-Demand Phases
 

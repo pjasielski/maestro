@@ -19,6 +19,7 @@ Recognize these patterns (with or without `/` prefix):
 | `mae-do` or `mdo` | `.maestro/commands/mae-do.md` |
 | `mae-review` or `mrv` | `.maestro/commands/mae-review.md` |
 | `mae-init` | `.maestro/commands/mae-init.md` |
+| `mae-help` | `.maestro/commands/mae-help.md` |
 | `sync` | `.maestro/commands/sync.md` |
 | `decide` | `.maestro/commands/decide.md` |
 | `status` | `.maestro/commands/status.md` |

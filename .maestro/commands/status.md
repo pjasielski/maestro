@@ -17,12 +17,13 @@ $ARGUMENTS — optional sub-command: tasks, decisions, questions
 
 ### Overview (default)
 
-1. Read `HANDOFF.md` for current phase, blockers, recent changes
-2. Read `OPEN_QUESTIONS.md` and count questions by priority
-3. Read `WORKLOG.md` for last 3 entries
-4. Check `.sessions/` for the latest session folder
-5. Check `docs/04-plan/tasks/` for task counts by status
-6. Check `DECISIONS.md` for recent unsynced decisions
+State is read with the **state probe** in `.maestro/commands/mae-help.md` § State probe — existence checks, `grep`, and header lines only. `/status` renders it as "where am I"; `/mae-help` renders the same probe as "what do I do". Do not re-derive the probe here.
+
+In addition to the probe:
+1. `HANDOFF.md` § Current Status only — phase, blockers (header block, not the whole file)
+2. `OPEN_QUESTIONS.md` — count rows by priority
+3. `WORKLOG.md` — last 3 rows
+4. Task counts — the `**Status:**` header line of each file in `docs/04-plan/tasks/`, not the files
 
 Output:
 ```
@@ -100,6 +101,8 @@ RESOLVED RECENTLY (last 5)
 ```
 
 ## Rules
+
+- State comes from the shared probe in `mae-help.md`; `/status` adds counts and recent activity, `/mae-help` adds the suggestion
 
 - Keep output concise — no decorative borders
 - Task/decision/question counts always shown in overview, even if zero

@@ -49,7 +49,7 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
   fi
 
   mkdir -p "$SOURCE_DIR/.maestro/commands"
-  for _cmd in mae-explore mae-req mae-poc mae-design mae-plan mae-do mae-review mae-init mae-explore-lite status decide sync md; do
+  for _cmd in mae-explore mae-req mae-poc mae-design mae-plan mae-do mae-review mae-init mae-explore-lite mae-help status decide sync md; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/commands/$_cmd.md" -o "$SOURCE_DIR/.maestro/commands/$_cmd.md" 2>/dev/null; then
       echo "  Warning: failed to download $_cmd.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
@@ -535,6 +535,7 @@ When user types any of these, read the corresponding file and follow its full pr
 | mae-do | mdo | .maestro/commands/mae-do.md |
 | mae-review | mrv | .maestro/commands/mae-review.md |
 | mae-init | — | .maestro/commands/mae-init.md |
+| mae-help | — | .maestro/commands/mae-help.md |
 | status | — | .maestro/commands/status.md |
 | decide | — | .maestro/commands/decide.md |
 | sync | — | .maestro/commands/sync.md |
@@ -721,10 +722,11 @@ echo "Questions:  $QUESTION_STYLE"
 echo "Adapters:   $ADAPTERS"
 echo ""
 echo "── Next steps ──────────────────────────"
-echo "  1. Edit CLAUDE.md with your project details"
-echo "  2. Run /mae-init to set up your profile (optional)"
-echo "  3. Put any client briefs / specs in docs/00-reference/"
-echo "  4. Run /mae-explore to start"
+echo "  1. Run /mae-help — it tells you what to run next, every time"
+echo "  2. Edit CLAUDE.md with your project details"
+echo "  3. Run /mae-init to set up your profile (optional)"
+echo "  4. Put any client briefs / specs in docs/00-reference/"
+echo "  5. Run /mae-explore to start"
 echo ""
 echo "── Commands ────────────────────────────"
 echo "  /mae-explore (mex)   Build project understanding"
@@ -734,6 +736,7 @@ echo "  /mae-design  (mds)   Create technical architecture"
 echo "  /mae-plan    (mpl)   Create roadmap and tasks"
 echo "  /mae-do      (mdo)   Execute tasks"
 echo "  /mae-review  (mrv)   Review code and artifacts"
+echo "  /mae-help            What should I run now? (/mae-help all for everything)"
 echo ""
 
 # Clean up temp source dir if we downloaded it
