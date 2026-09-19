@@ -2,13 +2,27 @@
 
 ## Current Status
 - **Phase:** bootstrap → packaging (v0.4.0 released; v0.4.2 behavior patch pending; M04 skill-first started)
-- **Last worked on:** 2026-09-17 — M04.01 skill spike + M04.02 frontmatter convention (session 017-skill-spike, Fable tier F2/F3)
+- **Last worked on:** 2026-09-19 — `/mae-help`, `/mae-run` + `/mae-yolo`, `/mae-scope`, dependency graph (session 019-m04-m05-commands, Fable); adversarial review of the instruction set (session 018-framework-review)
 - **Active branch:** `feat/v0.4.2-scope`
 - **Version:** v0.4.0 (Milestone M03 complete — PoC workflow)
-- **Done this sprint:** M04.02 ✅ (`.maestro/skills/CONVENTIONS.md`). M04.01 ⏳ blocked — agent work complete (`mae-explore` SKILL.md validated, symlinked into `.claude/skills/` and `.agents/skills/`); two criteria wait on a keyboard test, procedure in the task Notes, eval kit in `docs/07-test/skill-trigger-eval/`.
-- **Next task:** the M04.01 keyboard test (user), then the Opus tier per `maestro-hq/.sessions/22-new-scope/05-fable-tiered-scope.md` §4 starting with O1 `P42.02`. M04.15 `/mae-help` was skipped for the spike (hq `06-fable-reallocation.md` §6); when built it must point at the state table in CONVENTIONS.md §3, not copy it.
+- **Done this sprint:** M04.02 ✅, **M04.15 ✅, M05.11 ✅, M05.07 ✅, M04.18 ✅** (report: `.sessions/019-m04-m05-commands/01-implementation-report.md`). M04.01 ⏳ blocked — agent work complete; two criteria wait on a keyboard test, procedure in the task Notes, eval kit in `docs/07-test/skill-trigger-eval/`. M04.17 not built — Q7 still "maybe".
+- **Next task:** (user) M04.01 keyboard test, answer Q7 and Q8. Then write the M04.13 task file — P42.03 and P42.05 have criteria that point at it. Then the Opus tier per `maestro-hq/.sessions/22-new-scope/05-fable-tiered-scope.md` §4: O1 `P42.02` → P42.03 → P42.01 → P42.04 → P42.05 → P42.06 → clean-install test (now touches four installer loops) → tag v0.4.2. Review findings to fold in on the way: `.sessions/018-framework-review/01-findings.md` § Fix first (D30 read path into the loading table; Synced/Supersedes columns on DECISIONS.md; `mae-plan` prerequisites for PoC graduation — suggest P42.07).
+- **Where state is read:** the state probe and state table live in `.maestro/commands/mae-help.md`; `/status`, `/mae-yolo` and CONVENTIONS §3 point at it. Change it there only.
 - **Sprint 2026-09-14:** allocation by model tier (Fable → design-heavy new commands; Opus → v0.4.2 + conversion; Sonnet → mechanical) in `maestro-hq/.sessions/22-new-scope/05-fable-tiered-scope.md`, reallocated by `06-fable-reallocation.md` (Fable: Hub requirements, F2/F3, review; everything else Opus).
 - **Blockers:** M04.01 keyboard test. Q8 (utility-skill `mae-` prefix) should be answered before M04.03 converts the utility commands. Decision-gated: **M05.12** (design/architecture naming) needs its own session before M05.09 `/mae-mock` can be specced.
+
+## Recent Changes (2026-09-19) — Sessions 018 + 019
+
+### Four commands built (019) — the F1/F4/F5 items from the September sprint, in their original order
+- **`/mae-help`** (M04.15): state probe (10 cheap checks) + state table; bare / `all` / `{command}`; suggests 3–4 commands, never all. Installer's closing output now starts with it. `/status` shares the probe
+- **`/mae-run {a}..{b}`**, `->` lists, **`/mae-yolo [stop]`** (M05.11): one question round at the front, one review after the last specifying phase, per-task commits inside `do`, never skips explore, stop on first failure. MAESTRO.md § Chaining — documented, not advertised
+- **`/mae-scope`** / `msc` (M05.07): intake → classify (additive / modifying / conflicting; size check → `/mae-explore` first) → `NN_scope-delta.md` (client-sendable, analysis only) → apply on confirmation across REQUIREMENTS, DESIGN, ROADMAP, tasks, DECISIONS; unapproved capabilities → HANDOFF § Deferred scope. Template `scope-delta.md`
+- **Dependency graph** (M04.18): `/mae-plan` emits `### Dependencies` Mermaid per milestone between `<!-- deps:M{MM} -->` markers and a `## Milestone Map`; `/status --graph` prints it. ROADMAP.md dogfooded for M04
+- None of the four has run on a real project yet; the first real chain and the first real scope change are the acceptance tests
+
+### Adversarial review of the instruction set (018)
+- `.sessions/018-framework-review/01-findings.md`: 40 findings — 12 contradictions, 11 rules with no operator, 8 token hotspots, 9 decisions (D22–D33) not yet reflected. Four blockers: PoC graduation fails on `mae-plan` prerequisites; "unsynced decisions" has no representation in DECISIONS.md; Decision Protection has no reader in Design/Implementation/Review; D30's read path is unapplied
+- Nothing was changed by the review; its § Fix first is queued into the Opus tier above
 
 ## Recent Changes (2026-09-17) — Session 017-skill-spike
 
@@ -141,7 +155,7 @@ Critique from two external developers plus accumulated own observations, scoped 
 
 ## Project Overview
 - **Name:** Maestro
-- **Description:** AI-assisted delivery framework. 7 delivery commands + 4 utility commands + 6 aliases. Sessions-first workflow, decision tracking, task management via markdown files.
+- **Description:** AI-assisted delivery framework. 8 delivery commands + 6 utility commands + 2 chaining commands + 8 aliases. Sessions-first workflow, decision tracking, task management via markdown files.
 - **Stack:** Markdown-first (commands as `.md` files), TOML config (`maestro.toml`), future CLI in Python
 - **Multi-tool:** Claude Code (`.claude/commands/`), Cursor (`.cursor/rules/` + `.cursor/commands/`), Codex (`.github/copilot-instructions.md`)
 
@@ -162,7 +176,7 @@ Critique from two external developers plus accumulated own observations, scoped 
 | Cursor commands | `.cursor/commands/` for autocomplete | Matches Cursor's native slash command mechanism |
 
 ## Commands
-### Delivery (7)
+### Delivery (8)
 | Command | Alias | Purpose |
 |---------|-------|---------|
 | `/mae-init` | — | Profile setup after installation |
@@ -172,14 +186,18 @@ Critique from two external developers plus accumulated own observations, scoped 
 | `/mae-plan` | `mpl` | Create/update ROADMAP, generate task files |
 | `/mae-do` | `mdo` | Execute tasks (planned, ad-hoc, or from file) |
 | `/mae-review` | `mrv` | Review code or artifacts |
+| `/mae-scope` | `msc` | Scope change: classify, impact analysis (scope-delta), apply on confirmation |
 
-### Utility (4)
+### Utility (5) + Chaining (2)
 | Command | Purpose |
 |---------|---------|
 | `/decide` | Record decision in audit trail |
 | `/sync` | End-of-session save — update HANDOFF, ROADMAP status, DECISIONS, checkpoint |
 | `/status` | Project overview + sub-commands (tasks, decisions, questions) |
 | `/md` | Save response to session file |
+| `/mae-help` | What to run now — state probe, 3–4 commands; `all`, `{command}` |
+| `/mae-run` | Chain phases `{a}..{b}` or `->` list: one question round, one review |
+| `/mae-yolo` | `/mae-run {current}..{stop}`; never skips explore; ⚠️ unattended |
 
 ## Key Files
 | File | Location |
