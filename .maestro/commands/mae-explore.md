@@ -2,7 +2,7 @@
 
 Build mutual understanding of the project — business and technical. Adapts to what exists and what's needed. Every explore output includes questions to deepen understanding.
 
-$ARGUMENTS — optional: topic, file path, "ask", or "doc"
+$ARGUMENTS — optional: topic, file path, idea ID (`I-NN`), "ask", or "doc"
 
 ## Usage
 
@@ -10,9 +10,10 @@ $ARGUMENTS — optional: topic, file path, "ask", or "doc"
 /mae-explore                  → smart default: produce whatever is most useful now
 /mae-explore {topic}          → targeted analysis of a specific area
 /mae-explore {file path}      → analyze/summarize a specific document or transcript
+/mae-explore I-NN             → explore a parked idea from docs/01-explore/IDEAS.md
 /mae-explore ask              → generate questions to deepen understanding
 /mae-explore ask {audience}   → questions for: user, client, team, technical
-/mae-explore doc              → synthesize final explore report from all artifacts
+/mae-explore doc              → synthesize docs/01-explore/EXPLORE.md from all artifacts
 ```
 
 ## Smart Default (no arguments)
@@ -100,6 +101,10 @@ Reads the file and produces a structured summary:
 - Action items
 - Relevance to project scope
 
+### Idea (I-NN)
+
+Read the row in `docs/01-explore/IDEAS.md`, set its status to `exploring`, then explore it as a topic. Status changes after that (`promoted → {id}`, `dropped ({why})`) are not made here.
+
 ## Questions (ask)
 
 ```
@@ -151,11 +156,11 @@ The user or client fills in responses directly in the file. On next explore, the
 
 1. Read ALL explore working artifacts from the current and previous sessions
 2. Read any existing material in `docs/01-explore/`
-3. Produce structured report using `.maestro/templates/explore.md`
+3. Produce structured report using `.maestro/templates/explore.md`, linking each supporting artifact it draws on
 4. Save to session folder
-5. Ask: "Ready to promote to docs/01-explore/?"
+5. Ask: "Ready to promote to docs/01-explore/EXPLORE.md?"
 
-The explore report is a **living document** — running `explore doc` again replaces the previous version (session keeps the history via numbered files).
+`EXPLORE.md` is the fixed name and the only explore file downstream commands read. It is a **living document** — running `explore doc` again replaces it (session keeps the history via numbered files).
 
 ## Behavior
 
@@ -173,7 +178,7 @@ The explore report is a **living document** — running `explore doc` again repl
 3. **Every artifact MUST include a questions section** — questions the agent needs answered to deepen understanding. This is not optional. The goal is to build mutual understanding through iterative Q&A.
 4. **Save to session folder** (numbered file, e.g., `03_scope-analysis.md`)
 5. **Update readiness indicator** in `_summary.md`
-6. **For `doc` mode only:** offer promotion to `docs/01-explore/`
+6. **For `doc` mode only:** offer promotion to `docs/01-explore/EXPLORE.md`
 
 ## Output Behaviors
 
@@ -192,7 +197,7 @@ The explore report is a **living document** — running `explore doc` again repl
 
 Source materials → docs/00-reference/ (placed by the user, read first, never edited)
 All explore artifacts → .sessions/ (working material)
-Final report (`doc`) → .sessions/ → user promotes to docs/01-explore/
+Final report (`doc`) → .sessions/ → user promotes to docs/01-explore/EXPLORE.md
 When ready → user runs `/mae-specs` to write the specs, or `/mae-poc` for the PoC track
 
 ## Rules

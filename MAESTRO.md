@@ -192,6 +192,7 @@ Cursor adapters             → .cursor/rules/ (maestro-core.mdc + maestro-dispa
 - Editing anything inside `.sessions/`
 - Appending to WORKLOG.md
 - Appending to DECISIONS.md
+- Appending to `docs/01-explore/IDEAS.md`
 
 **Review required (show changes, wait for approval):**
 

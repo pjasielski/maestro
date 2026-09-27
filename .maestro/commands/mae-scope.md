@@ -62,7 +62,7 @@ For the approved capabilities, in this order, each as a review-required diff:
 3. **ROADMAP.md** — append the milestone from `## Roadmap`; set `⏳ blocked` on existing tasks the delta blocks
 4. **Task files** — generate `docs/03-plan/tasks/M{MM}.{NN}-{slug}.md` for the new milestone (`.maestro/templates/task.md`, IDs per D23)
 5. **Log resolved conflicts** — one row per resolved `CONFLICT` through the `/decide` protocol, text "supersedes {ID}: {what changed}". *Deliberately isolated: when ADRs land (M05.06) this step emits an ADR instead, and nothing else here changes.*
-6. **Deferred scope** — capabilities not approved go to HANDOFF.md under `## Deferred scope` as `- {date} · C{n} {one line} · see {NN_scope-delta.md}`; create the section if missing. They must not silently evaporate.
+6. **Deferred scope** — capabilities not approved are appended to `docs/01-explore/IDEAS.md` as `| I-NN | {date} | C{n} {one line} | {NN_scope-delta.md} | new |` (create from `.maestro/templates/ideas.md` if missing). They must not silently evaporate.
 
 Report in chat: files changed, milestone added, tasks created, decisions logged, capabilities deferred — one line each.
 
@@ -83,5 +83,5 @@ Report in chat: files changed, milestone added, tasks created, decisions logged,
 ```
 request (argument · file · docs/00-reference/)
   → /mae-scope  →  .sessions/{NNN}/NN_scope-delta.md          (analysis; send to the client)
-  ──apply, on confirmation──→  REQUIREMENTS.md · ARCHITECTURE.md · ROADMAP.md · tasks/ · DECISIONS.md · HANDOFF.md § Deferred scope
+  ──apply, on confirmation──→  REQUIREMENTS.md · ARCHITECTURE.md · ROADMAP.md · tasks/ · DECISIONS.md · IDEAS.md (not approved)
 ```
