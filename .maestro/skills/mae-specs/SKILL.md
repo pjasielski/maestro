@@ -24,6 +24,8 @@ metadata:
 
 Routing only: decides which spec parts to run and runs them as one chain. Each part's protocol lives once, in `references/{part}.md`, loaded only when that part runs; `/mae-requirements`, `/mae-design` and `/mae-architecture` are entry points to the same files.
 
+**Artifact** (MAESTRO.md § Artifact Capture): the artifacts of the parts it runs, plus one report for the chain.
+
 $ARGUMENTS — optional: a part (`requirements`/`req`, `design`, `architecture`/`arch`) plus its arguments
 
 ## Gate (auto-invocation only)

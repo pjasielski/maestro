@@ -2,6 +2,8 @@
 
 Universal task executor. Handles code, docs, config — whatever the task requires.
 
+**Artifact** (MAESTRO.md § Artifact Capture): the executed work; an implementation report only when the task was substantial.
+
 ## Arguments
 - `/mae-do` — no args: smart task suggestion
 - `/mae-do {task-id}` — execute one task (`M01.03`, `task-003`)
@@ -75,7 +77,7 @@ When invoked without arguments, suggest work in this priority order:
 8. **Update § 6 Current State** (PoC track) — done / in progress / next / blocked
 9. **Commit** per MAESTRO.md § Git Policy (`commit = "task"`: the task's files and status updates, commit convention, report the hash)
 10. **Milestone complete** (no todo task left in it): run the `commit`, `push` and `pr` steps of § Git Policy
-11. **Save report** to session folder (or promote to `docs/04-implementation/` if substantial)
+11. **Report:** substantial task (several files, a decision, or findings worth keeping) → save to the session folder, promotable to `docs/04-implementation/`; otherwise report in chat
 12. **Update `_summary.md`** → Tasks Touched section
 
 ## Output Behaviors

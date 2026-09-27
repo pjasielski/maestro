@@ -2,6 +2,8 @@
 
 Review existing code or delivery artifacts for quality, consistency, and completeness.
 
+**Artifact** (MAESTRO.md § Artifact Capture): findings report (session).
+
 ## Arguments
 
 - `/mae-review` — review recent changes (git diff)

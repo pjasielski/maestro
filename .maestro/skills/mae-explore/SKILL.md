@@ -25,6 +25,8 @@ metadata:
 
 Build mutual understanding of the project — business and technical. Adapts to what exists and what's needed. Every explore output includes questions to deepen understanding.
 
+**Artifact** (MAESTRO.md § Artifact Capture): one explore artifact per run (analysis + questions section, or a question file) in the session; `doc` → `EXPLORE.md` on promotion.
+
 $ARGUMENTS — optional: topic, file path, idea ID (`I-NN`), "ask", or "doc"
 
 ## Fit check (auto-invocation only)

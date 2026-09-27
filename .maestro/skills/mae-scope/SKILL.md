@@ -23,6 +23,8 @@ metadata:
 
 Mid-project, new scope arrives: a client request, a change file, a new brief in `docs/00-reference/`. Instead of re-running `/mae-specs` and regenerating everything, decompose the request, classify each capability against what exists, write a client-sendable impact analysis, and only then — on confirmation — apply the deltas to every canonical file at once.
 
+**Artifact** (MAESTRO.md § Artifact Capture): `NN_scope-delta.md` (session, client-sendable); canonical edits only on confirmation.
+
 Alias: `msc`
 
 $ARGUMENTS — optional: `"{description}"`, or a path to a request file; none → look in `docs/00-reference/`

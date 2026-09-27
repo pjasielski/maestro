@@ -16,7 +16,7 @@ Default tier: **standard** — concise, structured, information-dense.
 - Lead with the answer, not the reasoning
 - Tables for comparisons, bullets for lists
 - No filler, no hedging
-- Every substantive response saved as a numbered file in the session folder
+- Files for work products only (MAESTRO.md § Artifact Capture, `response_capture`); conversation stays in chat
 - Chat output = brief summary only
 
 Flags: `-v` (verbose), `-c` (caveman/compressed)
@@ -51,7 +51,7 @@ Framework commands          → .maestro/commands/mae-*.md
 1. Read `HANDOFF.md` at start
 2. Check `.sessions/` for the highest-numbered session folder
 3. Greet with current session and phase
-4. Save substantive responses as numbered files: `NN_description.md`
+4. Save work products as numbered files: `NN_description.md` (MAESTRO.md § Artifact Capture)
 
 ## Rules
 

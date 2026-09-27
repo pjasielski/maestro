@@ -21,6 +21,8 @@ metadata:
 
 Capture a "maybe later" in one line without interrupting the work. **Scope** is a change to what was agreed and needs a decision (`/mae-scope`); an **idea** is maybe-later and needs none.
 
+**Artifact** (MAESTRO.md § Artifact Capture): one row in `docs/01-explore/IDEAS.md`; nothing else.
+
 $ARGUMENTS — required: the idea, in quotes
 
 ## Gate (auto-invocation only)

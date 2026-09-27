@@ -231,13 +231,17 @@ Do NOT update for quick Q&A or minor exchanges.
 
 ### Artifact Capture
 
-**Commands generate files; conversation does not.**
+**A file is written when the output is a work product — something a later session, another person, or a client would read on its own. Not when it is long.**
 
-- Every delivery/utility command saves its artifacts as numbered session files (explore report + question files, requirements draft + report, design draft + report, plan report, review findings, implementation report) — per the command's definition.
-- Direct user queries (questions, discussion, analysis asked in chat) are answered in chat only.
-- Exception: if a chat answer is extensive (~300+ words), ask whether to save it to a session file.
-- `/md` saves the previous response on demand — verbatim, never summarized.
-- `response_capture = "all"` in `maestro.toml` restores save-everything behavior.
+Each command names its work product in an `**Artifact:**` line. How much else is saved is set by `response_capture` in `maestro.toml`, or in `maestro.local.toml` (a personal preference, no restriction). Absent → `"artifacts"`.
+
+| Value | Written to files | Stays in chat |
+|---|---|---|
+| `"artifacts"` (default) | Every command's artifact | Conversational answers: questions, discussion, analysis asked in chat |
+| `"minimal"` | Promotions to `docs/` and explore artifacts only; spec drafts are reviewed and written straight to `docs/` | Command reports (a "Save report" step prints it instead) and everything conversational |
+| `"all"` | Every substantive response, as a numbered session file | — |
+
+`/md` saves the previous response on demand, verbatim, in any mode.
 
 Sequential numbering: `NN_kebab-case-description.md`.
 
@@ -505,7 +509,7 @@ OPEN_QUESTIONS.md  →  DECISIONS.md  →  Canonical files
 
 ## Report Structure
 
-Every command saves a report to the session folder:
+When a command's artifact includes a report, use this structure:
 
 ```markdown
 # {Command}: {Topic}

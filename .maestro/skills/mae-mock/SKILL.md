@@ -23,6 +23,8 @@ metadata:
 
 Standalone HTML mockups of the screens, so a client can see and click through what will be built. The HTML is the review artifact: no brief file.
 
+**Artifact** (MAESTRO.md § Artifact Capture): HTML screens + `_screens.md` in `docs/02-specs/mock/`.
+
 $ARGUMENTS — optional: a screen list in quotes, or one `{screen}` to regenerate
 
 ## Gate (auto-invocation only)

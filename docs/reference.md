@@ -621,7 +621,7 @@ Every response follows these rules:
 - Tables for comparisons, bullets for lists
 - Balance: explanation (30%), structure/data (50%), questions/considerations (20%)
 - No filler, no hedging
-- Every substantive response saved as a numbered session file
+- Work products saved as numbered session files; conversation stays in chat (`response_capture`)
 - Chat output = brief summary, not a duplicate of the file
 
 ### Flags

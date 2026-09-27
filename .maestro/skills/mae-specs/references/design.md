@@ -2,6 +2,8 @@
 
 Write `docs/02-specs/DESIGN.md`: the visual system (colour, type, spacing, components) in the DESIGN.md format, so mocks, code and other agents use the same values. Architecture is `/mae-architecture`.
 
+**Artifact** (MAESTRO.md § Artifact Capture): DESIGN.md draft (session) → `docs/02-specs/DESIGN.md` on promotion; report.
+
 $ARGUMENTS — optional: focus (e.g. "colours only")
 
 ## Prerequisites

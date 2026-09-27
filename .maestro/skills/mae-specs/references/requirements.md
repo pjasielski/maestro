@@ -2,6 +2,8 @@
 
 Generate a Requirements Document from confirmed explore artifacts.
 
+**Artifact** (MAESTRO.md § Artifact Capture): requirements draft (session) → `docs/02-specs/REQUIREMENTS.md` on promotion; report.
+
 $ARGUMENTS — optional: topic focus, flags
 
 ## Prerequisites

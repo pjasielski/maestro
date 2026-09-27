@@ -2,6 +2,8 @@
 
 Design the technical solution. Works at three levels of granularity, top-down and iterative.
 
+**Artifact** (MAESTRO.md § Artifact Capture): architecture draft (session) → `docs/02-specs/ARCHITECTURE.md` on promotion; report.
+
 ## Modes
 
 ### Full solution (no arguments)

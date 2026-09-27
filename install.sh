@@ -171,6 +171,7 @@ SESSION_VISIBILITY="${SESSION_VISIBILITY:-committed}"
 TOOLS="${TOOLS:-}"
 QUESTION_STYLE="${QUESTION_STYLE:-async}"
 GIT_COMMIT="${GIT_COMMIT:-task}"
+RESPONSE_CAPTURE="${RESPONSE_CAPTURE:-artifacts}"
 
 SETUP_CLAUDE=true
 SETUP_CURSOR=true
@@ -220,6 +221,15 @@ elif [ "$REINSTALL" = false ]; then
     "After each task (recommended)" \
     "After each milestone" \
     "Never — I commit myself")
+  echo ""
+  RC_CHOICE=$(ask_choice "Save every response, or only work products?" \
+    "Work products only — reports, specs, plans; conversation stays in chat (recommended)" \
+    "Minimal — only docs/ promotions and explore artifacts" \
+    "Every response")
+  case "$RC_CHOICE" in
+    2) RESPONSE_CAPTURE="minimal" ;;
+    3) RESPONSE_CAPTURE="all" ;;
+  esac
   case "$GC_CHOICE" in
     2) GIT_COMMIT="milestone" ;;
     3) GIT_COMMIT="never" ;;
@@ -500,7 +510,7 @@ alwaysApply: true
 
 Read `MAESTRO.md` at the project root before responding to any delivery-related request.
 Follow all rules in MAESTRO.md. Key rules:
-- Save every substantive response as a numbered file in the current session folder
+- Save work products (not conversation) as numbered session files — MAESTRO.md § Artifact Capture
 - Use flags (CONSISTENCY:, GAP:, UNCLEAR:) when appropriate
 - On new chat: read HANDOFF.md, check .sessions/ for highest-numbered folder, greet user
 - Output standard: lead with answer, no filler, tables for comparisons
@@ -596,7 +606,7 @@ You are an AI delivery partner. Follow MAESTRO.md at the project root for all fr
 
 ## Quick Reference
 
-**Output:** Lead with answer. No filler. Tables for comparisons. Save every substantive response as a numbered file in the current session folder.
+**Output:** Lead with answer. No filler. Tables for comparisons. Save work products, not conversation, as numbered session files (MAESTRO.md § Artifact Capture).
 
 **On new chat:** Read HANDOFF.md → check .sessions/ for highest-numbered folder → greet user → create session folder → begin work.
 
@@ -700,6 +710,7 @@ name = \"$PROJECT_NAME\"
 session_visibility = \"$SESSION_VISIBILITY\"
 question_style = \"$QUESTION_STYLE\"
 ai_tools = $AI_TOOLS_TOML
+response_capture = \"$RESPONSE_CAPTURE\"  # \"artifacts\" | \"minimal\" | \"all\" — /md saves anything on demand
 
 [git]
 commit = \"$GIT_COMMIT\"       # \"task\" | \"milestone\" | \"never\"
@@ -728,6 +739,7 @@ TOML_KEYS=(
   "project|session_visibility|session_visibility = \"$SESSION_VISIBILITY\""
   "project|question_style|question_style = \"$QUESTION_STYLE\""
   "project|ai_tools|ai_tools = $AI_TOOLS_TOML"
+  "project|response_capture|response_capture = \"$RESPONSE_CAPTURE\""
   "git|commit|commit = \"$GIT_COMMIT\""
   "git|push|push = \"never\""
   "git|branch|branch = \"milestone\""
@@ -770,7 +782,7 @@ if [ ! -f "$TARGET/CLAUDE.md" ]; then
 See `MAESTRO.md` for all delivery framework behavior, commands, output standards, and conventions. MAESTRO.md is the canonical framework reference.
 
 When interacting, always apply instructions from `MAESTRO.md`.
-Always save substantive responses to a file in the session folder unless the response is very short (< 80 words).
+A file is written when the output is a work product — something a later session, another person, or a client would read on its own. Not when it is long. `/md` saves anything else on demand.
 
 ## Project
 
@@ -853,6 +865,7 @@ echo ""
 echo "Project:    $PROJECT_NAME"
 echo "Sessions:   $SESSION_VISIBILITY"
 echo "Questions:  $QUESTION_STYLE"
+echo "Files:      $RESPONSE_CAPTURE (/md saves any response on demand)"
 echo "Adapters:   $ADAPTERS"
 echo ""
 echo "── Next steps ──────────────────────────"

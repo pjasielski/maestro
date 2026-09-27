@@ -53,7 +53,7 @@ $ARGUMENTS — optional: project name, or `upgrade`
 
    If skipped, omit the section entirely. The framework works without it — all commands behave generically.
 
-4. Save report to session folder
+4. Report in chat (the artifact is `maestro.toml`)
 
 ## Upgrade
 

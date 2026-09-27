@@ -2,6 +2,8 @@
 
 Own the roadmap lifecycle. Create milestones, enrich them with execution details, generate task files.
 
+**Artifact** (MAESTRO.md § Artifact Capture): `docs/03-plan/ROADMAP.md` + task files in `docs/03-plan/tasks/`; report.
+
 $ARGUMENTS — optional: milestone number, "roadmap", or specific items
 
 ## Usage

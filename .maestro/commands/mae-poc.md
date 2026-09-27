@@ -2,6 +2,8 @@
 
 Collapse requirements, design, and roadmap into a single actionable spec. For prototypes, spikes, and time-boxed builds where the full track costs more than it returns.
 
+**Artifact** (MAESTRO.md § Artifact Capture): `docs/02-specs/POC.md` + report (session).
+
 $ARGUMENTS — optional: scope hint, or `--tasks` to also emit task files
 
 ## Usage
