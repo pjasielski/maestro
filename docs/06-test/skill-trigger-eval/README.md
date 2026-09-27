@@ -5,7 +5,7 @@ Checks whether a Maestro skill's `description` triggers on the prompts it should
 ## Run
 
 ```bash
-docs/07-test/skill-trigger-eval/trigger-eval.sh docs/07-test/skill-trigger-eval/mae-explore.queries.json
+docs/06-test/skill-trigger-eval/trigger-eval.sh docs/06-test/skill-trigger-eval/mae-explore.queries.json
 ```
 
 Requires `claude` and `jq`. Runs from the repo root so the project skills are discoverable. Prints one JSON object per query with its trigger rate.

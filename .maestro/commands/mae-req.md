@@ -29,8 +29,8 @@ $ARGUMENTS — optional: topic focus, flags
 
 3. **Save draft to session folder** (numbered file, e.g., `04_requirements-draft.md`)
 
-4. **Offer promotion:** "Requirements draft saved to session. Ready to promote to docs/02-requirements/REQUIREMENTS.md?"
-   - If user confirms → copy to `docs/02-requirements/REQUIREMENTS.md`
+4. **Offer promotion:** "Requirements draft saved to session. Ready to promote to docs/02-specs/REQUIREMENTS.md?"
+   - If user confirms → copy to `docs/02-specs/REQUIREMENTS.md`
    - If user wants changes → iterate in session first
    - If user says "save directly to docs" in the original prompt → skip the ask
 

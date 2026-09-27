@@ -165,16 +165,15 @@ your-project/
 ├── WORKLOG.md                   ← Activity log
 │
 ├── docs/                    ← Confirmed, canonical artifacts
-│   ├── 01-explore/              ← Explore report + confirmed analysis
-│   ├── 02-requirements/                  ← REQUIREMENTS.md
-│   ├── 03-design/               ← DESIGN.md
-│   ├── 04-plan/                 ← PLAN.md + tasks/
+│   ├── 01-explore/              ← EXPLORE.md (synthesis), IDEAS.md, artifacts
+│   ├── 02-specs/                ← REQUIREMENTS.md, ARCHITECTURE.md, ARCHITECTURE.md, mock/ (or POC.md)
+│   ├── 03-plan/                 ← ROADMAP.md + tasks/
 │   │   └── tasks/               ← Task files (individual tickets)
-│   ├── 05-implementation/       ← Implementation reports
-│   ├── 06-review/               ← Review reports (on demand)
-│   ├── 07-test/                 ← Test plans (on demand)
-│   ├── 08-deploy/               ← Deployment config (on demand)
-│   └── 09-maintenance/          ← Bugs & maintenance (on demand)
+│   ├── 04-implementation/       ← Implementation reports
+│   ├── 05-review/               ← Review reports (on demand)
+│   ├── 06-test/                 ← Test plans (on demand)
+│   ├── 07-deploy/               ← Deployment config (on demand)
+│   └── 08-maintenance/          ← Bugs & maintenance (on demand)
 │       └── issues/              ← Issue files (bug-001.md, debt-001.md)
 │
 ├── sessions/                    ← Working material (per-session folders)
@@ -273,7 +272,7 @@ Generates PRD from explore artifacts using `.maestro/templates/requirements.md`.
 - Prioritizes reading the final explore report over individual artifacts
 - Warns if explore report has unresolved gaps
 - Populates user stories (Section 6) with concrete stories and acceptance criteria
-- Saves draft to session, offers promotion to `docs/02-requirements/REQUIREMENTS.md`
+- Saves draft to session, offers promotion to `docs/02-specs/REQUIREMENTS.md`
 
 ### /mae-design — Technical Architecture
 
@@ -288,11 +287,11 @@ Creates SDD from PRD + explore report using `.maestro/templates/design.md`.
 - Reads both PRD and explore report (technical sections)
 - Presents technical questionnaire before generating SDD (for decisions it can't make)
 - Cross-phase awareness: suggests running `/mae-explore` when information is missing
-- Saves draft to session, offers promotion to `docs/03-design/DESIGN.md`
+- Saves draft to session, offers promotion to `docs/02-specs/ARCHITECTURE.md`
 
 ### /mae-plan — Break Into Tasks
 
-Reads SDD and creates task files in `docs/04-plan/tasks/`.
+Reads SDD and creates task files in `docs/03-plan/tasks/`.
 
 **Exception:** Tasks go directly to docs/ (not sessions-first) because they're immediately actionable.
 
@@ -443,7 +442,7 @@ If the design reveals missing information, the agent suggests returning to explo
 
 ## 10. The Plan Phase
 
-Creates task files from the SDD. Each task is a markdown file in `docs/04-plan/tasks/` — your Jira replacement.
+Creates task files from the SDD. Each task is a markdown file in `docs/03-plan/tasks/` — your Jira replacement.
 
 Tasks have: description, acceptance criteria, referenced files, effort estimate, dependencies, status (todo → in-progress → done).
 
@@ -659,7 +658,7 @@ Ask without a command only when:
 |------|--------|-----|
 | HANDOFF.md | 200-300 lines | 400 |
 | REQUIREMENTS.md | 1,500-3,000 words | 5,000 |
-| DESIGN.md | 2,000-4,000 words | 6,000 |
+| ARCHITECTURE.md | 2,000-4,000 words | 6,000 |
 | Task file | 200-500 words | 800 |
 
 ---
@@ -669,7 +668,7 @@ Ask without a command only when:
 For post-delivery maintenance, bugs, and tech debt:
 
 ```
-docs/09-maintenance/
+docs/08-maintenance/
 └── issues/
     ├── bug-001-login-timeout.md
     ├── bug-002-csv-export-encoding.md
@@ -700,11 +699,11 @@ Edit files in `.maestro/templates/` to match your domain. Add industry-specific 
 ### Extending Delivery Structure
 
 Add folders for project-specific needs:
-- `docs/05-implementation/` — implementation reports from /mae-do
-- `docs/06-review/` — formal reviews
-- `docs/07-test/` — test plans
-- `docs/08-deploy/` — deployment config
-- `docs/09-maintenance/issues/` — bugs, tech debt
+- `docs/04-implementation/` — implementation reports from /mae-do
+- `docs/05-review/` — formal reviews
+- `docs/06-test/` — test plans
+- `docs/07-deploy/` — deployment config
+- `docs/08-maintenance/issues/` — bugs, tech debt
 
 ---
 
@@ -722,7 +721,7 @@ Key decisions made during framework development:
 | 6 | Template pattern | Core + optional sections | Flexible without being overwhelming |
 | 7 | MVP scope | 8 delivery + 4 utility commands | Minimal overhead, covers full lifecycle |
 | 8 | Config format | TOML | Python native, no indent bugs |
-| 9 | Task management | Files in docs/04-plan/ | Lightweight Jira replacement in your repo |
+| 9 | Task management | Files in docs/03-plan/ | Lightweight Jira replacement in your repo |
 | 10 | Pathways | Flexible, not sequential | AI-assisted delivery is inherently iterative |
 | 11 | User profiles | Optional [user]/[[team.members]] | Adapts without requiring configuration |
 | 12 | Question handling | explore ask + natural conversation | Questions are first-class, not an afterthought |

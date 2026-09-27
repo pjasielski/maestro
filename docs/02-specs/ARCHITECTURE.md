@@ -3,8 +3,8 @@
 **Date:** 2026-06-18
 **Version:** v0.2.0
 **Status:** Draft — reconciled
-**Requirements:** docs/02-requirements/REQUIREMENTS.md
-**Changes from v0.1:** Renamed from SDD.md. DESIGN.md as universal artifact name. ROADMAP.md moved to docs/04-plan/. Checkpoint absorbed into sync. Session 010 consolidation decisions.
+**Requirements:** docs/02-specs/REQUIREMENTS.md
+**Changes from v0.1:** Renamed from SDD.md. DESIGN.md as universal artifact name. ROADMAP.md moved to docs/03-plan/. Checkpoint absorbed into sync. Session 010 consolidation decisions.
 
 ---
 
@@ -82,7 +82,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 | **Setup wizard** | Browser-based configuration UI | HTML + JS | setup/index.html; generates install command |
 | **Tracking files** | Project state: HANDOFF.md, DECISIONS.md, OPEN_QUESTIONS.md, WORKLOG.md | Markdown | Root-level files; HANDOFF.md is the primary context source |
 | **Session manager** | Organizes working artifacts into numbered sessions | Convention | .sessions/NNN-name/ with _summary.md and numbered files |
-| **Delivery folders** | Stores canonical, promoted artifacts | Convention | docs/01-explore/ through docs/09-maintenance/ |
+| **Delivery folders** | Stores canonical, promoted artifacts | Convention | docs/01-explore/ through docs/08-maintenance/ |
 
 ### 2.3 Data Flow
 
@@ -119,7 +119,7 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 **ADR-002: Sessions-First Artifact Flow**
 - **Context:** AI output quality varies. Directly writing to canonical docs/ folders risks polluting the audit trail with draft-quality content.
 - **Decision:** All command output goes to .sessions/ first. User reviews, then explicitly promotes to docs/.
-- **Consequences:** Extra step for the user (promotion). Benefit: docs/ stays clean and trustworthy. Exception: /mae-plan writes tasks directly to docs/04-plan/tasks/ (tasks are immediately actionable).
+- **Consequences:** Extra step for the user (promotion). Benefit: docs/ stays clean and trustworthy. Exception: /mae-plan writes tasks directly to docs/03-plan/tasks/ (tasks are immediately actionable).
 
 **ADR-003: TOML Over YAML for Configuration**
 - **Context:** Need a human-editable configuration format for project settings, user profiles, and team definitions.
@@ -154,8 +154,8 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 | **Session Artifact** | number, description, type | Belongs to session; may be promoted to delivery | File: NN_description.md |
 | **Delivery Artifact** | phase, type (PRD/SDD/task/etc.) | Belongs to delivery phase | File in docs/NN-phase/ |
 | **PoC Artifact** | phase, type, poc flag | Delivery artifact with -poc suffix | File: REQUIREMENTS-poc.md; archived to docs/poc/ |
-| **Task** | ID, title, status, priority, effort | Belongs to plan; references SDD components | File: docs/04-plan/tasks/task-NNN.md |
-| **Implementation Report** | date, task reference, findings | Belongs to implementation phase | File: docs/05-implementation/YYYYMMDD_task-name.md |
+| **Task** | ID, title, status, priority, effort | Belongs to plan; references SDD components | File: docs/03-plan/tasks/task-NNN.md |
+| **Implementation Report** | date, task reference, findings | Belongs to implementation phase | File: docs/04-implementation/YYYYMMDD_task-name.md |
 | **Decision** | date, session, decision text, status | Referenced by HANDOFF.md | Row in DECISIONS.md |
 | **Open Question** | priority, question text, blocks | May become a decision | Row in OPEN_QUESTIONS.md |
 | **User Profile** | description, strengths, needs_help | Belongs to project config | Section in maestro.toml |
@@ -185,14 +185,13 @@ HANDOFF.md ──references──► DECISIONS.md
 
 docs/
   ├─── 01-explore/  ──► explore reports, transcripts
-  ├─── 02-requirements/ ──► REQUIREMENTS.md (and REQUIREMENTS-poc.md during PoC)
-  ├─── 03-design/   ──► DESIGN.md (and DESIGN-poc.md during PoC)
-  ├─── 04-plan/     ──► ROADMAP.md, tasks/task-NNN.md
-  ├─── 05-implementation/ ──► implementation reports (on demand)
-  ├─── 06-review/   ──► review reports (on demand)
-  ├─── 07-test/     ──► test plans (on demand)
-  ├─── 08-deploy/   ──► deployment config (on demand)
-  ├─── 09-maintenance/ ──► issues/, tech debt (on demand)
+  ├─── 02-specs/  ──► REQUIREMENTS.md, DESIGN.md (visual), ARCHITECTURE.md, mock/ — or POC.md
+  ├─── 03-plan/     ──► ROADMAP.md, tasks/task-NNN.md
+  ├─── 04-implementation/ ──► implementation reports (on demand)
+  ├─── 05-review/   ──► review reports (on demand)
+  ├─── 06-test/     ──► test plans (on demand)
+  ├─── 07-deploy/   ──► deployment config (on demand)
+  ├─── 08-maintenance/ ──► issues/, tech debt (on demand)
   └─── poc/         ──► archived PoC artifacts (on demand)
 ```
 
@@ -244,16 +243,15 @@ maestro/                          ← Framework repository root
 │
 ├── docs/                     ← Canonical delivery artifacts
 │   ├── 01-explore/
-│   ├── 02-requirements/          ← REQUIREMENTS.md
-│   ├── 03-design/                ← DESIGN.md
-│   ├── 04-plan/
+│   ├── 02-specs/                 ← REQUIREMENTS.md, DESIGN.md, ARCHITECTURE.md (or POC.md)
+│   ├── 03-plan/
 │   │   ├── tasks/                ← Task files
 │   │   └── reports/              ← Implementation reports
-│   ├── 05-implementation/        ← Implementation reports (on demand)
-│   ├── 06-review/                ← Review reports (on demand)
-│   ├── 07-test/                  ← Test plans (on demand)
-│   ├── 08-deploy/                ← Deployment config (on demand)
-│   ├── 09-maintenance/           ← Issues, tech debt (on demand)
+│   ├── 04-implementation/        ← Implementation reports (on demand)
+│   ├── 05-review/                ← Review reports (on demand)
+│   ├── 06-test/                  ← Test plans (on demand)
+│   ├── 07-deploy/                ← Deployment config (on demand)
+│   ├── 08-maintenance/           ← Issues, tech debt (on demand)
 │   │   └── issues/
 │   └── poc/                      ← Archived PoC artifacts (on demand)
 │

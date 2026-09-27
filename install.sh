@@ -243,15 +243,13 @@ section "Creating folders"
 
 mkdir -p "$TARGET/docs/00-reference"
 mkdir -p "$TARGET/docs/01-explore"
-mkdir -p "$TARGET/docs/02-poc"
-mkdir -p "$TARGET/docs/02-requirements"
-mkdir -p "$TARGET/docs/03-design"
-mkdir -p "$TARGET/docs/04-plan/tasks"
-mkdir -p "$TARGET/docs/05-implementation"
-mkdir -p "$TARGET/docs/06-review"
-mkdir -p "$TARGET/docs/07-test"
-mkdir -p "$TARGET/docs/08-deploy"
-mkdir -p "$TARGET/docs/09-maintenance/issues"
+mkdir -p "$TARGET/docs/02-specs"
+mkdir -p "$TARGET/docs/03-plan/tasks"
+mkdir -p "$TARGET/docs/04-implementation"
+mkdir -p "$TARGET/docs/05-review"
+mkdir -p "$TARGET/docs/06-test"
+mkdir -p "$TARGET/docs/07-deploy"
+mkdir -p "$TARGET/docs/08-maintenance/issues"
 echo "  Created: docs/ (full structure)"
 if [ ! -f "$TARGET/docs/00-reference/README.md" ]; then
   cat > "$TARGET/docs/00-reference/README.md" <<'REFEOF'
@@ -519,7 +517,7 @@ You are an AI delivery partner. Follow MAESTRO.md at the project root for all fr
 
 **On new chat:** Read HANDOFF.md → check .sessions/ for highest-numbered folder → greet user → create session folder → begin work.
 
-**Flags:** CONSISTENCY: (contradiction) | GAP: (missing info) | UNCLEAR: (ambiguous) | STALE: (outdated artifact) | DRIFT: (code ≠ DESIGN.md)
+**Flags:** CONSISTENCY: (contradiction) | GAP: (missing info) | UNCLEAR: (ambiguous) | STALE: (outdated artifact) | DRIFT: (code ≠ ARCHITECTURE.md)
 
 ## Commands
 

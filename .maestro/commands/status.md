@@ -24,7 +24,7 @@ In addition to the probe:
 1. `HANDOFF.md` § Current Status only — phase, blockers (header block, not the whole file)
 2. `OPEN_QUESTIONS.md` — count rows by priority
 3. `WORKLOG.md` — last 3 rows
-4. Task counts — the `**Status:**` header line of each file in `docs/04-plan/tasks/`, not the files
+4. Task counts — the `**Status:**` header line of each file in `docs/03-plan/tasks/`, not the files
 
 Output:
 ```
@@ -45,7 +45,7 @@ RECENT ACTIVITY
 
 ### Tasks (/status tasks)
 
-Read all files in `docs/04-plan/tasks/`. Group by status:
+Read all files in `docs/03-plan/tasks/`. Group by status:
 
 ```
 TASK BOARD

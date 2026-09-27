@@ -31,12 +31,12 @@ Activity log                → WORKLOG.md
 Project config              → maestro.toml
 
 Exploration artifacts       → docs/01-explore/
-Requirements                → docs/02-requirements/REQUIREMENTS.md
-Architecture/Design         → docs/03-design/DESIGN.md
-Plan, roadmap & tasks       → docs/04-plan/ROADMAP.md, docs/04-plan/tasks/
-Implementation reports     → docs/05-implementation/  (on demand)
-Review artifacts            → docs/06-review/  (on demand)
-Test artifacts              → docs/07-test/    (on demand)
+Requirements                → docs/02-specs/REQUIREMENTS.md
+Architecture/Design         → docs/02-specs/ARCHITECTURE.md
+Plan, roadmap & tasks       → docs/03-plan/ROADMAP.md, docs/03-plan/tasks/
+Implementation reports     → docs/04-implementation/  (on demand)
+Review artifacts            → docs/05-review/  (on demand)
+Test artifacts              → docs/06-test/    (on demand)
 
 Templates                   → .maestro/templates/
 Session history             → .sessions/{NNN}-{name}/
@@ -68,7 +68,7 @@ Framework commands          → .maestro/commands/mae-*.md
 | Explore | `mae-explore` | Understanding, questions, gaps |
 | PoC spec | `mae-poc` | POC.md (requirements + design + roadmap) |
 | Requirements | `mae-req` | REQUIREMENTS.md |
-| Design | `mae-design` | DESIGN.md |
+| Design | `mae-design` | ARCHITECTURE.md |
 | Plan | `mae-plan` | ROADMAP.md + task files |
 | Do | `mae-do` | Executed work |
 | Review | `mae-review` | Review findings |

@@ -8,8 +8,8 @@ Batch-update canonical project files based on accumulated decisions and progress
    - Current session's `_summary.md`
    - `DECISIONS.md` — identify entries not yet reflected in canonical files
    - `HANDOFF.md` for current state
-   - `docs/04-plan/ROADMAP.md` for task/milestone status
-   - `docs/04-plan/tasks/` for task status changes
+   - `docs/03-plan/ROADMAP.md` for task/milestone status
+   - `docs/03-plan/tasks/` for task status changes
 
 2. **Update HANDOFF.md:**
    - Current phase, status, recent changes
@@ -26,7 +26,7 @@ Batch-update canonical project files based on accumulated decisions and progress
    - Find all `✓` confirmed decisions in `_summary.md` not yet marked `[synced]`
 
 5. **Reconcile delivery artifacts (if decisions affect them):**
-   - REQUIREMENTS.md, DESIGN.md — flag if decisions invalidate content
+   - REQUIREMENTS.md, ARCHITECTURE.md — flag if decisions invalidate content
    - OPEN_QUESTIONS.md — resolve questions answered during session
 
 6. **Capture checkpoint (state snapshot):**

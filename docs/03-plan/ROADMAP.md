@@ -146,7 +146,7 @@ Canonical docs stay current transactionally (D19, D20, D21).
 | M05.03 | **Capability sharding: requirements + design (_overview.md + per-capability files)** | P1 | M | — | ☐ todo | — | 015 |
 | M05.04 | **Mechanical drift report in /sync (unmerged deltas)** | P2 | S | M05.02 | ☐ todo | — | 014 |
 | M05.05 | **PoC graduation via delta merge (carried from M03 — currently graduates by `/mae-plan` at M02)** | P2 | M | M05.02 | ☐ todo | — | 015/018 |
-| M05.06 | **ADR supersession lifecycle: superseded-by graph, ADR ↔ DESIGN.md drift reporting in /sync** | P1 | M | M05.02, M04 ADR migration | ☐ todo | — | 018 (hq 11 §3) |
+| M05.06 | **ADR supersession lifecycle: superseded-by graph, ADR ↔ ARCHITECTURE.md drift reporting in /sync** | P1 | M | M05.02, M04 ADR migration | ☐ todo | — | 018 (hq 11 §3) |
 | M05.07 | **`/mae-scope` — scope-change intake: intake → classify (additive/modifying/conflicting) → `scope-delta.md` impact analysis → apply on confirmation. Emits ADRs for conflicts; consumes partial approval from `/mae-approve`; detects when the change is large enough to warrant `/mae-explore` first** | P1 | M | M05.01 (soft) | ✅ done | [M05.07](tasks/M05.07-mae-scope.md) | 018 (absorbs F.6), 22 §9 |
 | M05.07a | **`/mae-scope --direct`: delta file still written; additive applied without asking; modifying/conflicting still stop** | P2 | XS | M05.07 | ☐ todo | [M05.07a](tasks/M05.07a-scope-direct.md) | hq 22/11 §A4 |
 | M05.08 | **Canonical-file consolidation: OPEN_QUESTIONS → HANDOFF section; delete WORKLOG (git log with task-ID messages replaces it); DECISIONS → `adr/_index.md`; add ADR index to context-loading for Design/Implementation/Review; mechanical staleness reporting in `/sync`** | P1 | M | M05.06 | ☐ todo | — | 22 §6b |

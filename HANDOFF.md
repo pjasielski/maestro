@@ -26,13 +26,13 @@
 
 ## Recent Changes (2026-09-17) — Session 017-skill-spike
 
-First SKILL.md in the framework, plus the convention every other conversion follows. Report: `docs/05-implementation/M04.01-skill-spike-report.md`.
+First SKILL.md in the framework, plus the convention every other conversion follows. Report: `docs/04-implementation/M04.01-skill-spike-report.md`.
 
 ### M04.01 spike (⏳ blocked on keyboard test)
 - `.maestro/skills/mae-explore/SKILL.md` canonical, `references/question-format.md` as supporting file; passes `uvx --from skills-ref agentskills validate`, also through the symlinks
 - Placement: `.claude/skills/` (Claude Code, Cursor legacy) and `.agents/skills/` (Codex, Cursor) as symlinks; installer mechanism is M04.06
 - Old command file and wrappers untouched until M04.03; possible `/mae-explore` name clash with `.claude/commands/` is test step 1
-- Trigger-eval kit reusable for all conversions: `docs/07-test/skill-trigger-eval/`
+- Trigger-eval kit reusable for all conversions: `docs/06-test/skill-trigger-eval/`
 
 ### M04.02 convention (✅)
 - Tier lives in `metadata.maestro-tier` and is enforced by a body section per tier: fit check (auto), gate (suggest), guard (explicit). Suggest cannot be expressed in frontmatter at all
@@ -63,7 +63,7 @@ Critique from two external developers plus accumulated own observations, scoped 
 ## Recent Changes (2026-08-03) — Session 018 (maestro-hq), v0.4.0
 
 ### PoC track shipped
-- `/mae-poc` (`mpoc`) → single-file spec at `docs/02-poc/POC.md`; `/mae-do poc` executes the milestone
+- `/mae-poc` (`mpoc`) → single-file spec at `docs/02-specs/POC.md`; `/mae-do poc` executes the milestone
 - `docs/00-reference/` — read-only source material, authoritative over inferences drawn from code
 - Built for a live client engagement (session 017, maestro-hq) and validated there before release
 
@@ -206,11 +206,11 @@ Critique from two external developers plus accumulated own observations, scoped 
 | Project config | `CLAUDE.md` |
 | Framework settings | `maestro.toml` |
 | Explore artifacts | `docs/01-explore/` |
-| Requirements | `docs/02-requirements/REQUIREMENTS.md` |
-| Design/Architecture | `docs/03-design/DESIGN.md` |
-| Roadmap | `docs/04-plan/ROADMAP.md` |
-| Tasks | `docs/04-plan/tasks/` |
-| Implementation reports | `docs/05-implementation/` |
+| Requirements | `docs/02-specs/REQUIREMENTS.md` |
+| Architecture | `docs/02-specs/ARCHITECTURE.md` |
+| Roadmap | `docs/03-plan/ROADMAP.md` |
+| Tasks | `docs/03-plan/tasks/` |
+| Implementation reports | `docs/04-implementation/` |
 | Templates | `.maestro/templates/` (requirements, design, explore, task, summary, report, roadmap) |
 | Framework commands | `.maestro/commands/` |
 | Claude Code adapters | `.claude/commands/` (wrappers + aliases) |

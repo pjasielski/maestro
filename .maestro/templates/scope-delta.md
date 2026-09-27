@@ -2,13 +2,13 @@
 **Date:** {YYYY-MM-DD}
 **Session:** {NNN}-{name}
 **Request:** {argument text · file path · docs/00-reference/{file}}
-**Against:** REQUIREMENTS.md v{n} · DESIGN.md v{n} · ROADMAP.md (last milestone M{MM})
+**Against:** REQUIREMENTS.md v{n} · ARCHITECTURE.md v{n} · ROADMAP.md (last milestone M{MM})
 
 ## Capabilities
 
 | # | Capability | Class | Anchors |
 |---|---|---|---|
-| C1 | {one verifiable sentence} | additive / modifying / conflicting | {R-IDs, DESIGN §, task IDs it touches} |
+| C1 | {one verifiable sentence} | additive / modifying / conflicting | {R-IDs, ARCHITECTURE §, task IDs it touches} |
 
 **Cost:** {n} capabilities: {a} additive, {m} modifying, {c} conflicting — est. {one milestone / part of M{MM}}, {S/M/L}
 
@@ -17,7 +17,7 @@
 ```
 ADDED     R-{id}  {text}                                       ← C1
 MODIFIED  R-{id}  {new text}  (was: {old text})                ← C2
-CONFLICT  R-{id}  {what contradicts it; load-bearing in DESIGN.md § …, task M{MM}.{NN}}  ← C3
+CONFLICT  R-{id}  {what contradicts it; load-bearing in ARCHITECTURE.md § …, task M{MM}.{NN}}  ← C3
 ```
 
 ## Design

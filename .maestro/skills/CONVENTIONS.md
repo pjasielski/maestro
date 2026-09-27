@@ -109,7 +109,7 @@ Canonical: `.maestro/skills/{name}/`. Tool paths point at it: `.claude/skills/{n
 
 1. `uvx --from skills-ref agentskills validate .maestro/skills/{name}` passes, or fails only on `disable-model-invocation` for an explicit skill.
 2. `name` equals the directory; description ≤1,024 characters; body under 500 lines.
-3. `docs/07-test/skill-trigger-eval/{name}.queries.json` exists with 8–10 should-trigger and 8–10 near-miss should-not queries.
+3. `docs/06-test/skill-trigger-eval/{name}.queries.json` exists with 8–10 should-trigger and 8–10 near-miss should-not queries.
 4. Auto and suggest tiers: `trigger-eval.sh` passes (rate > 0.5 for should, < 0.5 for should-not, 3 runs).
 5. Suggest tier: an auto-invocation produces the one-line proposal and no file.
 6. Explicit tier: a should-trigger query produces no skill call.

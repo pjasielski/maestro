@@ -173,10 +173,10 @@ your-project/
 ├── .github/copilot-instructions.md   ← Copilot/Codex integration (if selected)
 │
 ├── docs/
+│   ├── 00-reference/
 │   ├── 01-explore/
-│   ├── 02-requirements/
-│   ├── 03-design/
-│   └── 04-plan/tasks/
+│   ├── 02-specs/
+│   └── 03-plan/tasks/
 │
 ├── .sessions/                        ← Working notes (gitignored or committed)
 └── .maestro/templates/               ← Document templates

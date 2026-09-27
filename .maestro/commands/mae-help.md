@@ -23,9 +23,9 @@ Existence checks, `grep`, and header lines only. Never read a canonical file in 
 | 1 | Session | Highest-numbered `.sessions/{NNN}-*/`; whether its `_summary.md` exists |
 | 2 | Reference | `docs/00-reference/` has files; newest modification time |
 | 3 | Explore | `docs/01-explore/` has files other than `.gitkeep` |
-| 4 | Track | `docs/02-poc/POC.md` exists → PoC track; `docs/02-requirements/REQUIREMENTS.md` exists → full track; both → full track (graduated PoC) |
-| 5 | Design | `docs/03-design/DESIGN.md` exists |
-| 6 | Roadmap | `docs/04-plan/ROADMAP.md` exists; count `☐ todo`, `🔄`, `⏳`, `✅` in it (grep); PoC track without a roadmap: same counts in POC.md § 4 |
+| 4 | Track | `docs/02-specs/POC.md` exists → PoC track; `docs/02-specs/REQUIREMENTS.md` exists → full track; both → full track (graduated PoC) |
+| 5 | Design | `docs/02-specs/ARCHITECTURE.md` exists |
+| 6 | Roadmap | `docs/03-plan/ROADMAP.md` exists; count `☐ todo`, `🔄`, `⏳`, `✅` in it (grep); PoC track without a roadmap: same counts in POC.md § 4 |
 | 7 | Next task | First `☐ todo` row whose `Depends` entries are all `✅` — ROADMAP table on the full track, POC.md § 4 on the PoC track. Task files are not opened |
 | 8 | Questions | Session files matching `*questions*.md` that still contain `**Response:** _` |
 | 9 | Unsynced | `_summary.md` has `✓` decision lines without `[synced]` |
@@ -41,8 +41,8 @@ First matching row wins. This table is also the auto-trigger heuristic for skill
 | No explore artifacts, no session (1, 3) | `/mae-explore` | `/mae-init` if `maestro.toml` has no profile |
 | Explore artifacts; no REQUIREMENTS.md, no POC.md (3, 4) | `/mae-req` — or `/mae-poc` if the build is one milestone and time-boxed | `/mae-explore doc` if there is no final report yet |
 | Reference newer than requirements (10) | `/mae-scope` | `/mae-explore {file}` when the new material is a whole area |
-| REQUIREMENTS.md, no DESIGN.md (4, 5) | `/mae-design` | `/mae-review requirements` |
-| DESIGN.md, no ROADMAP.md (5, 6) | `/mae-plan` | `/mae-review design` |
+| REQUIREMENTS.md, no ARCHITECTURE.md (4, 5) | `/mae-design` | `/mae-review requirements` |
+| ARCHITECTURE.md, no ROADMAP.md (5, 6) | `/mae-plan` | `/mae-review design` |
 | POC.md, todo rows in § 4 (4, 6, 7) | `/mae-do poc`, or `/mae-do M01.{NN}` for the next one | `/mae-review` |
 | ROADMAP.md with ☐ todo (6, 7) | `/mae-do {next unblocked id}` | `/mae-review`, `/status tasks` |
 | Nothing todo; unsynced decisions (6, 9) | `/sync` | `/mae-plan` for the next milestone; a finished PoC graduates with `/mae-plan` at M02 |

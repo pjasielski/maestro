@@ -55,7 +55,7 @@ Next week, in a brand-new chat, the agent reads `HANDOFF.md` first and greets yo
 
 Sometimes the full pipeline costs more than it returns. A prototype, a spike, a time-boxed build where you need to be writing code in twenty minutes, not reviewing three documents.
 
-`/mae-poc` collapses requirements, design, and roadmap into **one file** — `docs/02-poc/POC.md` — and `/mae-do poc` executes straight from it.
+`/mae-poc` collapses requirements, design, and roadmap into **one file** — `docs/02-specs/POC.md` — and `/mae-do poc` executes straight from it.
 
 ```
 /mae-explore          Understand the problem (or skip, if a brief already exists)
@@ -96,12 +96,12 @@ Eight delivery commands, four utilities. Every delivery command has a short alia
 | Command | Alias | What it does | Writes to |
 |---------|-------|--------------|-----------|
 | `/mae-explore` | `mex` | Build understanding; surface questions and gaps | `docs/01-explore/` |
-| `/mae-poc` | `mpoc` | One-file spec for prototypes and time-boxed builds | `docs/02-poc/POC.md` |
-| `/mae-req` | `mrq` | Formalize requirements | `docs/02-requirements/REQUIREMENTS.md` |
-| `/mae-design` | `mds` | Technical architecture with trade-offs | `docs/03-design/DESIGN.md` |
-| `/mae-plan` | `mpl` | Roadmap and task files | `docs/04-plan/` |
-| `/mae-do` | `mdo` | Execute a task, planned or ad-hoc | code + `docs/05-implementation/` |
-| `/mae-review` | `mrv` | Review code or delivery artifacts | `docs/06-review/` |
+| `/mae-poc` | `mpoc` | One-file spec for prototypes and time-boxed builds | `docs/02-specs/POC.md` |
+| `/mae-req` | `mrq` | Formalize requirements | `docs/02-specs/REQUIREMENTS.md` |
+| `/mae-design` | `mds` | Technical architecture with trade-offs | `docs/02-specs/ARCHITECTURE.md` |
+| `/mae-plan` | `mpl` | Roadmap and task files | `docs/03-plan/` |
+| `/mae-do` | `mdo` | Execute a task, planned or ad-hoc | code + `docs/04-implementation/` |
+| `/mae-review` | `mrv` | Review code or delivery artifacts | `docs/05-review/` |
 | `/mae-init` | — | One-time profile setup | `maestro.toml` |
 
 | Utility | What it does |
@@ -135,10 +135,10 @@ Commands write drafts to `.sessions/`. You review. Confirmed work gets **promote
 
 ```
 /mae-explore  → session artifacts  ──promote──→  docs/01-explore/
-/mae-req      → requirements draft ──promote──→  docs/02-requirements/REQUIREMENTS.md
-/mae-design   → design draft       ──promote──→  docs/03-design/DESIGN.md
-/mae-plan     → roadmap + tasks    ──────────→  docs/04-plan/
-/mae-poc      → POC spec           ──────────→  docs/02-poc/POC.md
+/mae-req      → requirements draft ──promote──→  docs/02-specs/REQUIREMENTS.md
+/mae-design   → design draft       ──promote──→  docs/02-specs/ARCHITECTURE.md
+/mae-plan     → roadmap + tasks    ──────────→  docs/03-plan/
+/mae-poc      → POC spec           ──────────→  docs/02-specs/POC.md
 ```
 
 Only reviewed artifacts reach `docs/`, so `docs/` stays trustworthy — which is what makes it safe for the agent to treat as canonical. (`/mae-plan` and `/mae-poc` write straight through: their output is immediately actionable, so a review round-trip would only cost you time.)
@@ -168,23 +168,21 @@ your-project/
 ├── WORKLOG.md                ← Activity log
 ├── docs/
 │   ├── 00-reference/         ← Material you didn't write (read-only)
-│   ├── 01-explore/           ← Confirmed explore artifacts
-│   ├── 02-poc/               ← POC.md                (PoC track)
-│   ├── 02-requirements/      ← REQUIREMENTS.md       (full track)
-│   ├── 03-design/            ← DESIGN.md
-│   ├── 04-plan/              ← ROADMAP.md + tasks/
-│   ├── 05-implementation/    ← Reports from /mae-do
-│   ├── 06-review/            ← Review reports        (on demand)
-│   ├── 07-test/              ← Test plans            (on demand)
-│   ├── 08-deploy/            ← Deployment config     (on demand)
-│   └── 09-maintenance/       ← Bugs, tech debt       (on demand)
+│   ├── 01-explore/           ← EXPLORE.md (synthesis), IDEAS.md, explore artifacts
+│   ├── 02-specs/             ← REQUIREMENTS.md, ARCHITECTURE.md, ARCHITECTURE.md, mock/ — or POC.md (PoC track)
+│   ├── 03-plan/              ← ROADMAP.md + tasks/
+│   ├── 04-implementation/    ← Reports from /mae-do
+│   ├── 05-review/            ← Review reports        (on demand)
+│   ├── 06-test/              ← Test plans            (on demand)
+│   ├── 07-deploy/            ← Deployment config     (on demand)
+│   └── 08-maintenance/       ← Bugs, tech debt       (on demand)
 ├── .sessions/                ← Working material, per session
 ├── .maestro/templates/       ← Document templates (customizable)
 ├── .maestro/commands/        ← Canonical command definitions
 └── .claude/commands/         ← Tool adapters + aliases
 ```
 
-`02-poc/` and `02-requirements/` share a number because the two tracks are mutually exclusive — a project uses one or the other, so they never collide in a real tree.
+A phase command is named after its folder: `/mae-explore` → `01-explore/`, `/mae-specs` → `02-specs/`, `/mae-plan` → `03-plan/`.
 
 </details>
 
@@ -237,13 +235,13 @@ Every artifact is generated from a markdown template in `.maestro/templates/`. E
 | Template | Produces |
 |----------|----------|
 | `requirements.md` | `REQUIREMENTS.md` |
-| `design.md` | `DESIGN.md` |
+| `design.md` | `ARCHITECTURE.md` |
 | `poc.md` | `POC.md` |
 | `roadmap.md` | `ROADMAP.md` |
 | `task.md` | `tasks/M{MM}.{NN}-{slug}.md` |
 | `explore.md` · `review.md` · `report.md` | Session artifacts |
 | `summary.md` | `_summary.md` |
-| `issue.md` | `docs/09-maintenance/issues/` |
+| `issue.md` | `docs/08-maintenance/issues/` |
 
 ## Multi-tool support
 
@@ -288,7 +286,7 @@ No. Maestro is markdown files in your repo. There's no runtime, no service, no a
 <details>
 <summary><b>Do I have to use all the docs folders?</b></summary>
 
-No. `05` through `09` are created on demand — when you file your first bug, or the first time deployment gets non-trivial. A small project may never leave `01`–`04`, and a PoC may only ever touch `00`, `02-poc`, and `05`.
+No. `04` through `08` are created on demand — when you file your first bug, or the first time deployment gets non-trivial. A small project may never leave `01`–`03`, and a PoC may only ever touch `00`, `02-specs` (POC.md), and `04`.
 
 </details>
 

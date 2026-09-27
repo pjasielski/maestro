@@ -31,7 +31,7 @@ Build mutual understanding of the project, business and technical. Adapt to what
 
 When this skill was chosen by the model rather than typed as `/mae-explore` or `mex`:
 
-- If the project already has `docs/02-requirements/REQUIREMENTS.md`, `docs/02-poc/POC.md`, or a task marked in-progress, say in one line what you are about to explore and why, then continue. Never produce an explore artifact silently in a project that is past exploration.
+- If the project already has `docs/02-specs/REQUIREMENTS.md`, `docs/02-specs/POC.md`, or a task marked in-progress, say in one line what you are about to explore and why, then continue. Never produce an explore artifact silently in a project that is past exploration.
 - If the request is a one-step factual question, answer it directly and do not run this protocol.
 
 ## Modes

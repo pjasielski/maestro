@@ -71,7 +71,7 @@ Choose what fits your project. The phases below describe each tool, not a mandat
 /mae-req
 ```
 
-Reads your explore artifacts and generates a Product Requirements Document using `.maestro/templates/requirements.md`. The PRD is saved as a draft in your session — review it, request changes, then promote to `docs/02-requirements/REQUIREMENTS.md`.
+Reads your explore artifacts and generates a Product Requirements Document using `.maestro/templates/requirements.md`. The PRD is saved as a draft in your session — review it, request changes, then promote to `docs/02-specs/REQUIREMENTS.md`.
 
 **Template sections:** 7 core (always included) + 3 optional (constraints, release strategy, glossary — include when relevant).
 
@@ -85,7 +85,7 @@ Reads your explore artifacts and generates a Product Requirements Document using
 /mae-design src/api/routes.py     # File-level spec
 ```
 
-Works top-down: full architecture first, then drill into components and files. The agent reads both the PRD and the explore report's technical sections for context. Before generating the SDD, it presents a technical questionnaire for decisions it can't make from available information (tech stack, architecture patterns, deployment model). The SDD is drafted in your session, then promoted to `docs/03-design/DESIGN.md`.
+Works top-down: full architecture first, then drill into components and files. The agent reads both the PRD and the explore report's technical sections for context. Before generating the SDD, it presents a technical questionnaire for decisions it can't make from available information (tech stack, architecture patterns, deployment model). The SDD is drafted in your session, then promoted to `docs/02-specs/ARCHITECTURE.md`.
 
 If the design process reveals missing information, the agent suggests running additional explore commands to fill the gap.
 
@@ -97,7 +97,7 @@ If the design process reveals missing information, the agent suggests running ad
 /mae-plan
 ```
 
-Reads the SDD and creates task files in `docs/04-plan/tasks/`. Each task is a markdown file — your Jira replacement. Tasks go directly to docs/ because they're meant to be immediately actionable.
+Reads the SDD and creates task files in `docs/03-plan/tasks/`. Each task is a markdown file — your Jira replacement. Tasks go directly to docs/ because they're meant to be immediately actionable.
 
 ### Execution: Do & Review
 
@@ -232,7 +232,7 @@ Generate effort estimates for planned tasks.
 
 ## Behavior
 
-1. Read task files in docs/04-plan/tasks/
+1. Read task files in docs/03-plan/tasks/
 2. For each task, estimate: time, complexity, risk
 3. Generate summary table
 4. Save report to session folder
@@ -245,11 +245,11 @@ Name it `mae-estimate.md` and it becomes `/mae-estimate`.
 Add folders for project-specific needs:
 
 ```
-docs/05-implementation/ # Implementation reports from /mae-do
-docs/06-review/      # Formal review cycles
-docs/07-test/        # Test plans and strategies
-docs/08-deploy/      # Deployment configuration
-docs/09-maintenance/ # Bugs, tech debt, maintenance
+docs/04-implementation/ # Implementation reports from /mae-do
+docs/05-review/      # Formal review cycles
+docs/06-test/        # Test plans and strategies
+docs/07-deploy/      # Deployment configuration
+docs/08-maintenance/ # Bugs, tech debt, maintenance
 ```
 
 ---
