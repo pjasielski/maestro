@@ -16,17 +16,24 @@ $ARGUMENTS — optional: milestone number, "roadmap", or specific items
 ```
 
 ## Prerequisites
-- `docs/02-specs/ARCHITECTURE.md` must exist (architecture informs the plan)
-- `docs/02-specs/REQUIREMENTS.md` should exist (requirements inform priorities)
-- If neither exists: warn and suggest running `/mae-architecture` first
+
+Plan from the first row that matches what exists in `docs/02-specs/`:
+
+| Specs on disk | Plan from | Notes |
+|---|---|---|
+| ARCHITECTURE.md (with or without REQUIREMENTS.md) | Both | Full track |
+| REQUIREMENTS.md only | REQUIREMENTS.md | Plan anyway; architecture work becomes tasks, flagged `GAP: no ARCHITECTURE.md` |
+| POC.md only | POC.md § 2 requirements, § 3 design, § 4 roadmap, § 6 current state | **PoC graduation:** M01 is the PoC as built; plan M02 onward and never re-plan done rows |
+| None | — | Stop and suggest `/mae-specs` or `/mae-poc` |
+
+Graduated project (POC.md and REQUIREMENTS.md both exist): the full-track files win; POC.md is history.
 
 ## Behavior
 
 ### Create Roadmap (no roadmap exists)
 
 1. **Read inputs:**
-   - `docs/02-specs/ARCHITECTURE.md` (components, tech stack, architecture)
-   - `docs/02-specs/REQUIREMENTS.md` (requirements, epics, priorities)
+   - The specs chosen in § Prerequisites: ARCHITECTURE.md (components, tech stack), REQUIREMENTS.md (requirements, epics, priorities), or POC.md
    - `DECISIONS.md` (confirmed decisions)
    - `.maestro/templates/roadmap.md` (output structure)
 
@@ -43,7 +50,7 @@ $ARGUMENTS — optional: milestone number, "roadmap", or specific items
 
 1. **Read inputs:**
    - `docs/03-plan/ROADMAP.md` (the milestone to enrich)
-   - `docs/02-specs/ARCHITECTURE.md` (architecture details)
+   - `docs/02-specs/ARCHITECTURE.md` (architecture details), or POC.md § 3 on a graduated PoC
    - Existing tasks in `docs/03-plan/tasks/` (avoid duplicates)
 
 2. **Add execution notes** to the milestone section in ROADMAP.md:

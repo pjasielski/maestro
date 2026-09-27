@@ -313,7 +313,7 @@ Fast-track: explore → architecture → do → review
 Iterative:  explore → requirements → do (MVP) → [feedback] → explore → requirements (revised) → do
 ```
 
-**PoC track vs. full track.** `/mae-poc` produces one file (`02-specs/POC.md`) containing requirements, architecture, and roadmap; the full track produces separate specs plus a plan. Use the PoC track when the whole build is one milestone and speed matters more than reviewability.
+**PoC track vs. full track.** `/mae-poc` produces one file (`02-specs/POC.md`) containing requirements, architecture, and roadmap; the full track produces separate specs plus a plan. Use the PoC track when the whole build is one milestone and speed matters more than reviewability. To graduate, run `/mae-plan` for M02 onward; it plans from POC.md. Once REQUIREMENTS.md exists too, the full-track files win and POC.md is history.
 
 **`/mae-specs` routes, it doesn't merge.** It runs the part commands (`requirements`, `design`, `architecture`) as a chain, each writing its own file; it never restates their protocols. Bare `/mae-specs` builds what is missing and relevant. A merged spec artifact is still rejected (D32); POC.md is the one deliberate exception.
 
