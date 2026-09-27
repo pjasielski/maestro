@@ -32,6 +32,10 @@ PRECONFIGURED_MODE=""
 # Self-download when running via curl (no local source files)
 # ─────────────────────────────────────────────
 
+# Skills (the model may offer them). Every other protocol is a command.
+SKILLS="mae-explore mae-specs mae-scope mae-idea"
+SKILL_FILES="mae-explore/SKILL.md mae-specs/SKILL.md mae-specs/references/requirements.md mae-specs/references/design.md mae-specs/references/architecture.md mae-scope/SKILL.md mae-idea/SKILL.md"
+
 _CLEANUP_SOURCE=false
 # Local mode only from a framework checkout installing into another directory.
 # An installed project also has MAESTRO.md + .maestro/commands/, so a script run
@@ -52,9 +56,17 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ] || [ ! -d "$SCRIPT_DIR/.maestro/commands" ]
   fi
 
   mkdir -p "$SOURCE_DIR/.maestro/commands"
-  for _cmd in mae-explore mae-idea mae-specs mae-requirements mae-design mae-architecture mae-req mae-poc mae-plan mae-do mae-review mae-init mae-help mae-run mae-yolo mae-scope status decide sync md; do
+  for _cmd in mae-requirements mae-design mae-architecture mae-req mae-poc mae-plan mae-do mae-review mae-init mae-help mae-run mae-yolo status decide sync md; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/commands/$_cmd.md" -o "$SOURCE_DIR/.maestro/commands/$_cmd.md" 2>/dev/null; then
       echo "  Warning: failed to download $_cmd.md" >&2
+      _DL_FAIL=$((_DL_FAIL + 1))
+    fi
+  done
+
+  for _sf in $SKILL_FILES; do
+    mkdir -p "$SOURCE_DIR/.maestro/skills/$(dirname "$_sf")"
+    if ! curl -fsSL "$MAESTRO_URL/.maestro/skills/$_sf" -o "$SOURCE_DIR/.maestro/skills/$_sf" 2>/dev/null; then
+      echo "  Warning: failed to download skill file $_sf" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
     fi
   done
@@ -302,15 +314,23 @@ for cmd in "$SOURCE_DIR/.maestro/commands/"*.md; do
 done
 echo "  Copied: .maestro/commands/ ($(ls "$TARGET/.maestro/commands/" | wc -l | tr -d ' ') files)"
 
+for _s in $SKILLS; do
+  [ -f "$SOURCE_DIR/.maestro/skills/$_s/SKILL.md" ] || continue
+  rm -rf "$TARGET/.maestro/skills/$_s"
+  mkdir -p "$TARGET/.maestro/skills"
+  cp -R "$SOURCE_DIR/.maestro/skills/$_s" "$TARGET/.maestro/skills/$_s"
+done
+echo "  Copied: .maestro/skills/ ($SKILLS)"
+
 # ─────────────────────────────────────────────
 # Clean up deprecated files from earlier versions
 # ─────────────────────────────────────────────
 
 _MIGRATED=0
-for _old in mae-prd.md mae-checkpoint.md mae-explore-lite.md; do
+for _old in mae-prd.md mae-checkpoint.md mae-explore-lite.md mae-explore.md mae-scope.md mae-specs.md mae-idea.md; do
   if [ -f "$TARGET/.maestro/commands/$_old" ]; then
     rm "$TARGET/.maestro/commands/$_old"
-    echo "  Removed: .maestro/commands/$_old (renamed)"
+    echo "  Removed: .maestro/commands/$_old (renamed, or now a skill)"
     _MIGRATED=$((_MIGRATED + 1))
   fi
 done
@@ -321,7 +341,7 @@ for _old in prd.md sdd.md; do
     _MIGRATED=$((_MIGRATED + 1))
   fi
 done
-for _old in mae-prd.md mae-checkpoint.md mae-explore-lite.md; do
+for _old in mae-prd.md mae-checkpoint.md mae-explore-lite.md mae-explore.md mae-scope.md mae-specs.md mae-idea.md; do
   [ -f "$TARGET/.claude/commands/$_old" ] && rm "$TARGET/.claude/commands/$_old"
   [ -f "$TARGET/.cursor/commands/$_old" ] && rm "$TARGET/.cursor/commands/$_old"
 done
@@ -424,11 +444,21 @@ EOF
   for pair in mex:mae-explore msp:mae-specs mrq:mae-requirements mds:mae-design mar:mae-architecture mpoc:mae-poc mpl:mae-plan mdo:mae-do mrv:mae-review msc:mae-scope; do
     alias_name="${pair%%:*}"
     canonical="${pair##*:}"
+    proto=".maestro/commands/$canonical.md"
+    [ -f "$TARGET/.maestro/skills/$canonical/SKILL.md" ] && proto=".maestro/skills/$canonical/SKILL.md"
     cat > "$TARGET/.claude/commands/$alias_name.md" <<EOF
 # $alias_name
-Follow the protocol defined in \`.maestro/commands/$canonical.md\`.
+Follow the protocol defined in \`$proto\`.
 Pass \$ARGUMENTS through as-is.
 EOF
+  done
+
+  # Skills: copies, not links (portable). The skill answers /{name} itself.
+  mkdir -p "$TARGET/.claude/skills"
+  for _s in $SKILLS; do
+    [ -d "$TARGET/.maestro/skills/$_s" ] || continue
+    rm -rf "$TARGET/.claude/skills/$_s"
+    cp -R "$TARGET/.maestro/skills/$_s" "$TARGET/.claude/skills/$_s"
   done
 
   echo "  Created: .claude/commands/ (wrappers + aliases)"
@@ -506,14 +536,37 @@ done
 for pair in mex:mae-explore msp:mae-specs mrq:mae-requirements mds:mae-design mar:mae-architecture mpoc:mae-poc mpl:mae-plan mdo:mae-do mrv:mae-review msc:mae-scope; do
   alias_name="${pair%%:*}"
   canonical="${pair##*:}"
+  proto=".maestro/commands/$canonical.md"
+  [ -f "$TARGET/.maestro/skills/$canonical/SKILL.md" ] && proto=".maestro/skills/$canonical/SKILL.md"
   cat > "$TARGET/.cursor/commands/$alias_name.md" <<EOF
 # $alias_name
-Follow the protocol defined in \`.maestro/commands/$canonical.md\`.
+Follow the protocol defined in \`$proto\`.
+Pass all user arguments through as-is.
+EOF
+done
+
+# Skills: slash-command pointers for Cursor
+for _s in $SKILLS; do
+  [ -f "$TARGET/.maestro/skills/$_s/SKILL.md" ] || continue
+  cat > "$TARGET/.cursor/commands/$_s.md" <<EOF
+# $_s
+Follow the skill defined in \`.maestro/skills/$_s/SKILL.md\`.
 Pass all user arguments through as-is.
 EOF
 done
 
 echo "  Created: .cursor/commands/ (slash commands + aliases)"
+fi
+
+# Skills for Cursor and Codex (.agents/skills/)
+if $SETUP_CURSOR || $SETUP_CODEX; then
+  mkdir -p "$TARGET/.agents/skills"
+  for _s in $SKILLS; do
+    [ -d "$TARGET/.maestro/skills/$_s" ] || continue
+    rm -rf "$TARGET/.agents/skills/$_s"
+    cp -R "$TARGET/.maestro/skills/$_s" "$TARGET/.agents/skills/$_s"
+  done
+  echo "  Created: .agents/skills/ ($SKILLS)"
 fi
 
 # ─────────────────────────────────────────────
