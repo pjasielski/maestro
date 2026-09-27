@@ -71,7 +71,7 @@ When invoked without arguments, suggest work in this priority order:
    - Ad-hoc: relevant files based on description
 3. **Update task status** to `in-progress`
 4. **Execute** the work
-5. **Verify** (run checks, lint, tests if applicable)
+5. **Verify** (run checks, lint, tests if applicable). Then, per § Runnable Projects: update the README quickstart; report any process left running
 6. **Update task status** to `done` (with completion date)
 7. **Update roadmap status** — set the Status column to ✅ in whichever source owns the task: `docs/03-plan/ROADMAP.md` or `docs/02-specs/POC.md` § 4
 8. **Update § 6 Current State** (PoC track) — done / in progress / next / blocked
@@ -90,11 +90,23 @@ When invoked without arguments, suggest work in this priority order:
 ## Skip When
 - No planned tasks exist and no ad-hoc work is needed — nothing to do
 
+## Runnable Projects
+
+- **Quickstart:** when a task creates or changes a runnable project, write or update `## Quickstart` in that project's README: install, run, verify. Use the commands **actually executed** in Verify, never ones inferred from config. Python: show both `pip` and `uv`.
+- **Staleness:** a task that changes an entry point, port, required env var or dependency updates the quickstart in the same task. A task is not done while its README lies.
+- **Processes:** when you start a long-running process (dev server, watcher), end the report with it and say whether you left it up on purpose or stopped it:
+  ```
+  ⚙️  Running: dev server on :3000 (pid 48211, started by this session), left up so you can look at it
+      Stop with: kill 48211   or   npm run stop
+  ```
+  Record it under `## Running Processes` in `_summary.md`. Never leave one running silently.
+
 ## Special: Source Code Scaffolding
 When executing the scaffolding task (typically the first task in M01):
 - Read `docs/02-specs/ARCHITECTURE.md` § Tech Stack and § Source Structure — or, on the PoC track, `docs/02-specs/POC.md` § 3 Design
 - Create directory tree, package files, config files
 - Show both `pip` and `uv` install commands
+- Write the README `## Quickstart` from the verified commands (§ Runnable Projects)
 
 ## Special: PoC / Prototype
 `/mae-do` can be used at any point to build a quick proof of concept — even before requirements are fully defined. This is encouraged when:
