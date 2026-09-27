@@ -121,7 +121,6 @@ Eight delivery commands, four utilities. Every delivery command has a short alia
 | `/mae-explore` | Analyze docs, topics, transcripts |
 | `/mae-explore ask` | Generate questions for you, the client, or the team |
 | `/mae-explore doc` | Synthesize the final explore report |
-| `/mae-explore-lite` | Fast pass for small or well-understood projects |
 | `/mae-poc --tasks` | Also emit individual task files, not just the roadmap table |
 | `/mae-do poc` | Execute the whole PoC milestone from `POC.md` |
 | `/mae-do M02.03` | Execute one planned task |

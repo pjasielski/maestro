@@ -112,41 +112,60 @@ Read the row in `docs/01-explore/IDEAS.md`, set its status to `exploring`, then 
 /mae-explore ask {audience}    → questions for: user, client, team, technical
 ```
 
-Generates a structured question document saved to the session folder. Questions are designed to be answered asynchronously — each question has space for a response.
+Writes a question file to the session folder, answered asynchronously. On the next explore, read the answers and use them.
+
+### Pre-fill rule
+
+Decide by what a wrong guess costs, not by how confident you are:
+
+| A wrong guess… | Do | Marker |
+|---|---|---|
+| is cheap to correct later | Pre-fill; name where it gets verified | `Pre-answered:` |
+| changes a value or scope; the build stays valid | Pre-fill as a stated assumption | `Pre-answered (assumed):` |
+| means wasted work or a silently wrong output | Leave open | `OPEN` |
+| concerns a preference, priority, budget or business rule | Leave open, always | `OPEN` |
+
+- **Route by who holds the knowledge, not by topic.** Technical → team/architect: pre-fill freely; verified at implementation. Business → client: never pre-filled, whatever your confidence; mark `OPEN — ask the client`. A confident pre-fill on a client-only question reads as an answer and gets silently accepted.
+- An `OPEN` question may carry a **working default**, kept apart from the answer, so the build proceeds if it stays unanswered.
+- `(assumed)` keeps judgement calls under review; never file one as plain `Pre-answered:`.
+- Header count line: "5 pre-answered (2 assumed), 3 open".
+
+### Question types
+
+- **Confirm** (pre-answered only): `- [ ] Pre-answered: {answer} — verified at {where}`. Tick to confirm, edit to correct; untouched, it stands.
+- **Multiple choice:** options as `- [ ]`, one labelled `*(working default)*`. Ticking one answers it; nothing ticked = still open and the default applies. The label is not an answer.
+- **Open:** `**Response:** _`, plus `**Working default:** {…}` on its own line when one is defensible.
+
+Group questions **Business** / **Technical**; within each group, tag the tier and list `blocking` first, then `important`, `clarifying`.
 
 **Output format:**
 
 ```markdown
 # Explore: Questions for {audience}
+5 pre-answered (2 assumed), 3 open. Tick, edit or answer inline.
 
-## Blocking (answers needed before we can proceed)
+## Business
 
-### Q1: {question}
+### Q1 [blocking]: {question}
+**OPEN — ask the client** · **Unblocks:** {what this enables}
+- [ ] {option A}
+- [ ] {option B} *(working default)*
+
+### Q2 [important]: {question}
+**OPEN — ask the client** · **Affects:** {what it impacts}
+**Working default:** {value}
+**Response:** _
+
+## Technical
+
+### Q3 [blocking]: {question}
 **Unblocks:** {what this enables}
+- [ ] Pre-answered: {answer} — verified at {where}
 
-**Response:** _
-
-### Q2: {question}
-**Unblocks:** {what this enables}
-
-**Response:** _
-
-## Important (significantly affects direction)
-
-### Q3: {question}
-**Affects:** {what it impacts}
-
-**Response:** _
-
-## Clarifying (would improve quality)
-
-### Q4: {question}
+### Q4 [clarifying]: {question}
 **Improves:** {what it refines}
-
-**Response:** _
+- [ ] Pre-answered (assumed): {answer} — {why it's a judgement call}
 ```
-
-The user or client fills in responses directly in the file. On next explore, the agent reads answered questions and incorporates them.
 
 ## Final Report (doc)
 
@@ -185,7 +204,7 @@ The user or client fills in responses directly in the file. On next explore, the
 - **Always ask questions** — every explore artifact ends with questions for the user or relevant audience
 - Surface unknowns and flag gaps (`GAP:`, `UNCLEAR:`)
 - Compare options when multiple approaches exist. Recommend one you consider best.
-- Rank questions by importance (blocking → important → clarifying)
+- Group questions Business / Technical; rank by tier (blocking → important → clarifying)
 - When uncertain about what to read or analyze, ask the user rather than guessing
 
 ## Skip When

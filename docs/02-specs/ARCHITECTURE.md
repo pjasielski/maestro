@@ -215,7 +215,6 @@ maestro/                          ← Framework repository root
 ├── .maestro/                     ← Framework command source of truth
 │   └── commands/
 │       ├── mae-explore.md        ← Delivery commands (8)
-│       ├── mae-explore-lite.md
 │       ├── mae-req.md
 │       ├── mae-design.md
 │       ├── mae-plan.md

@@ -29,7 +29,7 @@ $ARGUMENTS — optional: scope hint, or `--tasks` to also emit task files
    - `.maestro/templates/poc.md` (output structure)
    - Do NOT read source code or raw data files — that is explore's job
 
-2. **Ask only blocking questions.** PoC mode is speed-optimized. Ask only where a wrong guess invalidates the build — stack choice, external dependency, data source, deployment target. Everything else: decide, and record the call under § Risks & Assumptions. Respect `question_style` from `maestro.toml`.
+2. **Ask only blocking questions.** PoC mode is speed-optimized. Ask only where a wrong guess invalidates the build — stack choice, external dependency, data source, deployment target. Everything else: decide, and record the call under § Risks & Assumptions with the `/mae-explore` markers (`Pre-answered:`, `Pre-answered (assumed):`, `OPEN`; business rules are never pre-answered). Respect `question_style` from `maestro.toml`.
 
 3. **Generate POC.md** using `.maestro/templates/poc.md`:
 
@@ -65,7 +65,7 @@ PoC work uses the standard `M{MM}.{NN}` scheme — the PoC is milestone **M01**.
 ## Skip When
 
 - The build is more than one milestone of work — use the full track (`/mae-specs` → `/mae-plan`)
-- Requirements are genuinely contested or externally reviewed — use `/mae-req`
+- Requirements are genuinely contested or externally reviewed — use `/mae-specs`
 - A single-file script — go straight to `/mae-do`
 
 ## File Size

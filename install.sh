@@ -52,7 +52,7 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ] || [ ! -d "$SCRIPT_DIR/.maestro/commands" ]
   fi
 
   mkdir -p "$SOURCE_DIR/.maestro/commands"
-  for _cmd in mae-explore mae-idea mae-specs mae-requirements mae-design mae-architecture mae-req mae-poc mae-plan mae-do mae-review mae-init mae-explore-lite mae-help mae-run mae-yolo mae-scope status decide sync md; do
+  for _cmd in mae-explore mae-idea mae-specs mae-requirements mae-design mae-architecture mae-req mae-poc mae-plan mae-do mae-review mae-init mae-help mae-run mae-yolo mae-scope status decide sync md; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/commands/$_cmd.md" -o "$SOURCE_DIR/.maestro/commands/$_cmd.md" 2>/dev/null; then
       echo "  Warning: failed to download $_cmd.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
@@ -307,7 +307,7 @@ echo "  Copied: .maestro/commands/ ($(ls "$TARGET/.maestro/commands/" | wc -l | 
 # ─────────────────────────────────────────────
 
 _MIGRATED=0
-for _old in mae-prd.md mae-checkpoint.md; do
+for _old in mae-prd.md mae-checkpoint.md mae-explore-lite.md; do
   if [ -f "$TARGET/.maestro/commands/$_old" ]; then
     rm "$TARGET/.maestro/commands/$_old"
     echo "  Removed: .maestro/commands/$_old (renamed)"
@@ -321,7 +321,7 @@ for _old in prd.md sdd.md; do
     _MIGRATED=$((_MIGRATED + 1))
   fi
 done
-for _old in mae-prd.md mae-checkpoint.md; do
+for _old in mae-prd.md mae-checkpoint.md mae-explore-lite.md; do
   [ -f "$TARGET/.claude/commands/$_old" ] && rm "$TARGET/.claude/commands/$_old"
   [ -f "$TARGET/.cursor/commands/$_old" ] && rm "$TARGET/.cursor/commands/$_old"
 done

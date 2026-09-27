@@ -28,7 +28,7 @@ Phase order: `explore` → `requirements` → `design` → `architecture` → `p
 
 ### 2. One question round
 
-- Before producing anything, run each phase's question step in **collect** mode — explore's Blocking tier, architecture's Must Answer tier, design's source question, poc's blocking questions — and write them once, deduplicated, to `NN_chain-questions.md` in the session folder, grouped by phase. Each question carries `**Response:** _` and a working default where one is defensible (the `Pre-answered (assumed):` vocabulary from `/mae-explore`).
+- Before producing anything, run each phase's question step in **collect** mode — explore's `blocking` questions, architecture's Must Answer tier, design's source question, poc's blocking questions — and write them once, deduplicated, to `NN_chain-questions.md` in the session folder, grouped by phase. Each question carries `**Response:** _` and a working default where one is defensible (the `Pre-answered (assumed):` vocabulary from `/mae-explore`).
 - Say: "N questions across {phases} — see `{file}`. Answer inline and say `go`. Unanswered questions proceed on their working default and are marked `UNCLEAR:` in the artifact they affect."
 - Non-blocking questions (Important, Clarifying, Recommend, Your call) are not asked. They become `UNCLEAR:` flags inside the artifact they belong to.
 - No blocking questions anywhere → say so in one line and continue without stopping.
