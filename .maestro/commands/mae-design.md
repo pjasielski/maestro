@@ -1,115 +1,32 @@
-# /mae-design — Technical Architecture
+# /mae-design — Visual Design System
 
-Design the technical solution. Works at three levels of granularity, top-down and iterative.
+Write `docs/02-specs/DESIGN.md`: the visual system (colour, type, spacing, components) in the DESIGN.md format, so mocks, code and other agents use the same values. Architecture is `/mae-architecture`.
 
-## Modes
-
-### Full solution (no arguments)
-```
-/mae-design
-```
-Reads REQUIREMENTS.md. Generates ARCHITECTURE.md using `.maestro/templates/architecture.md` as structure:
-- Core sections (1-6) always included
-- Optional sections (7-11) included when relevant — omit if not applicable
-- Architecture overview (system boundaries, high-level flow)
-- Component list (names, responsibilities, interfaces)
-- Tech stack (language, frameworks, databases, infra)
-- Data model (entities, relationships)
-- Source structure (directories, key files)
-- Open design questions
-
-### Component detail
-```
-/mae-design {component_name}
-```
-Adds detailed specs for one component to ARCHITECTURE.md:
-- API contracts (endpoints, request/response schemas)
-- Internal architecture (modules, data flow)
-- Error handling strategy
-- Dependencies on other components
-- Acceptance criteria
-
-### File-level spec
-```
-/mae-design {path/to/file}
-```
-Generates implementation specs for a specific file:
-- Function signatures with types
-- Business logic rules
-- Edge cases and error scenarios
-- Test scenarios
+$ARGUMENTS — optional: focus (e.g. "colours only")
 
 ## Prerequisites
-- Full solution: `docs/02-specs/REQUIREMENTS.md` must exist
-- Component: `docs/02-specs/ARCHITECTURE.md` must exist (run full first)
-- File-level: ARCHITECTURE.md with relevant component section
+- The project has a UI (per EXPLORE.md, REQUIREMENTS.md or `docs/02-specs/mock/`). No UI → say so and stop
+- Explore artifacts but no `EXPLORE.md` → ask once (MAESTRO.md § Layout Rules)
 
 ## Behavior
 
-1. **Read inputs (prioritized):**
-   - `docs/02-specs/REQUIREMENTS.md` (requirements — primary input)
-   - `docs/01-explore/` — final explore report, especially Technical Analysis sections (3.1-3.4: current state, data landscape, integrations, constraints)
-   - If many files in explore folder: read the final report; ask user which others to include
-   - `docs/02-specs/ARCHITECTURE.md` (if exists — for component/file-level modes)
-   - `DECISIONS.md` (confirmed technical decisions)
-   - `maestro.toml` (project context, user profile, tech preferences if configured)
-   - `.maestro/templates/architecture.md` (output structure for full solution mode)
+1. **Pick the source, first match wins:**
+   - Approved mock in `docs/02-specs/mock/` → **extract**: the colours, type and components the client already approved, plus the choices recorded in `_screens.md`. Don't invent new ones
+   - Brand assets or screenshots in `docs/00-reference/`
+   - Neither → ask: "No mock or brand assets found. Add some to `docs/00-reference/`, or shall I propose a neutral system?"
+2. **Read:** REQUIREMENTS.md (screens, platforms, accessibility), DECISIONS.md, `.maestro/templates/design.md` (output structure)
+3. **Generate DESIGN.md** from the template: exact token values in the front matter; the eight prose sections in spec order. Name the source of each choice (mock, brand asset, default). Unknown brand value → `GAP:`, never invented. Flag text/background pairs below WCAG AA contrast
+4. **Save draft** to the session; offer promotion to `docs/02-specs/DESIGN.md` (same rule as `/mae-requirements` step 4)
+5. **Save report** to the session
 
-2. **Technical questionnaire (full solution mode only):**
-   Before generating the SDD, identify technical decisions the agent cannot make from available information:
-
-   ```markdown
-   ## Technical Decisions Needed
-
-   ### Must Answer (blocks architecture)
-   1. {decision} — why it's needed, what it blocks
-
-   ### Recommend (I have a suggestion — confirm or override)
-   2. {decision} — recommendation: {X} because {rationale}. Agree?
-
-   ### Your Call (multiple valid approaches)
-   3. {decision} — options: {A} vs {B}, trade-offs: {comparison}
-   ```
-
-   Present the questionnaire to the user. Once answered, generate the ARCHITECTURE.md incorporating the responses.
-   If all decisions can be made from available information, skip the questionnaire and state the rationale for each choice in the design document.
-
-3. **Generate or extend ARCHITECTURE.md** (iterative — each invocation adds to it)
-
-4. **Save design draft to session folder** (numbered file)
-
-5. **Offer promotion:** "Design draft saved to session. Ready to promote to docs/02-specs/ARCHITECTURE.md?"
-   - If user confirms → copy to `docs/02-specs/ARCHITECTURE.md`
-   - If user wants changes → iterate in session first
-   - If user says "save directly to docs" in the original prompt → skip the ask
-   - For component/file-level: update the existing ARCHITECTURE.md in docs/ (with review)
-
-6. **Save report** to session folder
-
-## Cross-Phase Awareness
-
-If the design process reveals missing information:
-- Suggest: "This design decision requires information we don't have. Consider running `/mae-explore {topic}` to investigate."
-- Flag in ARCHITECTURE.md with `GAP:` tag so it's visible in reviews
-- Do not invent technical decisions when information is insufficient — ask or flag
-
-## Output Behaviors
-- Compare alternatives when multiple approaches exist (table format)
-- State recommendation with rationale for every design choice
-- List trade-offs explicitly
-- Flag decisions needing user input vs agent-decidable
-- Include source structure section (for later `/mae-do` scaffolding task)
-- When user profile indicates technical expertise, offer lighter explanations; when non-technical, explain trade-offs in plain terms
-
-## Direction
-Top-down: architecture → components → files. The requirements drive the architecture.
+## Rules
+- DESIGN.md exists → mocks follow it. Changes after sign-off go through `/mae-scope`
+- Visual only: no component logic, APIs or data (that's ARCHITECTURE.md)
 
 ## Skip When
-- Project is a single-file tool or script — go straight to `/mae-do`
-- Implementation is obvious from explore output alone — skip to `/mae-do`
-- Building a PoC — capture design decisions informally in the explore output
+- No UI (CLI, API, data pipeline)
+- The client has a design system — reference it in `docs/00-reference/` instead of restating it
 
 ## File Size
-- Target: 2,000-4,000 words
-- Hard max: 6,000 words
-- If exceeding, split: ARCHITECTURE.md (overview) + component-{name}.md per component
+- Target: 800–2,000 words; hard max: 3,000
+- Past the hard max, split per the main-file rule: DESIGN.md (foundations) + `design/{component-group}.md`

@@ -74,7 +74,7 @@ Report in chat: files changed, milestone added, tasks created, decisions logged,
 
 ## Skip When
 
-- No REQUIREMENTS.md yet — `/mae-req` territory
+- No REQUIREMENTS.md yet — `/mae-requirements` territory
 - The change is one requirement row — edit it under review, `/decide` if it reverses anything
 - The change is a new product area — `/mae-explore {area}` first
 

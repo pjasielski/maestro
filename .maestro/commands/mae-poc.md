@@ -42,7 +42,7 @@ $ARGUMENTS — optional: scope hint, or `--tasks` to also emit task files
 
 4. **Populate § 6 Current State.** This section is the rehydration key: a fresh session must be able to read POC.md alone and know exactly where the work stands. On generation it reads "not started". `/mae-do` updates it after each task. Keep it to five lines — what's done, what's next, what's blocked.
 
-5. **Save to `docs/02-specs/POC.md` directly.** Unlike `/mae-req` and `/mae-design`, PoC output is immediately actionable, so it follows the `/mae-plan` convention and skips the session-then-promote step. Also save a report to the session folder.
+5. **Save to `docs/02-specs/POC.md` directly.** Unlike the `/mae-specs` parts, PoC output is immediately actionable, so it follows the `/mae-plan` convention and skips the session-then-promote step. Also save a report to the session folder.
 
 6. **If `--tasks`:** additionally emit `docs/03-plan/tasks/M01.NN-{slug}.md` using `.maestro/templates/task.md`. Off by default — the roadmap table plus `/mae-do` session reports already provide the audit trail.
 
@@ -64,7 +64,7 @@ PoC work uses the standard `M{MM}.{NN}` scheme — the PoC is milestone **M01**.
 
 ## Skip When
 
-- The build is more than one milestone of work — use the full track (`/mae-req` → `/mae-design` → `/mae-plan`)
+- The build is more than one milestone of work — use the full track (`/mae-specs` → `/mae-plan`)
 - Requirements are genuinely contested or externally reviewed — use `/mae-req`
 - A single-file script — go straight to `/mae-do`
 

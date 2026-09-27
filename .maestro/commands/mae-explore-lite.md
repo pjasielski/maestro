@@ -184,7 +184,7 @@ The explore report is a **living document** — running `explore doc` again repl
 
 All explore artifacts → .sessions/ (working material)
 Final report (`doc`) → .sessions/ → user promotes to docs/01-explore/
-When ready → user runs `/mae-req` to formalize requirements
+When ready → user runs `/mae-specs` to write the specs
 
 ## Rules
 

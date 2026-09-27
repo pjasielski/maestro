@@ -12,9 +12,13 @@ Recognize these patterns (with or without `/` prefix):
 | User types | Load file |
 |-----------|-----------|
 | `mae-explore` or `mex` | `.maestro/commands/mae-explore.md` |
+| `mae-idea` | `.maestro/commands/mae-idea.md` |
 | `mae-poc` or `mpoc` | `.maestro/commands/mae-poc.md` |
-| `mae-req` or `mrq` | `.maestro/commands/mae-req.md` |
-| `mae-design` or `mds` | `.maestro/commands/mae-design.md` |
+| `mae-specs` or `msp` | `.maestro/commands/mae-specs.md` |
+| `mae-requirements` or `mrq` | `.maestro/commands/mae-requirements.md` |
+| `mae-design` or `mds` | `.maestro/commands/mae-design.md` (visual design) |
+| `mae-architecture` or `mar` | `.maestro/commands/mae-architecture.md` |
+| `mae-req` (old name) | `.maestro/commands/mae-req.md` |
 | `mae-scope` or `msc` | `.maestro/commands/mae-scope.md` |
 | `mae-plan` or `mpl` | `.maestro/commands/mae-plan.md` |
 | `mae-do` or `mdo` | `.maestro/commands/mae-do.md` |
@@ -47,7 +51,7 @@ User: "mex ask client"
 → Execute with arguments: "ask client"
 
 User: "mrq"
-→ Read .maestro/commands/mae-req.md
+→ Read .maestro/commands/mae-requirements.md
 → Execute with no arguments (smart default)
 ```
 

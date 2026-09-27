@@ -184,7 +184,7 @@ The explore report is a **living document** — running `explore doc` again repl
 - When uncertain about what to read or analyze, ask the user rather than guessing
 
 ## Skip When
-- Requirements are already well-defined (e.g., detailed brief from client) — skip to `/mae-req`
+- Requirements are already well-defined (e.g., detailed brief from client) — skip to `/mae-specs`
 - Building a trivial script with obvious scope — skip to `/mae-do`
 - Returning to a well-explored project — check if coverage is already sufficient before exploring again
 
@@ -193,7 +193,7 @@ The explore report is a **living document** — running `explore doc` again repl
 Source materials → docs/00-reference/ (placed by the user, read first, never edited)
 All explore artifacts → .sessions/ (working material)
 Final report (`doc`) → .sessions/ → user promotes to docs/01-explore/
-When ready → user runs `/mae-req` to formalize requirements, or `/mae-poc` for the PoC track
+When ready → user runs `/mae-specs` to write the specs, or `/mae-poc` for the PoC track
 
 ## Rules
 

@@ -57,8 +57,8 @@ $ARGUMENTS — optional: project name
 ## What init does NOT do
 - Create folder structure (that's `install.sh` — creates docs/01-explore/, 02-specs/, 03-plan/)
 - Create tracking files (that's `install.sh`)
-- Set up source code structure (that's a `/mae-do` task after `/mae-design`)
-- Choose tech stack (that's `/mae-explore` and `/mae-design`)
+- Set up source code structure (that's a `/mae-do` task after `/mae-architecture`)
+- Choose tech stack (that's `/mae-explore` and `/mae-architecture`)
 - Create or modify CLAUDE.md (user's responsibility)
 
 ## Output

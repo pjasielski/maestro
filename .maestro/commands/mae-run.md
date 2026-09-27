@@ -9,13 +9,13 @@ $ARGUMENTS — required: a range `{a}..{b}`, or an explicit list `/mae-x -> /mae
 ## Usage
 
 ```
-/mae-run req..plan                        → /mae-req, /mae-design, /mae-plan
-/mae-run explore..do                      → the whole track
-/mae-req -> /mae-design -> /mae-plan      → same as req..plan
-/mae-run design..do M02                   → "M02" is passed to /mae-do
+/mae-run requirements..plan                          → /mae-requirements, /mae-design (if UI), /mae-architecture, /mae-plan
+/mae-run explore..do                                 → the whole track
+/mae-requirements -> /mae-architecture -> /mae-plan  → explicit list, no design
+/mae-run architecture..do M02                        → "M02" is passed to /mae-do
 ```
 
-Phase order: `explore` → `req` → `design` → `plan` → `do` → `review`. `poc` is not a chain phase — on the PoC track (probe 4 in `mae-help.md`) the engine substitutes `/mae-poc` for `req..plan` and `/mae-do poc` for `do`; the user still writes the full-track names.
+Phase order: `explore` → `requirements` → `design` → `architecture` → `plan` → `do` → `review`. Short forms `req`, `arch`; `specs` = `requirements..architecture`. A range includes `design` only when `/mae-specs` would (missing and the project has a UI). `poc` is not a chain phase — on the PoC track (probe 4 in `mae-help.md`) the engine substitutes `/mae-poc` for `requirements..plan` and `/mae-do poc` for `do`; the user still writes the full-track names.
 
 ## Behavior
 
@@ -23,25 +23,25 @@ Phase order: `explore` → `req` → `design` → `plan` → `do` → `review`. 
 
 - `a..b` expands to the phase list; `a` must precede `b`. A one-phase range is refused: "that is just `/mae-{a}`".
 - The `->` list must contain delivery commands only, in ascending phase order. Mixing `->` with `..` is an error; say which form to use.
-- **Missing prerequisites.** Each phase's prerequisite artifact must exist on disk or be produced earlier in the same chain. `design..do` with no REQUIREMENTS.md → stop: "`design` needs REQUIREMENTS.md, which does not exist. `/mae-run req..do` works." Never fill the gap silently.
+- **Missing prerequisites.** Each phase's prerequisite artifact must exist on disk or be produced earlier in the same chain. `architecture..do` with no REQUIREMENTS.md → stop: "`architecture` needs REQUIREMENTS.md, which does not exist. `/mae-run requirements..do` works." Never fill the gap silently.
 - Print the resolved plan, one line per phase, plus the trade-off in one line: "N phases, one question round now, one review after `{last specifying phase}`, per-task commits inside `do`." Confirm once. This is the only confirmation before the question round.
 
 ### 2. One question round
 
-- Before producing anything, run each phase's question step in **collect** mode — explore's Blocking tier, design's Must Answer tier, poc's blocking questions — and write them once, deduplicated, to `NN_chain-questions.md` in the session folder, grouped by phase. Each question carries `**Response:** _` and a working default where one is defensible (the `Pre-answered (assumed):` vocabulary from `/mae-explore`).
+- Before producing anything, run each phase's question step in **collect** mode — explore's Blocking tier, architecture's Must Answer tier, design's source question, poc's blocking questions — and write them once, deduplicated, to `NN_chain-questions.md` in the session folder, grouped by phase. Each question carries `**Response:** _` and a working default where one is defensible (the `Pre-answered (assumed):` vocabulary from `/mae-explore`).
 - Say: "N questions across {phases} — see `{file}`. Answer inline and say `go`. Unanswered questions proceed on their working default and are marked `UNCLEAR:` in the artifact they affect."
 - Non-blocking questions (Important, Clarifying, Recommend, Your call) are not asked. They become `UNCLEAR:` flags inside the artifact they belong to.
 - No blocking questions anywhere → say so in one line and continue without stopping.
 
 ### 3. Run the specifying phases
 
-- Each phase runs its own command file unchanged, with two suppressions: no "ready to promote?" prompt and no per-phase report. Chat gets one line per phase: "`req` → `.sessions/{NNN}/04_requirements-draft.md`".
+- Each phase runs its own command file unchanged, with two suppressions: no "ready to promote?" prompt and no per-phase report. Chat gets one line per phase: "`requirements` → `.sessions/{NNN}/04_requirements-draft.md`".
 - Each phase reads the previous phase's **session draft** as its input, because the canonical file does not exist yet.
 - `/mae-plan` (and `/mae-poc`) write to `docs/` directly as they always do — creating is free; the chain does not change that.
 
 ### 4. One review
 
-- After the last specifying phase (`plan`; or `design`, `req`, `explore` when the range ends earlier): one message listing every artifact produced, in order, each with its link and its report header (Summary, Flags). Then: "Promote to `docs/`? (all / list the ones to promote / no)".
+- After the last specifying phase (`plan`; or `architecture`, `design`, `requirements`, `explore` when the range ends earlier): one message listing every artifact produced, in order, each with its link and its report header (Summary, Flags). Then: "Promote to `docs/`? (all / list the ones to promote / no)".
 - Promotion applies the review-required rule once, for the set. Anything not approved stays in the session; say so, and stop the chain there if `do` was in range — `do` runs only against promoted specs.
 
 ### 5. `do` and `review` after the review

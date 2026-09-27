@@ -2,6 +2,18 @@
 
 All notable changes to the Maestro framework.
 
+## [0.5.0] — unreleased
+
+### Breaking
+- **Layout:** `docs/02-requirements/`, `02-poc/`, `03-design/` → one `docs/02-specs/` (REQUIREMENTS.md, DESIGN.md, ARCHITECTURE.md, POC.md, mock/); `04-plan/` → `03-plan/`; on-demand folders renumbered `04-implementation/` … `08-maintenance/`. Existing projects: `/mae-init upgrade`
+- **Renames:** architecture is now `ARCHITECTURE.md` (was `DESIGN.md`), made by `/mae-architecture` (`mar`); `/mae-req` → `/mae-requirements` (`mrq`; `/mae-req` kept as a pointer for one release); template `design.md` → `architecture.md`
+- **`mds` / `/mae-design` changed meaning:** now the visual design system (`DESIGN.md`, DESIGN.md format), not architecture
+
+### Added
+- `/mae-specs [part]` (`msp`) — builds the missing and relevant spec parts in one question round and one review
+- `docs/01-explore/EXPLORE.md` — the fixed explore synthesis; the only explore file downstream commands read
+- Main-file rule for splitting large artifacts into lowercase sub-folders
+
 ## [0.4.0] — 2026-08-03
 
 The PoC track: a time-boxed path from idea to running code, using one spec file instead of three. Built ahead of schedule for a live client engagement and validated there before release.

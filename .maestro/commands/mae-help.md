@@ -2,7 +2,7 @@
 
 State-aware guidance. Answers "what do I do next" from what exists on disk and shows the three or four commands that make sense now — never all of them.
 
-$ARGUMENTS — optional: `all`, or one command name (`mae-req`, `mrq`, `sync`)
+$ARGUMENTS — optional: `all`, or one command name (`mae-requirements`, `mrq`, `sync`)
 
 ## Usage
 
@@ -22,9 +22,9 @@ Existence checks, `grep`, and header lines only. Never read a canonical file in 
 |---|---|---|
 | 1 | Session | Highest-numbered `.sessions/{NNN}-*/`; whether its `_summary.md` exists |
 | 2 | Reference | `docs/00-reference/` has files; newest modification time |
-| 3 | Explore | `docs/01-explore/` has files other than `.gitkeep` |
+| 3 | Explore | `docs/01-explore/` has files other than `.gitkeep`; `EXPLORE.md` exists |
 | 4 | Track | `docs/02-specs/POC.md` exists → PoC track; `docs/02-specs/REQUIREMENTS.md` exists → full track; both → full track (graduated PoC) |
-| 5 | Design | `docs/02-specs/ARCHITECTURE.md` exists |
+| 5 | Specs | `docs/02-specs/ARCHITECTURE.md` exists; `docs/02-specs/DESIGN.md` exists; UI = EXPLORE.md or REQUIREMENTS.md mentions screens, or `docs/02-specs/mock/` exists |
 | 6 | Roadmap | `docs/03-plan/ROADMAP.md` exists; count `☐ todo`, `🔄`, `⏳`, `✅` in it (grep); PoC track without a roadmap: same counts in POC.md § 4 |
 | 7 | Next task | First `☐ todo` row whose `Depends` entries are all `✅` — ROADMAP table on the full track, POC.md § 4 on the PoC track. Task files are not opened |
 | 8 | Questions | Session files matching `*questions*.md` that still contain `**Response:** _` |
@@ -39,10 +39,10 @@ First matching row wins. This table is also the auto-trigger heuristic for skill
 |---|---|---|
 | Unanswered questions in the session (8) | Answer them — name the file | the command that asked them |
 | No explore artifacts, no session (1, 3) | `/mae-explore` | `/mae-init` if `maestro.toml` has no profile |
-| Explore artifacts; no REQUIREMENTS.md, no POC.md (3, 4) | `/mae-req` — or `/mae-poc` if the build is one milestone and time-boxed | `/mae-explore doc` if there is no final report yet |
+| Explore artifacts; no REQUIREMENTS.md, no POC.md (3, 4) | `/mae-specs` — or `/mae-poc` if the build is one milestone and time-boxed | `/mae-explore doc` if there is no EXPLORE.md yet |
 | Reference newer than requirements (10) | `/mae-scope` | `/mae-explore {file}` when the new material is a whole area |
-| REQUIREMENTS.md, no ARCHITECTURE.md (4, 5) | `/mae-design` | `/mae-review requirements` |
-| ARCHITECTURE.md, no ROADMAP.md (5, 6) | `/mae-plan` | `/mae-review design` |
+| REQUIREMENTS.md, no ARCHITECTURE.md (4, 5) | `/mae-specs` (builds the missing parts) | `/mae-review requirements` |
+| ARCHITECTURE.md, no ROADMAP.md (5, 6) | `/mae-plan` | `/mae-review architecture`; `/mae-design` if the project has a UI and no DESIGN.md |
 | POC.md, todo rows in § 4 (4, 6, 7) | `/mae-do poc`, or `/mae-do M01.{NN}` for the next one | `/mae-review` |
 | ROADMAP.md with ☐ todo (6, 7) | `/mae-do {next unblocked id}` | `/mae-review`, `/status tasks` |
 | Nothing todo; unsynced decisions (6, 9) | `/sync` | `/mae-plan` for the next milestone; a finished PoC graduates with `/mae-plan` at M02 |
@@ -72,8 +72,8 @@ ALSO    /mae-review           {why it fits now}
 
 Every command, grouped, one line each — command, alias, what it produces:
 
-- **Explore** — `mae-explore` (`mex`), `mae-poc` (`mpoc`)
-- **Specify** — `mae-req` (`mrq`), `mae-design` (`mds`), `mae-scope` (`msc`)
+- **Explore** — `mae-explore` (`mex`), `mae-idea`, `mae-poc` (`mpoc`)
+- **Specify** — `mae-specs` (`msp`), `mae-requirements` (`mrq`), `mae-design` (`mds`, visual), `mae-architecture` (`mar`), `mae-scope` (`msc`)
 - **Plan and build** — `mae-plan` (`mpl`), `mae-do` (`mdo`), `mae-review` (`mrv`)
 - **Session** — `status`, `decide`, `sync`, `md`, `mae-init`
 - **Chaining** — `mae-run`, `mae-yolo`, each with its one-line warning from its command file
@@ -82,7 +82,7 @@ End with: "`/mae-help {command}` for details."
 
 ### {command}
 
-Resolve aliases (`mex` → `mae-explore`, `msc` → `mae-scope`). Read only that command file. Answer four questions in at most twelve lines: what it does (its first paragraph); when to skip it (`## Skip When`); what it reads (`## Prerequisites` or step 1 of `## Behavior`); what it writes (`## Artifact Flow` or the save steps). Unknown name → the three closest names, nothing else.
+Resolve aliases (`mex` → `mae-explore`, `msc` → `mae-scope`, `mae-req` → `mae-requirements`). Read only that command file. Answer four questions in at most twelve lines: what it does (its first paragraph); when to skip it (`## Skip When`); what it reads (`## Prerequisites` or step 1 of `## Behavior`); what it writes (`## Artifact Flow` or the save steps). Unknown name → the three closest names, nothing else.
 
 ## Rules
 

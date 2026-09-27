@@ -8,7 +8,7 @@ Artifact capture: commands save their artifact as a numbered session file; direc
 
 ## Project
 
-- **Framework:** Maestro (command prefix: `mae-`, aliases: `mex`/`mpoc`/`mrq`/`mds`/`msc`/`mpl`/`mdo`/`mrv`)
+- **Framework:** Maestro (command prefix: `mae-`, aliases: `mex`/`mpoc`/`msp`/`mrq`/`mds`/`mar`/`msc`/`mpl`/`mdo`/`mrv`)
 - **What this repo is:** The Maestro framework itself (bootstrapping — building the framework using itself)
 - **Current phase:** bootstrap → packaging
 - **Config:** `maestro.toml` (TOML format — Python native, no indent bugs)

@@ -16,7 +16,7 @@ $ARGUMENTS — optional: milestone number, "roadmap", or specific items
 ## Prerequisites
 - `docs/02-specs/ARCHITECTURE.md` must exist (architecture informs the plan)
 - `docs/02-specs/REQUIREMENTS.md` should exist (requirements inform priorities)
-- If neither exists: warn and suggest running `/mae-design` first
+- If neither exists: warn and suggest running `/mae-architecture` first
 
 ## Behavior
 

@@ -6,7 +6,7 @@ Review existing code or delivery artifacts for quality, consistency, and complet
 
 - `/mae-review` — review recent changes (git diff)
 - `/mae-review {path}` — review a specific file or directory
-- `/mae-review requirements` or `design` — review a delivery artifact by name
+- `/mae-review requirements`, `design` or `architecture` — review a delivery artifact by name
 
 ## Behavior
 
@@ -19,7 +19,8 @@ Review existing code or delivery artifacts for quality, consistency, and complet
 
    - For code: ARCHITECTURE.md (architecture), coding standards
    - For requirements: explore artifacts, DECISIONS.md
-   - For design: REQUIREMENTS.md (does design match requirements?)
+   - For architecture: REQUIREMENTS.md (does the architecture match requirements?)
+   - For design: REQUIREMENTS.md, `docs/02-specs/mock/` (does the visual system cover the screens?)
 3. **Generate review** using `.maestro/templates/review.md` structure, findings categorized:
 
    - 🔴 **Critical** — must fix (security, correctness, data loss risk)

@@ -7,7 +7,7 @@ description: >-
   notes, or an unfamiliar codebase; asks "what are we missing" or "what should we ask
   the client"; or is starting a new project or engagement, even if they never say
   "explore". Also handles /mae-explore, mex, "explore ask", and "explore doc".
-  Do NOT use to formalize requirements (mae-req), design architecture (mae-design),
+  Do NOT use to formalize requirements (mae-requirements), design architecture (mae-architecture),
   plan tasks (mae-plan), implement or fix code (mae-do), review existing work
   (mae-review), or answer a quick factual question about the code. Answer those directly.
 license: MIT
