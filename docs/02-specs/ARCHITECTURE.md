@@ -89,8 +89,8 @@ Technical architecture for the Maestro delivery framework. Covers the command sy
 | Step | From | To | Data | Mechanism |
 |---|---|---|---|---|
 | 1 | User | AI Tool | Command invocation (/mae-explore, /mae-req poc, etc.) | Slash command or prompt |
-| 2 | AI Tool | Adapter file | Dispatch | Tool reads .claude/commands/mae-explore.md |
-| 3 | Adapter | .maestro/commands/ | Delegation | Adapter says "follow .maestro/commands/mae-explore.md" |
+| 2 | AI Tool | Adapter file | Dispatch | Tool reads .claude/commands/mae-plan.md |
+| 3 | Adapter | .maestro/commands/ | Delegation | Adapter says "follow .maestro/commands/mae-plan.md" (skills: the tool loads .maestro/skills/{name}/SKILL.md through .claude/skills/) |
 | 4 | Command file | File system | Context loading | Command reads specified inputs (HANDOFF.md, docs/, etc.) |
 | 5 | AI Tool | .sessions/ | Output | Numbered artifact saved to current session folder |
 | 6 | User | docs/ | Promotion | User confirms; AI copies session artifact to docs/ |
@@ -302,10 +302,10 @@ maestro/                          ← Framework repository root
 User types: /mae-explore
     │
     ▼
-Tool reads: .claude/commands/mae-explore.md (adapter)
-    │ Contains: "Follow .maestro/commands/mae-explore.md"
+Tool reads: .claude/commands/mae-plan.md (adapter)
+    │ Contains: "Follow .maestro/commands/mae-plan.md"
     ▼
-AI follows: .maestro/commands/mae-explore.md (canonical)
+AI follows: .maestro/commands/mae-plan.md (canonical)
     │ Contains: full behavioral instructions
     ▼
 AI reads: MAESTRO.md (framework rules, output tiers, context loading)

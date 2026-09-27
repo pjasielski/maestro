@@ -129,10 +129,10 @@ Maintenance & bugs          → docs/08-maintenance/     (created on demand)
 Templates                   → .maestro/templates/
 Session history             → .sessions/{NNN}-{name}/_summary.md
 Source code                 → src/ (or project-specific path)
-Framework commands          → .maestro/commands/mae-*.md
-Framework skills            → .maestro/skills/{name}/SKILL.md  (Agent Skills standard; M04 migration in progress)
+Framework skills            → .maestro/skills/{name}/SKILL.md  (mae-explore, mae-specs, mae-scope, mae-idea; the model may offer them)
+Framework commands          → .maestro/commands/*.md  (everything else; runs when typed)
 Skill conventions           → .maestro/skills/CONVENTIONS.md  (tiers, description pattern, frontmatter)
-Claude Code adapters        → .claude/commands/mae-*.md  (thin wrappers → .maestro/commands/)
+Claude Code adapters        → .claude/skills/ (links to .maestro/skills/), .claude/commands/ (wrappers + aliases)
 Cursor adapters             → .cursor/rules/ (maestro-core.mdc + maestro-dispatch.mdc), .cursor/commands/
 ```
 

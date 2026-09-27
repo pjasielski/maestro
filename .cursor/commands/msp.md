@@ -1,3 +1,3 @@
 # msp
-Follow the protocol defined in `.maestro/commands/mae-specs.md`.
+Follow the skill defined in `.maestro/skills/mae-specs/SKILL.md`.
 Pass all user arguments through as-is.

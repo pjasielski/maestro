@@ -74,21 +74,21 @@ ALSO    /mae-review           {why it fits now}
 
 Every command, grouped, one line each — command, alias, what it produces:
 
-- **Explore** — `mae-explore` (`mex`), `mae-idea`, `mae-poc` (`mpoc`)
-- **Specify** — `mae-specs` (`msp`), `mae-requirements` (`mrq`), `mae-design` (`mds`, visual), `mae-architecture` (`mar`), `mae-scope` (`msc`)
-- **Plan and build** — `mae-plan` (`mpl`), `mae-do` (`mdo`), `mae-review` (`mrv`)
-- **Session** — `status`, `decide`, `sync`, `md`, `mae-init`
+- **Explore** — `mae-explore` (`mex`) → EXPLORE.md + questions · `mae-idea` → a row in IDEAS.md · `mae-poc` (`mpoc`) → one-file POC.md
+- **Specify** — `mae-specs` (`msp`) → the missing spec parts · `mae-requirements` (`mrq`) → REQUIREMENTS.md · `mae-design` (`mds`) → DESIGN.md, visual system · `mae-architecture` (`mar`) → ARCHITECTURE.md · `mae-scope` (`msc`) → scope-delta, applied on confirmation
+- **Plan and build** — `mae-plan` (`mpl`) → ROADMAP.md + tasks · `mae-do` (`mdo`) → executed task + report · `mae-review` (`mrv`) → findings
+- **Session** — `status` → where things stand · `decide` → DECISIONS.md row · `sync` → HANDOFF and ROADMAP updated · `md` → saves the last response · `mae-init` → profile, or `upgrade` for the old layout
 - **Chaining** — `mae-run`, `mae-yolo`, each with its one-line warning from its command file
 
 End with: "`/mae-help {command}` for details."
 
 ### {command}
 
-Resolve aliases (`mex` → `mae-explore`, `msc` → `mae-scope`, `mae-req` → `mae-requirements`). Read only that command file. Answer four questions in at most twelve lines: what it does (its first paragraph); when to skip it (`## Skip When`); what it reads (`## Prerequisites` or step 1 of `## Behavior`); what it writes (`## Artifact Flow` or the save steps). Unknown name → the three closest names, nothing else.
+Resolve aliases (`mex` → `mae-explore`, `msc` → `mae-scope`, `mae-req` → `mae-requirements`). Read only that file: `.maestro/commands/{name}.md`, or `.maestro/skills/{name}/SKILL.md` for a skill. Answer four questions in at most twelve lines: what it does (its first paragraph); when to skip it (`## Skip When`); what it reads (`## Prerequisites` or step 1 of `## Behavior`); what it writes (`## Artifact Flow` or the save steps). Unknown name → the three closest names, nothing else.
 
 ## Rules
 
-- Cheap enough to run habitually: no file is read in full except the one command file in `{command}` mode
+- Cheap enough to run habitually: no file is read in full except the one command or skill file in `{command}` mode
 - Suggests, never runs — `/mae-help` has no side effects
 - Chaining commands appear under `all` only, never under NEXT or ALSO
 - On a graduated PoC (POC.md and REQUIREMENTS.md both exist) the full-track rows apply

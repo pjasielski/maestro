@@ -35,7 +35,7 @@ Phase order: `explore` → `requirements` → `design` → `architecture` → `p
 
 ### 3. Run the specifying phases
 
-- Each phase runs its own command file unchanged, with two suppressions: no "ready to promote?" prompt and no per-phase report. Chat gets one line per phase: "`requirements` → `.sessions/{NNN}/04_requirements-draft.md`".
+- Each phase runs its own protocol (command file, or skill / `mae-specs` reference) unchanged, with two suppressions: no "ready to promote?" prompt and no per-phase report. Chat gets one line per phase: "`requirements` → `.sessions/{NNN}/04_requirements-draft.md`".
 - Each phase reads the previous phase's **session draft** as its input, because the canonical file does not exist yet.
 - `/mae-plan` (and `/mae-poc`) write to `docs/` directly as they always do — creating is free; the chain does not change that.
 
@@ -58,7 +58,7 @@ Saved to the session as `NN_chain-report.md`; chat gets the link and one sentenc
 
 - Stop on first failure at any phase. Leave an accurate record: session drafts, task statuses, commits.
 - Instruction priority is unchanged: an explicit instruction in the question file wins over any default.
-- If a phase's command file changes, the chain changes with it. Fix behaviour in the command file, never here.
+- If a phase's protocol changes, the chain changes with it. Fix behaviour in that file, never here.
 
 ## Skip When
 

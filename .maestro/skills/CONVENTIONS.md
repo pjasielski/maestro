@@ -20,29 +20,19 @@ Three tiers, one question each: what does a false positive cost?
 
 `UNCLEAR:` the reference validator rejects `disable-model-invocation` as a non-spec field (spike finding F2). Working default: keep it, because it is the only mechanism the tools offer; expect exactly one "Unexpected fields" line per explicit skill from `agentskills validate`, and have `maestro validate` (M06.01) whitelist it. Drop the exception the day the spec adds an invocation field.
 
-## 2. Tier assignment
+## 2. Tier assignment: five skills, the rest commands
+
+Only protocols the model should be able to **offer** are skills (v0.5.0; supersedes "every command becomes a skill", 11 §A6). Everything else stays a command in `.maestro/commands/`, run when typed.
 
 | Skill | Tier | Why |
 |---|---|---|
 | `mae-explore` | auto | Questions are cheap; fit check announces itself |
-| `mae-review` | auto | Read-only; findings, no edits |
-| `status` | auto | Read-only |
-| `mae-help` (M04.15) | auto | Read-only; the "what next" question is the trigger |
-| `mae-poc` | suggest | Writes `POC.md` straight to `docs/` |
-| `mae-req` | suggest | An unwanted draft is the failure mode |
-| `mae-design` | suggest | Same |
-| `mae-plan` | suggest | Writes ROADMAP and tasks straight to `docs/` |
-| `decide` | suggest | A wrongly recorded decision outlives the session |
-| `mae-scope` (M05.07) | suggest | Edits canonical files under review |
-| `mae-mock` (M05.09, gated on Q6) | suggest | Provisional |
-| `mae-do` | explicit | Executes work and commits (D27) |
-| `mae-run`, `mae-yolo` (M05.11) | explicit | Chain explicit commands |
-| `mae-approve` (M04.17) | explicit | Acts on annotations |
-| `sync` | explicit | Edits HANDOFF and ROADMAP |
-| `mae-init` | explicit | Writes `maestro.toml` |
-| `md` | explicit | User-only by definition |
+| `mae-specs` | suggest | An unwanted draft is the failure mode. Part protocols in `references/`; `/mae-requirements`, `/mae-design`, `/mae-architecture` are ≤3-line command entry points to them |
+| `mae-scope` | suggest | Edits canonical files under review |
+| `mae-idea` | suggest | Offers "Park this as an idea?"; catches scope drift |
+| `mae-mock` (M05.09) | suggest | Writes HTML to `docs/02-specs/mock/` |
 
-The explore/review/status → req/design/plan/decide → do/sync/init split is D17. The rows for commands not yet built are provisional (`~`) and are confirmed by the task that builds each command. `mae-explore-lite` is not in the command table; `UNCLEAR:` whether it survives M04.03. Working default: fold it into `mae-explore` as a `lite` argument.
+Commands, never skills: `mae-poc`, `mae-plan`, `mae-do`, `mae-review`, `mae-run`, `mae-yolo`, `mae-pr`, `mae-init`, `mae-help`, `sync`, `status`, `decide`, `md`. Promotion trigger: anything typed 10+ times that the agent could have offered.
 
 ## 3. State table (auto-trigger heuristic)
 
@@ -93,17 +83,17 @@ Never use: `allowed-tools` (a permission grant with tool-specific semantics), `m
 ## 6. Naming
 
 - Skill `name` = directory name = command name without the slash: `mae-explore`, `sync`.
-- Framework delivery skills carry the `mae-` prefix. Utility skills keep their D7 names for now; whether they get the prefix on conversion is Q8.
-- Aliases (`mex`, `mrq`) are not skills. They stay thin wrappers in `.claude/commands/` and `.cursor/commands/`, and are listed in the description for tools without wrappers.
+- Skills carry the `mae-` prefix (Q8: yes).
+- Aliases (`mex`, `msp`) are not skills. They stay thin wrappers in `.claude/commands/` and `.cursor/commands/` that point at the `SKILL.md`, and are listed in the description for tools without wrappers.
 - One skill per behaviour. Variants are arguments, not sibling skills.
 
 ## 7. Body structure
 
-`# {name} — {title}`, then the `$ARGUMENTS` line, then the tier section from §1, then in this order as needed: Modes, Read context first, Behaviour, After every artifact, Rules, Skip when, Artifact flow. Target under 150 lines; hard limit 500. Formats owned by the skill go to `references/` and are linked by relative path, one level deep. Shared templates stay in `.maestro/templates/` and are referenced by project path (they are also installed by `install.sh`); M04.03 may revisit. Keep behaviour identical to the command file being replaced; the conversion is packaging, not a rewrite (D25).
+`# {name} — {title}`, then the `$ARGUMENTS` line, then the tier section from §1, then in this order as needed: Modes, Read context first, Behaviour, After every artifact, Rules, Skip when, Artifact flow. Target under 150 lines; hard limit 500. Formats owned by the skill go to `references/` and are linked by relative path, one level deep. Shared templates stay in `.maestro/templates/` and are referenced by project path (they are also installed by `install.sh`); M04.03 may revisit. Keep behaviour identical to the command file being replaced: **move** the protocol, then trim only where nothing is lost, and list every changed or dropped rule in the commit body. Conversion is packaging, not a rewrite (D25).
 
 ## 8. Placement
 
-Canonical: `.maestro/skills/{name}/`. Tool paths point at it: `.claude/skills/{name}` for Claude Code, `.agents/skills/{name}` for Codex and Cursor (Cursor also reads `.claude/skills/`). The spike uses symlinks; the installer mechanism, including Windows, is M04.06. Never edit a tool copy.
+Canonical: `.maestro/skills/{name}/`. Tool paths point at it: `.claude/skills/{name}` for Claude Code, `.agents/skills/{name}` for Codex and Cursor (Cursor also reads `.claude/skills/`). The repo uses symlinks; the installer copies each skill folder into both paths (minimal M04.06; Windows later). Never edit a tool copy.
 
 ## 9. Validation checklist (before committing a skill)
 
@@ -113,4 +103,4 @@ Canonical: `.maestro/skills/{name}/`. Tool paths point at it: `.claude/skills/{n
 4. Auto and suggest tiers: `trigger-eval.sh` passes (rate > 0.5 for should, < 0.5 for should-not, 3 runs).
 5. Suggest tier: an auto-invocation produces the one-line proposal and no file.
 6. Explicit tier: a should-trigger query produces no skill call.
-7. The old command file and wrappers are removed in the same commit only after M04.03's clash test (spike F6) says they collide.
+7. One copy: the command file and its Claude wrapper are deleted in the same commit (the skill wins on a same-name collision, M04.01 keyboard test). Aliases and Cursor wrappers point at the `SKILL.md`.

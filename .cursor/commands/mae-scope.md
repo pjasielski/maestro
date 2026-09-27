@@ -1,3 +1,3 @@
 # mae-scope
-Follow the protocol defined in `.maestro/commands/mae-scope.md`.
+Follow the skill defined in `.maestro/skills/mae-scope/SKILL.md`.
 Pass all user arguments through as-is.

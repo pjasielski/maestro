@@ -3,7 +3,7 @@ alwaysApply: true
 ---
 # Maestro Command Dispatch
 
-When the user types a Maestro command in chat, load and follow the corresponding command file from `.maestro/commands/`.
+When the user types a Maestro command in chat, load and follow the file in the table below: a skill in `.maestro/skills/` or a command in `.maestro/commands/`.
 
 ## Command Recognition
 
@@ -11,15 +11,15 @@ Recognize these patterns (with or without `/` prefix):
 
 | User types | Load file |
 |-----------|-----------|
-| `mae-explore` or `mex` | `.maestro/commands/mae-explore.md` |
-| `mae-idea` | `.maestro/commands/mae-idea.md` |
+| `mae-explore` or `mex` | `.maestro/skills/mae-explore/SKILL.md` |
+| `mae-idea` | `.maestro/skills/mae-idea/SKILL.md` |
 | `mae-poc` or `mpoc` | `.maestro/commands/mae-poc.md` |
-| `mae-specs` or `msp` | `.maestro/commands/mae-specs.md` |
+| `mae-specs` or `msp` | `.maestro/skills/mae-specs/SKILL.md` |
 | `mae-requirements` or `mrq` | `.maestro/commands/mae-requirements.md` |
 | `mae-design` or `mds` | `.maestro/commands/mae-design.md` (visual design) |
 | `mae-architecture` or `mar` | `.maestro/commands/mae-architecture.md` |
 | `mae-req` (old name) | `.maestro/commands/mae-req.md` |
-| `mae-scope` or `msc` | `.maestro/commands/mae-scope.md` |
+| `mae-scope` or `msc` | `.maestro/skills/mae-scope/SKILL.md` |
 | `mae-plan` or `mpl` | `.maestro/commands/mae-plan.md` |
 | `mae-do` or `mdo` | `.maestro/commands/mae-do.md` |
 | `mae-review` or `mrv` | `.maestro/commands/mae-review.md` |
@@ -34,7 +34,7 @@ Recognize these patterns (with or without `/` prefix):
 
 ## Dispatch Protocol
 
-1. When a command is recognized, **read the full command file** from `.maestro/commands/`
+1. When a command is recognized, **read the full file** named in the table
 2. Pass any arguments the user provided after the command name
 3. Follow the command file's behavior specification exactly
 4. Save output to the current session folder as specified
@@ -43,11 +43,11 @@ Recognize these patterns (with or without `/` prefix):
 
 ```
 User: "mae-explore the auth system"
-→ Read .maestro/commands/mae-explore.md
+→ Read .maestro/skills/mae-explore/SKILL.md
 → Execute with argument: "the auth system"
 
 User: "mex ask client"
-→ Read .maestro/commands/mae-explore.md
+→ Read .maestro/skills/mae-explore/SKILL.md
 → Execute with arguments: "ask client"
 
 User: "mrq"

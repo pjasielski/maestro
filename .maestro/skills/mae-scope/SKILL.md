@@ -1,10 +1,35 @@
-# /mae-scope — Scope-change intake
+---
+name: mae-scope
+description: >-
+  Turn a mid-project change request into a client-sendable impact analysis
+  (scope-delta.md), then apply the deltas to specs, roadmap and tasks only on
+  confirmation. Use when a client asks for something new or different, a change request
+  or new brief lands in docs/00-reference/, or the user asks what a change would cost,
+  even if they never say "scope". Also handles /mae-scope, msc. Do NOT use to park a
+  maybe-later idea (mae-idea), explore a whole new product area (mae-explore), or write
+  specs that don't exist yet (mae-specs). Propose first; produce only after the user confirms.
+license: MIT
+compatibility: >-
+  Requires a project initialized with Maestro (.maestro/, HANDOFF.md, .sessions/).
+  Any Agent Skills client (Claude Code, Cursor, Codex CLI).
+metadata:
+  maestro-tier: suggest
+  maestro-command: /mae-scope
+  maestro-aliases: msc
+  maestro-version: "0.5.0"
+---
 
-Mid-project, new scope arrives: a client request, a change file, a new brief in `docs/00-reference/`. Instead of re-running `/mae-req` and regenerating everything, decompose the request, classify each capability against what exists, write a client-sendable impact analysis, and only then — on confirmation — apply the deltas to every canonical file at once.
+# mae-scope — Scope-change intake
+
+Mid-project, new scope arrives: a client request, a change file, a new brief in `docs/00-reference/`. Instead of re-running `/mae-specs` and regenerating everything, decompose the request, classify each capability against what exists, write a client-sendable impact analysis, and only then — on confirmation — apply the deltas to every canonical file at once.
 
 Alias: `msc`
 
 $ARGUMENTS — optional: `"{description}"`, or a path to a request file; none → look in `docs/00-reference/`
+
+## Gate (auto-invocation only)
+
+When you chose this skill yourself, write nothing and say one line: "This looks like a scope change. Want me to run `/mae-scope`? (yes / not now)". Proceed only when the user typed the command or confirmed. A "maybe later" that isn't a change to what was agreed belongs to `/mae-idea`.
 
 ## Usage
 

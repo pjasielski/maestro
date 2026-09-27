@@ -544,15 +544,15 @@ When user types any of these, read the corresponding file and follow its full pr
 
 | Command | Alias | File |
 |---------|-------|------|
-| mae-explore | mex | .maestro/commands/mae-explore.md |
-| mae-idea | — | .maestro/commands/mae-idea.md |
-| mae-specs | msp | .maestro/commands/mae-specs.md |
+| mae-explore | mex | .maestro/skills/mae-explore/SKILL.md |
+| mae-idea | — | .maestro/skills/mae-idea/SKILL.md |
+| mae-specs | msp | .maestro/skills/mae-specs/SKILL.md |
 | mae-requirements | mrq | .maestro/commands/mae-requirements.md |
 | mae-design | mds | .maestro/commands/mae-design.md |
 | mae-architecture | mar | .maestro/commands/mae-architecture.md |
 | mae-poc | mpoc | .maestro/commands/mae-poc.md |
 | mae-req (old name) | — | .maestro/commands/mae-req.md |
-| mae-scope | msc | .maestro/commands/mae-scope.md |
+| mae-scope | msc | .maestro/skills/mae-scope/SKILL.md |
 | mae-plan | mpl | .maestro/commands/mae-plan.md |
 | mae-do | mdo | .maestro/commands/mae-do.md |
 | mae-review | mrv | .maestro/commands/mae-review.md |
