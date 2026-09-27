@@ -41,6 +41,8 @@ Batch-update canonical project files based on accumulated decisions and progress
 
 8. **Update WORKLOG.md** — append entry logging the sync activity
 
+9. **Git report** (MAESTRO.md § Git Policy): current branch, unpushed commits. A milestone completed this session with `pr` ≠ `off` and no PR description yet → write it. Push only if `push = "milestone"`; never otherwise
+
 ## Rules
 
 - **Every edit to canonical files requires review** — show diff, wait for approval

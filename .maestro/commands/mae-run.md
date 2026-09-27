@@ -47,7 +47,7 @@ Phase order: `explore` → `requirements` → `design` → `architecture` → `p
 ### 5. `do` and `review` after the review
 
 - `do` runs as `/mae-do M{MM}` multi-task execution on the milestone the chain planned (or the one named in the argument): stop on first failure, task status and ROADMAP updated after every task, never batched.
-- **Commit after every completed task**, regardless of any `[git]` `commit` setting: `{type}({task-id}): {title}` with a `Task: docs/03-plan/tasks/{file}` trailer (the convention P42.01 owns; until P42.01 lands this is the only place it is enforced). Never push, never branch, never merge, never open a PR inside a chain — a `[git]` policy is honoured for everything except commit frequency.
+- **Commit after every completed task**, regardless of any `[git]` `commit` setting, using the commit convention in MAESTRO.md § Git Policy. Never push, never branch, never merge, never open a PR inside a chain — a `[git]` policy is honoured for everything except commit frequency.
 - `review` runs `/mae-review` over what the chain produced and saves its findings as usual.
 
 ### 6. Final report

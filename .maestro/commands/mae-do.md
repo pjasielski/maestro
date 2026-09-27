@@ -27,11 +27,12 @@ On the PoC track there are no task files. Status lives in the POC.md roadmap tab
 When the argument names a milestone rather than a single task:
 
 1. **Resolve the task list** and order it by the dependency graph (respect the `Depends on` column; where the roadmap names a critical path, follow it).
-2. **Confirm before starting:** "M01 has N todo tasks: [list IDs + titles]. Estimated scope: {S/M/L counts}. Execute all in sequence?" Never auto-start a multi-task run.
-3. **Execute each task** through the normal Execution Flow below.
-4. **After every task**, update the status column *and* § 6 Current State in POC.md before starting the next one. Do not batch these to the end — an interrupted run must leave an accurate record of what completed.
-5. **Stop on first failure.** Report which task failed, why, and what state the work is in. Do not continue past a failure on the assumption it was cosmetic.
-6. **Report at the end:** tasks completed, tasks skipped, verification results, and what remains.
+2. **Branch** per MAESTRO.md § Git Policy (`branch`): at the milestone's first task, ask once, not per task.
+3. **Confirm before starting:** "M01 has N todo tasks: [list IDs + titles]. Estimated scope: {S/M/L counts}. Execute all in sequence?" Never auto-start a multi-task run.
+4. **Execute each task** through the normal Execution Flow below.
+5. **After every task**, update the status column *and* § 6 Current State in POC.md before starting the next one. Do not batch these to the end — an interrupted run must leave an accurate record of what completed.
+6. **Stop on first failure.** Report which task failed, why, and what state the work is in. Do not continue past a failure on the assumption it was cosmetic.
+7. **Report at the end:** tasks completed, tasks skipped, verification results, git actions, and what remains.
 
 If the milestone defines a **spine** (see `.maestro/templates/poc.md`), build the spine tasks first and confirm the end-to-end path works before starting anything outside it.
 
@@ -72,13 +73,16 @@ When invoked without arguments, suggest work in this priority order:
 6. **Update task status** to `done` (with completion date)
 7. **Update roadmap status** — set the Status column to ✅ in whichever source owns the task: `docs/03-plan/ROADMAP.md` or `docs/02-specs/POC.md` § 4
 8. **Update § 6 Current State** (PoC track) — done / in progress / next / blocked
-9. **Save report** to session folder (or promote to `docs/04-implementation/` if substantial)
-10. **Update `_summary.md`** → Tasks Touched section
+9. **Commit** per MAESTRO.md § Git Policy (`commit = "task"`: the task's files and status updates, commit convention, report the hash)
+10. **Milestone complete** (no todo task left in it): run the `commit`, `push` and `pr` steps of § Git Policy
+11. **Save report** to session folder (or promote to `docs/04-implementation/` if substantial)
+12. **Update `_summary.md`** → Tasks Touched section
 
 ## Output Behaviors
 - Report what was done clearly
 - Flag issues found during execution
 - Show verification results
+- Report git actions taken (committed, pushed, branch, PR), or "no git actions"
 - Suggest next task if sequential dependency exists
 
 ## Skip When

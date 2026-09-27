@@ -63,7 +63,7 @@ Six small behavior changes to command *content*, shipped before the skill conver
 
 | # | Item | Priority | Effort | Depends | Status | Task | Source |
 |---|------|----------|--------|---------|--------|------|--------|
-| P42.01 | **`[git]` config block + per-task commits: commit/push/branch/pr/merge settings; defaults commit=task, push=never, branch=milestone (asks once), merge=never; agent reports git actions** | P1 | S | — | ☐ todo | [P42.01](tasks/P42.01-git-settings.md) | 22 §3 |
+| P42.01 | **`[git]` config block + per-task commits: commit/push/branch/pr/merge settings; defaults commit=task, push=never, branch=milestone (asks once), merge=never; agent reports git actions** | P1 | S | — | ✅ done | [P42.01](tasks/P42.01-git-settings.md) | 22 §3 |
 | P42.02 | **`response_capture` = all \| artifacts (default) \| minimal; replace the "> 80 words" rule with a work-product rule; define the artifact per command** | P1 | S | — | ☐ todo | [P42.02](tasks/P42.02-response-capture.md) | 22 §1, 015/03 |
 | P42.03 | **Merge req/design double-save into one artifact with a report header; `/md` two-mode semantics; "link + one sentence, never duplicate the file in chat" as a global rule** | P1 | S | P42.02 | ☐ todo | [P42.03](tasks/P42.03-artifact-consolidation.md) | 22 §1 |
 | P42.04 | **Append-only session summary + decision log; two zones (curated top / log bottom); compact and reconcile at `/sync` with contradiction flagging** | P1 | S | — | ☐ todo | [P42.04](tasks/P42.04-append-only-state.md) | 22 §6a |

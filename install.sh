@@ -170,6 +170,7 @@ PROJECT_NAME="$(basename "$TARGET")"
 SESSION_VISIBILITY="${SESSION_VISIBILITY:-committed}"
 TOOLS="${TOOLS:-}"
 QUESTION_STYLE="${QUESTION_STYLE:-async}"
+GIT_COMMIT="${GIT_COMMIT:-task}"
 
 SETUP_CLAUDE=true
 SETUP_CURSOR=true
@@ -213,6 +214,16 @@ elif [ "$REINSTALL" = false ]; then
   if [ "$QS_CHOICE" = "2" ]; then
     QUESTION_STYLE="sync"
   fi
+
+  echo ""
+  GC_CHOICE=$(ask_choice "When should the agent commit? (it never pushes unless you change [git] push)" \
+    "After each task (recommended)" \
+    "After each milestone" \
+    "Never — I commit myself")
+  case "$GC_CHOICE" in
+    2) GIT_COMMIT="milestone" ;;
+    3) GIT_COMMIT="never" ;;
+  esac
 fi
 
 # Parse tool selections
@@ -690,6 +701,13 @@ session_visibility = \"$SESSION_VISIBILITY\"
 question_style = \"$QUESTION_STYLE\"
 ai_tools = $AI_TOOLS_TOML
 
+[git]
+commit = \"$GIT_COMMIT\"       # \"task\" | \"milestone\" | \"never\"
+push = \"never\"        # \"never\" | \"milestone\" — pushes the current branch only
+branch = \"milestone\"  # \"milestone\" | \"never\" — asks once per milestone
+pr = \"markdown\"       # \"off\" | \"markdown\" | \"milestone\" — PR text in the session; any PR opened is a draft and pushes that branch only
+merge = \"never\"       # the agent never merges
+
 # Uncomment and fill in to enable profile-aware behavior:
 # [user]
 # description = \"Your role and expertise\"
@@ -710,6 +728,11 @@ TOML_KEYS=(
   "project|session_visibility|session_visibility = \"$SESSION_VISIBILITY\""
   "project|question_style|question_style = \"$QUESTION_STYLE\""
   "project|ai_tools|ai_tools = $AI_TOOLS_TOML"
+  "git|commit|commit = \"$GIT_COMMIT\""
+  "git|push|push = \"never\""
+  "git|branch|branch = \"milestone\""
+  "git|pr|pr = \"markdown\""
+  "git|merge|merge = \"never\""
 )
 toml_has_key() {  # file section key → 0 if key is set inside [section]
   awk -v sec="[$2]" -v key="$3" '
@@ -721,7 +744,12 @@ for _entry in "${TOML_KEYS[@]}"; do
   IFS='|' read -r _sec _key _line <<< "$_entry"
   toml_has_key "$TARGET/maestro.toml" "$_sec" "$_key" && continue
   if grep -q "^\[$_sec\]" "$TARGET/maestro.toml"; then
-    awk -v hdr="[$_sec]" -v add="$_line" '{ print } $0 == hdr { print add }' "$TARGET/maestro.toml" > "$TARGET/maestro.toml.tmp" \
+    # insert after the section's last key line (comments and blank lines stay below it)
+    awk -v hdr="[$_sec]" -v add="$_line" '
+      { line[NR] = $0 }
+      /^[[:space:]]*\[/ { insec = ($0 == hdr); if (insec) at = NR; next }
+      insec && /^[[:space:]]*[A-Za-z0-9_-]+[[:space:]]*=/ { at = NR }
+      END { for (i = 1; i <= NR; i++) { print line[i]; if (i == at) print add } }' "$TARGET/maestro.toml" > "$TARGET/maestro.toml.tmp" \
       && mv "$TARGET/maestro.toml.tmp" "$TARGET/maestro.toml"
   else
     printf '\n[%s]\n%s\n' "$_sec" "$_line" >> "$TARGET/maestro.toml"
@@ -772,12 +800,14 @@ if [ ! -f "$TARGET/.gitignore" ]; then
 # Maestro: personal working artifacts (gitignored)
 .sessions/
 sessions/
+maestro.local.toml
 .DS_Store
 EOF
     echo "  Created: .gitignore (.sessions/ gitignored)"
   else
     cat > "$TARGET/.gitignore" <<'EOF'
 .DS_Store
+maestro.local.toml
 # .sessions/ committed (change session_visibility in maestro.toml)
 EOF
     echo "  Created: .gitignore (.sessions/ committed)"

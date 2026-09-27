@@ -569,6 +569,35 @@ ai_tools = ["claude", "cursor"]   # installed adapters
 
 ---
 
+## Git Policy
+
+Commit often (local, revertible); never push by default (shared, not revertible). Set in `maestro.toml`; an absent key uses its default.
+
+```toml
+[git]
+commit = "task"       # "task" | "milestone" | "never"
+push = "never"        # "never" | "milestone" — pushes the current branch only
+branch = "milestone"  # "milestone" | "never"
+pr = "markdown"       # "off" | "markdown" | "milestone" — any PR is a draft; opening one pushes that branch only
+merge = "never"       # the agent never merges
+```
+
+| Key | Behaviour |
+|---|---|
+| `commit` | `task`: `/mae-do` commits after each completed task. `milestone`: one commit when the milestone completes. `never`: the user commits |
+| `push` | `milestone`: push the current branch when its milestone completes. Never the default branch, never force |
+| `branch` | `milestone`: at a milestone's first task, ask once: "Create `milestone/m{NN}-{slug}`?" Unrelated uncommitted changes → refuse; offer to stash or stay on the current branch |
+| `pr` | `markdown`: at milestone end or on request, write the PR description to the session (`NN_pr-{milestone}.md`: title, summary, tasks with IDs and "done when", commits, how to test); nothing pushed. `milestone`: also push that branch and open a **draft** PR (`gh`), else print the compare URL. `/mae-pr` does the same on request |
+| `merge` | Only `never` |
+
+**Commit convention:** `{type}({task-id}): {title}` plus a `Task: {task file path}` trailer (PoC track: `Task: docs/02-specs/POC.md#{task-id}`). The type (`feat`, `fix`, `docs`, `chore`…) follows the task's subject. Stage only the task's files.
+
+**Always report git actions**, whatever the settings: "Committed 3 tasks (a1b2c3d, …), not pushed."
+
+**Personal overrides:** `maestro.local.toml` (gitignored) may only tighten `[git]`: lower `commit` (task → milestone → never), set `push = "never"`, set `pr` to `"off"` or `"markdown"`. Any other local `[git]` value is ignored with a warning: "`maestro.local.toml` {key} = {value} loosens project policy — ignored."
+
+---
+
 ## User / Team Profile
 
 Optional. Configured in `maestro.toml`. Helps the agent adapt its assistance to the practitioner's expertise.

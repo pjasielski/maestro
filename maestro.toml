@@ -7,3 +7,10 @@ session_visibility = "committed"
 description = "AI Solutions Architect, Python/FastAPI specialist, planning-heavy workflow"
 strengths = ["backend", "python", "system-design", "architecture", "fastapi"]
 needs_help = ["frontend", "ux", "css"]
+
+[git]
+commit = "task"
+push = "never"
+branch = "milestone"
+pr = "markdown"
+merge = "never"
