@@ -75,6 +75,7 @@ Framework commands          → .maestro/commands/mae-*.md
 | Requirements | `mae-requirements` | REQUIREMENTS.md |
 | Design | `mae-design` | DESIGN.md (visual system) |
 | Architecture | `mae-architecture` | ARCHITECTURE.md |
+| Mock | `mae-mock` | docs/02-specs/mock/ (HTML screens) |
 | Plan | `mae-plan` | ROADMAP.md + task files |
 | Do | `mae-do` | Executed work |
 | Review | `mae-review` | Review findings |

@@ -129,7 +129,7 @@ Maintenance & bugs          → docs/08-maintenance/     (created on demand)
 Templates                   → .maestro/templates/
 Session history             → .sessions/{NNN}-{name}/_summary.md
 Source code                 → src/ (or project-specific path)
-Framework skills            → .maestro/skills/{name}/SKILL.md  (mae-explore, mae-specs, mae-scope, mae-idea; the model may offer them)
+Framework skills            → .maestro/skills/{name}/SKILL.md  (mae-explore, mae-specs, mae-scope, mae-idea, mae-mock; the model may offer them)
 Framework commands          → .maestro/commands/*.md  (everything else; runs when typed)
 Skill conventions           → .maestro/skills/CONVENTIONS.md  (tiers, description pattern, frontmatter)
 Claude Code adapters        → .claude/skills/ (links to .maestro/skills/), .claude/commands/ (wrappers + aliases)
@@ -304,6 +304,7 @@ Standard:   explore → specs → plan → do → review          ← specs = re
 PoC track:  explore → poc → do → [review]                 ← time-boxed builds, prototypes, spikes
 Graduation: ... poc → do → plan (M02+) → do               ← the PoC worked; keep going
 PoC-first:  explore (light) → do (PoC) → [feedback] → explore (refined) → specs → do
+Client-first: explore → mock → [client] → poc or specs → plan → do   ← the client sees screens before any spec
 Fast-track: explore → architecture → do → review
 Iterative:  explore → requirements → do (MVP) → [feedback] → explore → requirements (revised) → do
 ```
@@ -334,6 +335,7 @@ Rules that a chain cannot override: explore is never skipped; nothing is promote
 | 02 | Requirements | `/mae-requirements` | `mrq`  | REQUIREMENTS.md — what and why                             |
 | 02 | Design       | `/mae-design`       | `mds`  | DESIGN.md — visual system: tokens, type, components         |
 | 02 | Architecture | `/mae-architecture` | `mar`  | ARCHITECTURE.md — how it's built; `{component}` → `architecture/{component}.md` |
+| 02 | Mock         | `/mae-mock`         | —      | mock/ — self-contained HTML screens + `_screens.md` (screens → requirement IDs, gaps) |
 | 02 | PoC spec     | `/mae-poc`          | `mpoc` | POC.md — requirements + architecture + roadmap in one file (PoC track) |
 | 02+ | Scope change | `/mae-scope`       | `msc`  | scope-delta.md (session, client-sendable) → deltas applied to specs, ROADMAP, tasks on confirmation; rejected → IDEAS.md |
 | 03 | Plan         | `/mae-plan`         | `mpl`  | ROADMAP.md + tasks/ — milestones and task files            |
@@ -372,6 +374,10 @@ docs/00-reference/  ← placed by the user before anything runs; read-only to Ma
   → working artifacts (session)  ──promote──→  docs/01-explore/{topic}.md
   → /mae-explore doc (session)   ──promote──→  docs/01-explore/EXPLORE.md
 /mae-idea                        ──────────→  docs/01-explore/IDEAS.md (append)
+
+/mae-mock                                       (projects with a UI)
+  ← reads REQUIREMENTS.md → POC.md → EXPLORE.md; look from DESIGN.md → 00-reference/ brand → neutral
+  → HTML screens + _screens.md    ──────────→  docs/02-specs/mock/  (GAP: lines feed requirements and poc)
 
 ── PoC track ──────────────────────────────────────────────
 /mae-poc
@@ -416,7 +422,7 @@ docs/00-reference/  ← placed by the user before anything runs; read-only to Ma
 
 All commands save to `.sessions/` first. User reviews, then promotes to `docs/` when ready.
 Exceptions: `/mae-plan` saves ROADMAP and tasks directly to docs/ (immediately actionable).
-`/mae-poc` saves POC.md directly to `docs/02-specs/` for the same reason; `/mae-idea` appends directly.
+`/mae-poc` saves POC.md directly to `docs/02-specs/` and `/mae-mock` its HTML to `docs/02-specs/mock/`, for the same reason; `/mae-idea` appends directly.
 `/mae-do` saves reports to session; substantial reports can be promoted to `docs/04-implementation/`.
 
 ### Adaptive Workflow Guidance

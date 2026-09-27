@@ -23,7 +23,8 @@ $ARGUMENTS — optional: scope hint, or `--tasks` to also emit task files
 1. **Read inputs (prioritized — stop once you have enough):**
 
    - `docs/00-reference/` — source materials you did not write (client briefs, specs, transcripts). **Authoritative** over inferences drawn from code.
-   - `docs/01-explore/` — final explore report (primary synthesis)
+   - `docs/01-explore/EXPLORE.md` — the explore synthesis
+   - `docs/02-specs/mock/_screens.md` if present: carry its `GAP:` lines in as open questions
    - `DECISIONS.md`, `OPEN_QUESTIONS.md`
    - `maestro.toml` (project context, user profile, tech preferences)
    - `.maestro/templates/poc.md` (output structure)
@@ -76,7 +77,7 @@ PoC work uses the standard `M{MM}.{NN}` scheme — the PoC is milestone **M01**.
 ## Artifact Flow
 
 ```
-docs/00-reference/ + docs/01-explore/  →  /mae-poc  →  docs/02-specs/POC.md
+docs/00-reference/ + EXPLORE.md (+ mock/_screens.md)  →  /mae-poc  →  docs/02-specs/POC.md
                                                           ↓
                                                       /mae-do poc
 ```

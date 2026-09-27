@@ -15,6 +15,7 @@ $ARGUMENTS — optional: topic focus, flags
 1. **Read inputs (prioritized):**
    - `docs/01-explore/EXPLORE.md` (primary input — the synthesis; never individual explore artifacts)
    - `DECISIONS.md` (relevant prior decisions)
+   - `docs/02-specs/mock/_screens.md` if present: carry its `GAP:` lines in as open questions
    - `OPEN_QUESTIONS.md` (check for unresolved items affecting requirements)
    - `maestro.toml` (project context, user profile if configured)
    - `.maestro/templates/requirements.md` (output structure)

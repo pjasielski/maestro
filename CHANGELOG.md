@@ -13,6 +13,7 @@ All notable changes to the Maestro framework.
 - `/mae-specs [part]` (`msp`) — builds the missing and relevant spec parts in one question round and one review
 - `docs/01-explore/EXPLORE.md` — the fixed explore synthesis; the only explore file downstream commands read
 - Main-file rule for splitting large artifacts into lowercase sub-folders
+- `/mae-mock` — self-contained, clickable HTML screens in `docs/02-specs/mock/` with `_screens.md` (screens → requirement IDs, `GAP:` lines read by `/mae-requirements` and `/mae-poc`)
 
 ## [0.4.0] — 2026-08-03
 

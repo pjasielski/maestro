@@ -13,6 +13,7 @@ Recognize these patterns (with or without `/` prefix):
 |-----------|-----------|
 | `mae-explore` or `mex` | `.maestro/skills/mae-explore/SKILL.md` |
 | `mae-idea` | `.maestro/skills/mae-idea/SKILL.md` |
+| `mae-mock` | `.maestro/skills/mae-mock/SKILL.md` |
 | `mae-poc` or `mpoc` | `.maestro/commands/mae-poc.md` |
 | `mae-specs` or `msp` | `.maestro/skills/mae-specs/SKILL.md` |
 | `mae-requirements` or `mrq` | `.maestro/commands/mae-requirements.md` |

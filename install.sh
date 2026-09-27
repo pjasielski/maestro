@@ -33,8 +33,8 @@ PRECONFIGURED_MODE=""
 # ─────────────────────────────────────────────
 
 # Skills (the model may offer them). Every other protocol is a command.
-SKILLS="mae-explore mae-specs mae-scope mae-idea"
-SKILL_FILES="mae-explore/SKILL.md mae-specs/SKILL.md mae-specs/references/requirements.md mae-specs/references/design.md mae-specs/references/architecture.md mae-scope/SKILL.md mae-idea/SKILL.md"
+SKILLS="mae-explore mae-specs mae-scope mae-idea mae-mock"
+SKILL_FILES="mae-explore/SKILL.md mae-specs/SKILL.md mae-specs/references/requirements.md mae-specs/references/design.md mae-specs/references/architecture.md mae-scope/SKILL.md mae-idea/SKILL.md mae-mock/SKILL.md"
 
 _CLEANUP_SOURCE=false
 # Local mode only from a framework checkout installing into another directory.
@@ -72,7 +72,7 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ] || [ ! -d "$SCRIPT_DIR/.maestro/commands" ]
   done
 
   mkdir -p "$SOURCE_DIR/.maestro/templates"
-  for _tmpl in requirements design architecture explore ideas poc task summary report review roadmap scope-delta issue; do
+  for _tmpl in requirements design architecture explore ideas poc task summary report review roadmap scope-delta issue screens; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/templates/$_tmpl.md" -o "$SOURCE_DIR/.maestro/templates/$_tmpl.md" 2>/dev/null; then
       echo "  Warning: failed to download template $_tmpl.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
@@ -503,7 +503,7 @@ alwaysApply: true
 
 When the user types a Maestro command in chat, load the corresponding file from `.maestro/commands/` and follow its protocol.
 
-Commands: mae-explore (mex), mae-idea, mae-specs (msp), mae-requirements (mrq), mae-design (mds), mae-architecture (mar), mae-poc (mpoc), mae-scope (msc), mae-plan (mpl), mae-do (mdo), mae-review (mrv), mae-init, mae-help, mae-run, mae-yolo, sync, decide, status, md. Old name: mae-req → mae-requirements
+Commands: mae-explore (mex), mae-idea, mae-mock, mae-specs (msp), mae-requirements (mrq), mae-design (mds), mae-architecture (mar), mae-poc (mpoc), mae-scope (msc), mae-plan (mpl), mae-do (mdo), mae-review (mrv), mae-init, mae-help, mae-run, mae-yolo, sync, decide, status, md. Old name: mae-req → mae-requirements
 
 Always read the command file before executing — do not guess the protocol.
 CURSOREOF
@@ -603,6 +603,7 @@ When user types any of these, read the corresponding file and follow its full pr
 | mae-requirements | mrq | .maestro/commands/mae-requirements.md |
 | mae-design | mds | .maestro/commands/mae-design.md |
 | mae-architecture | mar | .maestro/commands/mae-architecture.md |
+| mae-mock | — | .maestro/skills/mae-mock/SKILL.md |
 | mae-poc | mpoc | .maestro/commands/mae-poc.md |
 | mae-req (old name) | — | .maestro/commands/mae-req.md |
 | mae-scope | msc | .maestro/skills/mae-scope/SKILL.md |
@@ -835,6 +836,7 @@ echo "── Commands ───────────────────�
 echo "  /mae-explore (mex)   Build project understanding → EXPLORE.md"
 echo "  /mae-idea            Park an idea in IDEAS.md"
 echo "  /mae-specs   (msp)   Requirements, design (if UI), architecture — whatever is missing"
+echo "  /mae-mock            Clickable HTML screens to show a client"
 echo "  /mae-poc     (mpoc)  PoC spec: requirements + architecture + roadmap in one file"
 echo "  /mae-scope   (msc)   Scope change: classify, impact analysis, apply"
 echo "  /mae-plan    (mpl)   Create roadmap and tasks"

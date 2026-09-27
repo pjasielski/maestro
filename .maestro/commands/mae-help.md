@@ -41,9 +41,9 @@ First matching row wins. This table is also the auto-trigger heuristic for skill
 | Legacy layout (0) | `/mae-init upgrade` — moves docs to the 0.5.0 layout on confirmation | — (other rows read the new paths; they are unreliable until upgraded) |
 | Unanswered questions in the session (8) | Answer them — name the file | the command that asked them |
 | No explore artifacts, no session (1, 3) | `/mae-explore` | `/mae-init` if `maestro.toml` has no profile |
-| Explore artifacts; no REQUIREMENTS.md, no POC.md (3, 4) | `/mae-specs` — or `/mae-poc` if the build is one milestone and time-boxed | `/mae-explore doc` if there is no EXPLORE.md yet |
+| Explore artifacts; no REQUIREMENTS.md, no POC.md (3, 4) | `/mae-specs` — or `/mae-poc` if the build is one milestone and time-boxed | `/mae-explore doc` if there is no EXPLORE.md yet; `/mae-mock` if the project has a UI |
 | Reference newer than requirements (10) | `/mae-scope` | `/mae-explore {file}` when the new material is a whole area |
-| REQUIREMENTS.md, no ARCHITECTURE.md (4, 5) | `/mae-specs` (builds the missing parts) | `/mae-review requirements` |
+| REQUIREMENTS.md, no ARCHITECTURE.md (4, 5) | `/mae-specs` (builds the missing parts) | `/mae-review requirements`; `/mae-mock` if the project has a UI and no `mock/` |
 | ARCHITECTURE.md, no ROADMAP.md (5, 6) | `/mae-plan` | `/mae-review architecture`; `/mae-design` if the project has a UI and no DESIGN.md |
 | POC.md, todo rows in § 4 (4, 6, 7) | `/mae-do poc`, or `/mae-do M01.{NN}` for the next one | `/mae-review` |
 | ROADMAP.md with ☐ todo (6, 7) | `/mae-do {next unblocked id}` | `/mae-review`, `/status tasks` |
@@ -75,7 +75,7 @@ ALSO    /mae-review           {why it fits now}
 Every command, grouped, one line each — command, alias, what it produces:
 
 - **Explore** — `mae-explore` (`mex`) → EXPLORE.md + questions · `mae-idea` → a row in IDEAS.md · `mae-poc` (`mpoc`) → one-file POC.md
-- **Specify** — `mae-specs` (`msp`) → the missing spec parts · `mae-requirements` (`mrq`) → REQUIREMENTS.md · `mae-design` (`mds`) → DESIGN.md, visual system · `mae-architecture` (`mar`) → ARCHITECTURE.md · `mae-scope` (`msc`) → scope-delta, applied on confirmation
+- **Specify** — `mae-specs` (`msp`) → the missing spec parts · `mae-requirements` (`mrq`) → REQUIREMENTS.md · `mae-design` (`mds`) → DESIGN.md, visual system · `mae-architecture` (`mar`) → ARCHITECTURE.md · `mae-mock` → clickable HTML screens in `mock/` · `mae-scope` (`msc`) → scope-delta, applied on confirmation
 - **Plan and build** — `mae-plan` (`mpl`) → ROADMAP.md + tasks · `mae-do` (`mdo`) → executed task + report · `mae-review` (`mrv`) → findings
 - **Session** — `status` → where things stand · `decide` → DECISIONS.md row · `sync` → HANDOFF and ROADMAP updated · `md` → saves the last response · `mae-init` → profile, or `upgrade` for the old layout
 - **Chaining** — `mae-run`, `mae-yolo`, each with its one-line warning from its command file
