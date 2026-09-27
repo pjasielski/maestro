@@ -1,15 +1,24 @@
 # HANDOFF.md — Maestro Framework
 
 ## Current Status
-- **Phase:** bootstrap → packaging (v0.4.0 released; v0.4.2 behavior patch pending; M04 skill-first started)
-- **Last worked on:** 2026-09-19 — `/mae-help`, `/mae-run` + `/mae-yolo`, `/mae-scope`, dependency graph (session 019-m04-m05-commands, Fable); adversarial review of the instruction set (session 018-framework-review)
-- **Active branch:** `feat/v0.4.2-scope`
-- **Version:** v0.4.0 (Milestone M03 complete — PoC workflow)
-- **Done this sprint:** M04.02 ✅, **M04.15 ✅, M05.11 ✅, M05.07 ✅, M04.18 ✅** (report: `.sessions/019-m04-m05-commands/01-implementation-report.md`). M04.01 ⏳ blocked — agent work complete; two criteria wait on a keyboard test, procedure in the task Notes, eval kit in `docs/07-test/skill-trigger-eval/`. M04.17 not built — Q7 still "maybe".
-- **Next task:** (user) M04.01 keyboard test, answer Q7 and Q8. Then write the M04.13 task file — P42.03 and P42.05 have criteria that point at it. Then the Opus tier per `maestro-hq/.sessions/22-new-scope/05-fable-tiered-scope.md` §4: O1 `P42.02` → P42.03 → P42.01 → P42.04 → P42.05 → P42.06 → clean-install test (now touches four installer loops) → tag v0.4.2. Review findings to fold in on the way: `.sessions/018-framework-review/01-findings.md` § Fix first (D30 read path into the loading table; Synced/Supersedes columns on DECISIONS.md; `mae-plan` prerequisites for PoC graduation — suggest P42.07).
+- **Phase:** packaging — v0.5.0 at `rc.1`, waiting for the user's test before `main`
+- **Last worked on:** 2026-09-27 — v0.5.0 blocks 0–5 per `maestro-hq/.sessions/22-new-scope/18-implementation-brief.md` (Opus, one session)
+- **Active branch:** `release/v0.5.0`. Tags `v0.5.0-alpha.0` (baseline) … `alpha.4`, `rc.1`; `dev` fast-forwarded. Rollback = install from a tag (`MAESTRO_BRANCH=v0.5.0-alpha.N`)
+- **Version:** v0.4.0 released; v0.5.0 unreleased (CHANGELOG `[0.5.0]`)
+- **Done in v0.5.0:** P42.01 git policy, P42.02 response_capture, P42.05 quickstart + processes, P42.06 question pre-fill, P42.07 PoC graduation, P42.08 installer fixes, P42.09 layout & commands, P42.10 `/mae-idea`, P42.11 `/mae-pr`, M04.03 five skills (+ minimal M04.06 placement), M05.07a `--direct`, M05.09 `/mae-mock`; decisions D34–D45
+- **Next task:** (user) test `rc.1` (fresh install + one real project), merge `release/v0.5.0` to `main`, tag `v0.5.0`. Then delete stale branches (`milestone/m03-skill-first`, `milestone/m04-poc`, `feat/new-installation`); back up `maestro/.sessions/` and drop the two stashes
+- **Not in this release:** P42.03 artifact consolidation + `/md` two modes · P42.04 append-only state + review 018 fix-first 1–2 (DECISIONS.md in the Design/Implementation/Review loading rows; Synced/Supersedes columns) · M04.13 definition of done (task file only) · M05.07a delta-file marks (not approved) · M04.17 `/mae-approve` (Q7) · M05.06/M05.08 canonical files + ADR folder · M05.13 parallel view · plugin install / `maestro` CLI · YAML workflows
+- **Known gaps:** trigger evals (CONVENTIONS §9.3–4) not run for the five skills; skill placement on Windows untested; `mae-explore` SKILL.md is 240 lines (target 150); upgraded projects keep their own CLAUDE.md, including the old "< 80 words" line, because the installer never edits it — remove that line by hand
 - **Where state is read:** the state probe and state table live in `.maestro/commands/mae-help.md`; `/status`, `/mae-yolo` and CONVENTIONS §3 point at it. Change it there only.
-- **Sprint 2026-09-14:** allocation by model tier (Fable → design-heavy new commands; Opus → v0.4.2 + conversion; Sonnet → mechanical) in `maestro-hq/.sessions/22-new-scope/05-fable-tiered-scope.md`, reallocated by `06-fable-reallocation.md` (Fable: Hub requirements, F2/F3, review; everything else Opus).
-- **Blockers:** M04.01 keyboard test. Q8 (utility-skill `mae-` prefix) should be answered before M04.03 converts the utility commands. Decision-gated: **M05.12** (design/architecture naming) needs its own session before M05.09 `/mae-mock` can be specced.
+- **Blockers:** none. Q7 (`/mae-approve`) still open
+
+## Recent Changes (2026-09-27) — v0.5.0 (session 22-new-scope, maestro-hq)
+
+- **Layout (D34–D38):** `docs/02-specs/` (REQUIREMENTS, DESIGN = visual, ARCHITECTURE, `mock/`, or POC.md), `03-plan/`, on-demand `04`–`08`; `EXPLORE.md` synthesis; main-file split rule. Legacy projects: installer prints a hint, `/mae-init upgrade` migrates on confirmation
+- **Commands:** `/mae-specs` routes over `/mae-requirements`, `/mae-design` (visual, new meaning of `mds`), `/mae-architecture`; `/mae-req` is a one-release pointer. New: `/mae-mock`, `/mae-idea`, `/mae-pr`, `/mae-scope --direct`. `mae-explore-lite` removed
+- **Skills (D40, D41):** `mae-explore`, `mae-specs` (part protocols in `references/`), `mae-scope`, `mae-idea`, `mae-mock`; one copy each; installer copies them into `.claude/skills/` and `.agents/skills/`
+- **Behaviour:** `[git]` policy and commit convention in MAESTRO.md § Git Policy; work-product rule + `response_capture`; explore questions grouped Business / Technical with consequence-based pre-fill; `/mae-plan` plans from POC.md or requirements alone; `/mae-do` keeps a verified README quickstart and reports running processes
+- **Installer:** documented upgrade now downloads; missing `maestro.toml` keys appended after the section's last key; `issue.md` installed; old command copies and the old `design.md` template migrated. Clean-install test green from the pushed branch (fresh interactive, `--quick`, upgrade from v0.4.0, re-run without `--force`, `/mae-help` smoke); `/mae-mock` run end-to-end on a scratch project
 
 ## Recent Changes (2026-09-19) — Sessions 018 + 019
 

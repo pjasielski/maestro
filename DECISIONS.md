@@ -35,3 +35,15 @@
 | D31 | 2026-08-21 | 22 | ADRs are flat and chronological, never foldered by milestone; milestone recorded as frontmatter. A decision made during a milestone usually outlives it | confirmed |
 | D32 | 2026-08-21 | 22 | Cumulative commands rejected — chaining (`/mae-run a..b`, `/mae-yolo [stop-phase]`) covers the fast path. `/mae-until` explicitly not built: "until" implies a stopping condition the framework cannot evaluate | confirmed |
 | D33 | 2026-08-21 | 22 | Command surface grows, but discovery is solved by `/mae-help` showing 3 relevant commands rather than 11. Fewer commands visible ≠ fewer commands | confirmed |
+| D34 | 2026-09-27 | 22 | `ARCHITECTURE.md` = how it's built (`/mae-architecture`, `mar`); `DESIGN.md` = the visual system in the DESIGN.md format (`/mae-design`, `mds`). Resolves Q6 and M05.12 | confirmed |
+| D35 | 2026-09-27 | 22 | One `docs/02-specs/` folder for everything the client signs or reads: REQUIREMENTS, DESIGN, ARCHITECTURE, `mock/`, or POC.md | confirmed |
+| D36 | 2026-09-27 | 22 | Renumber: `04-plan` → `03-plan`, on-demand folders `04-implementation` … `08-maintenance`. A phase command is named after its folder | confirmed |
+| D37 | 2026-09-27 | 22 | `docs/01-explore/EXPLORE.md` is the fixed explore synthesis; downstream commands read it and never individual explore artifacts | confirmed |
+| D38 | 2026-09-27 | 22 | Main-file rule: one UPPERCASE main file per artifact at a fixed path; sub-files in a lowercase sibling folder split by the unit that changes independently; commands open sub-files only when the task touches them | confirmed |
+| D39 | 2026-09-27 | 22 | `/mae-specs` routes over the part commands (missing + relevant, one question round, one review). Refines D32: routing over separate artifacts is allowed; merged artifacts are still rejected, POC.md excepted | confirmed |
+| D40 | 2026-09-27 | 22 | Five skills (`mae-explore`, `mae-specs`, `mae-scope`, `mae-idea`, `mae-mock`), everything else a command. Supersedes "every command becomes a skill" (11 §A6). Q8: skills carry the `mae-` prefix | confirmed |
+| D41 | 2026-09-27 | 22 | A skill wins over a same-name command (M04.01 keyboard test) → one copy of each protocol; the command copy is deleted, aliases point at the skill | confirmed |
+| D42 | 2026-09-27 | 22 | `/mae-idea` parks by default and offers explore; it never asks. Scope = change to what was agreed (needs a decision); idea = maybe later | confirmed |
+| D43 | 2026-09-27 | 22 | PR description written as markdown by default, nothing pushed; `/mae-pr` is the explicit push + **draft** PR. Any PR the agent opens is a draft and pushes that branch only | confirmed |
+| D44 | 2026-09-27 | 22 | Versioning: one minor version per milestone; `alpha.N` tag per implementation block; `rc` before `main`; the user merges to `main` and tags the release | confirmed |
+| D45 | 2026-09-27 | 22 | Ask when unsure: if a missing input would change the output and can't be read or inferred, ask, batched into one round; otherwise proceed and state the assumption. `mae-explore-lite` dropped (pre-fill makes full explore cheap) | confirmed |

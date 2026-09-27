@@ -1,8 +1,8 @@
 # ROADMAP — Maestro Framework
 
-**Version:** v0.4.0 (current release — tags v0.1.0 / v0.2.0 / v0.3.0 / v0.4.0 match CHANGELOG)
-**Next release:** v0.4.2 (behavior patch — see below), then v0.5.0 (Milestone M04 — skill-first architecture)
-**Updated:** 2026-08-21
+**Version:** v0.4.0 released; v0.5.0 at `rc.1` on `release/v0.5.0` (the v0.4.2 patch items, the layout change and five skills, released together — D44)
+**Next release:** v0.5.0 after the user merges to `main`
+**Updated:** 2026-09-27
 **Sources:** Sessions 005, 006, 009, 010, 012, 014 (competition), 015 (skills), 017 (interview — PoC field test), 018 (reconciliation), 22-new-scope (developer critique)
 **Note:** Renumbered 2026-07-18 to unified IDs (D23): `M{MM}.{NN}`, identical in ROADMAP, task filenames (`M{MM}.{NN}-{slug}.md`), and task titles.
 **Note:** Renumbered again 2026-08-03 — see "Renumbering 2026-08-03" at the foot of this file. PoC workflow shipped early as M03/v0.4.0; skills moved to M04 and everything between shifted by one. Session notes dated before 2026-08-03 use the old numbering.
@@ -55,7 +55,7 @@ Time-boxed delivery track: one spec file instead of three, plus `docs/00-referen
 
 ---
 
-## Patch v0.4.2: Behavior Fixes from Developer Critique — ← NEXT · branch `feat/v0.4.2-scope`
+## v0.5.0 (was patch v0.4.2): Behavior Fixes, Layout and Commands — branch `release/v0.5.0`
 
 Six small behavior changes to command *content*, shipped before the skill conversion so M04 converts final behavior rather than converting twice. All items are S. Source: session 22-new-scope, driven by critique from two external developers.
 
@@ -153,7 +153,7 @@ Canonical docs stay current transactionally (D19, D20, D21).
 | M05.09 | **`/mae-mock` — standalone HTML mockups, self-contained, `_screens.md` index mapping screens to requirements; one destination `02-specs/mock/`; born as a skill** | P1 | M | P42.09, M04.03 | ✅ done | [M05.09](tasks/M05.09-mae-mock.md) | 22 §7, hq 22/11 §A5, 15 §5 |
 | M05.10 | **`/mae-approve` full: frontmatter approval stamp; approved sections are never silently regenerated — conflict flagged instead** | P2 | S | M04.17, M05.01 | ☐ todo | — | 22 §8 |
 | M05.11 | **`/mae-run {a}..{b}` chaining + `->` syntax + `/mae-yolo [stop-phase]`: one question round at the front, one review at the end; never skips explore; commits per task** | P1 | M | P42.01 (soft) | ✅ done | [M05.11](tasks/M05.11-run-chaining-yolo.md) | 22 §2 |
-| M05.12 | **⚠️ DECISION-GATED — design/architecture naming + phase placement.** Needs its own session before any task spec exists. `/mae-arch` as primary with `/mae-design` alias (research: Anthropic shipped `frontend-design`, not `design`; Kiro/spec-kit keep `design.md` for architecture). Artifact names stay. Decide before M05.09 | P1 | S | — | ⏳ blocked (needs decision session) | — | 22 §7 |
+| M05.12 | ~~**⚠️ DECISION-GATED — design/architecture naming + phase placement.**~~ Decided: D34 (`ARCHITECTURE.md` + `/mae-architecture`; `DESIGN.md` = visual), D35 (`02-specs/`) | P1 | S | — | ✅ done | — | 22 §7, hq 22/15 |
 | M05.13 | **Parallel-work view: ready-now vs. blocked, with file-overlap conflict warnings derived from task acceptance criteria** (promoted from M10 — 8-person team test upcoming) | P2 | M | M04.18 | ☐ todo | — | 22 §5 |
 
 **Done when:** Shipping a change updates canonical docs as part of /sync; drift is reported, not noticed; a mid-project scope addition lands in every canonical file without hand-editing; the root holds one tracking file instead of four.
