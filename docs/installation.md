@@ -17,15 +17,94 @@ You need:
 
 | I am… | Best option |
 |-------|-------------|
-| Not comfortable with terminals | [Option A — Browser Setup Wizard](#option-a--browser-setup-wizard) |
-| Comfortable with a terminal | [Option B — One-Line Install](#option-b--one-line-install) |
-| A developer who wants full control | [Option C — Manual Install](#option-c--manual-install) |
+| Anyone with a terminal (recommended) | [Option A — One-Line Install](#option-a--one-line-install) |
+| A developer who wants full control | [Option B — Manual Install](#option-b--manual-install) |
+| Not comfortable with terminals | [Option C — Browser Setup Wizard](#option-c--browser-setup-wizard-frozen) (frozen) |
 
 ---
 
-## Option A — Browser Setup Wizard
+## Option A — One-Line Install
 
-The easiest option. Opens a form in your web browser — no terminal required.
+Recommended.
+
+### Step 1 — Navigate to your project
+
+```bash
+cd /path/to/your-project
+```
+
+### Step 2 — Run the installer
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
+```
+
+The installer asks five questions (session visibility, AI tools, question style, when to commit, which responses to save as files). Answer each and press Enter.
+
+**Skip the questions (use defaults):**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash -s -- . --quick
+```
+
+Defaults: all adapters, sessions committed, async questions, commit per task (never push), files for work products only.
+
+**Force reinstall (overwrite all framework files):**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash -s -- . --force
+```
+
+Replaces MAESTRO.md, commands, templates, and adapters. Project files (HANDOFF.md, DECISIONS.md, CLAUDE.md) are preserved; `maestro.toml` keeps every existing key and gains keys added since your install. Without `--force`, customised templates are also kept.
+
+**Upgrading from before v0.5.0:** the installer never moves your docs. It prints `Old layout found` when `docs/02-requirements/`, `02-poc/`, `03-design/` or `04-plan/` hold files; then run `/mae-init upgrade` in your agent, which shows the moves and link rewrites and commits once after you confirm.
+
+**Install from a specific branch:**
+
+```bash
+MAESTRO_BRANCH=feat/my-branch bash -c \
+  'curl -fsSL "https://raw.githubusercontent.com/pjasielski/maestro/$MAESTRO_BRANCH/install.sh" | bash -s -- . --force'
+```
+
+A tag works the same way (`MAESTRO_BRANCH=v0.5.0-alpha.2`), which is also how you roll back.
+
+### Step 3 — Follow the printed instructions
+
+The installer prints tool-specific next steps when it finishes.
+
+---
+
+## Option B — Manual Install
+
+For developers who want to inspect or customise the files before installing.
+
+```bash
+git clone https://github.com/pjasielski/maestro.git /tmp/maestro
+/tmp/maestro/install.sh /path/to/your-project
+```
+
+Or install into the current directory:
+
+```bash
+git clone https://github.com/pjasielski/maestro.git /tmp/maestro
+/tmp/maestro/install.sh .
+```
+
+### Customising after install
+
+| File | What to edit |
+|------|-------------|
+| `CLAUDE.md` | Project description, stack, current phase |
+| `maestro.toml` | Session visibility, AI tools, question style, user profile |
+| `.maestro/templates/` | Document templates to match your team's standards |
+
+---
+
+## Option C — Browser Setup Wizard (frozen)
+
+> **Frozen at v0.4.0.** The wizard still works, but it does not ask the newer questions (when to commit, which responses to save). The installer fills those with defaults (`commit = "task"`, `response_capture = "artifacts"`); change them in `maestro.toml`. Prefer Option A.
+
+Opens a form in your web browser — no terminal required.
 
 ### Step 1 — Download the setup wizard
 
@@ -60,89 +139,12 @@ Your browser will show a confirmation with tool-specific next steps.
 
 ---
 
-## Option B — One-Line Install
-
-For people comfortable with a terminal.
-
-### Step 1 — Navigate to your project
-
-```bash
-cd /path/to/your-project
-```
-
-### Step 2 — Run the installer
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
-```
-
-The installer will ask three questions (session visibility, AI tools, question style). Answer each and press Enter.
-
-**Skip the questions (use defaults):**
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash -s -- . --quick
-```
-
-Defaults: all adapters, sessions committed, async questions.
-
-**Force reinstall (overwrite all framework files):**
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash -s -- . --force
-```
-
-Replaces MAESTRO.md, commands, templates, and adapters. Project files (HANDOFF.md, DECISIONS.md, CLAUDE.md) are preserved; `maestro.toml` keeps every existing key and gains keys added since your install. Without `--force`, customised templates are also kept.
-
-**Upgrading from before v0.5.0:** the installer never moves your docs. It prints `Old layout found` when `docs/02-requirements/`, `02-poc/`, `03-design/` or `04-plan/` hold files; then run `/mae-init upgrade` in your agent, which shows the moves and link rewrites and commits once after you confirm.
-
-**Install from a specific branch:**
-
-```bash
-MAESTRO_BRANCH=feat/my-branch bash -c \
-  'curl -fsSL "https://raw.githubusercontent.com/pjasielski/maestro/$MAESTRO_BRANCH/install.sh" | bash -s -- . --force'
-```
-
-A tag works the same way (`MAESTRO_BRANCH=v0.5.0-alpha.2`), which is also how you roll back.
-
-### Step 3 — Follow the printed instructions
-
-The installer prints tool-specific next steps when it finishes.
-
----
-
-## Option C — Manual Install
-
-For developers who want to inspect or customise the files before installing.
-
-```bash
-git clone https://github.com/pjasielski/maestro.git /tmp/maestro
-/tmp/maestro/install.sh /path/to/your-project
-```
-
-Or install into the current directory:
-
-```bash
-git clone https://github.com/pjasielski/maestro.git /tmp/maestro
-/tmp/maestro/install.sh .
-```
-
-### Customising after install
-
-| File | What to edit |
-|------|-------------|
-| `CLAUDE.md` | Project description, stack, current phase |
-| `maestro.toml` | Session visibility, AI tools, question style, user profile |
-| `.maestro/templates/` | Document templates to match your team's standards |
-
----
-
 ## After Installing — First Steps
 
 ### Claude Code
 
 1. Open a new Claude Code conversation in your project folder
-2. Type `/mae-explore`
+2. Type `/mae-help` — it names the one command to run now (usually `/mae-explore`)
 
 ### Cursor
 
@@ -165,14 +167,16 @@ git clone https://github.com/pjasielski/maestro.git /tmp/maestro
 your-project/
 ├── MAESTRO.md                        ← Framework rules (read by your AI tool)
 ├── CLAUDE.md                         ← Your project config — edit this
-├── maestro.toml                      ← Settings (sessions, tools, question style)
+├── maestro.toml                      ← Settings (sessions, tools, questions, [git], response_capture)
 ├── HANDOFF.md                        ← Project status — single source of truth
 ├── DECISIONS.md                      ← Decision log
 ├── OPEN_QUESTIONS.md                 ← Questions to resolve
 ├── WORKLOG.md                        ← Activity log
 │
+├── .maestro/skills/                  ← Skills the agent may offer (explore, specs, scope, idea, mock)
 ├── .maestro/commands/                ← Maestro command definitions
-├── .claude/commands/                 ← Claude Code integration (if selected)
+├── .claude/skills/, .claude/commands/ ← Claude Code integration (if selected)
+├── .agents/skills/                   ← Skills for Cursor and Codex (if selected)
 ├── .cursor/rules/                    ← Cursor integration (if selected)
 ├── .github/copilot-instructions.md   ← Copilot/Codex integration (if selected)
 │
@@ -180,13 +184,14 @@ your-project/
 │   ├── 00-reference/
 │   ├── 01-explore/
 │   ├── 02-specs/
-│   └── 03-plan/tasks/
+│   ├── 03-plan/tasks/
+│   └── 04-implementation/ … 08-maintenance/   (empty until needed)
 │
 ├── .sessions/                        ← Working notes (gitignored or committed)
 └── .maestro/templates/               ← Document templates
 ```
 
-Maestro **never overwrites** files that already exist. Re-running the installer is safe.
+Maestro **never overwrites** your files (HANDOFF, DECISIONS, CLAUDE.md, `maestro.toml` keys, customised templates). Re-running the installer is safe; it refreshes framework files and appends new config keys.
 
 ---
 
@@ -264,7 +269,7 @@ Keep `CLAUDE.md` if it contains your own project notes.
 ## Troubleshooting
 
 **"Command not found: curl"**
-Use [Option C — Manual Install](#option-c--manual-install).
+Use [Option B — Manual Install](#option-b--manual-install).
 
 **"Permission denied" when running install.sh**
 ```bash

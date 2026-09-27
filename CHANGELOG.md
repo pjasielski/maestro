@@ -10,12 +10,29 @@ All notable changes to the Maestro framework.
 - **`mds` / `/mae-design` changed meaning:** now the visual design system (`DESIGN.md`, DESIGN.md format), not architecture
 
 ### Added
-- `/mae-specs [part]` (`msp`) — builds the missing and relevant spec parts in one question round and one review
-- `docs/01-explore/EXPLORE.md` — the fixed explore synthesis; the only explore file downstream commands read
-- `/mae-pr` — pushes the current branch and opens a draft PR (compare-URL fallback); `/mae-do` offers it at milestone end
-- `[git]` policy (commit per task, never push by default, PR description as markdown) and `response_capture` (artifacts / minimal / all); upgrades append missing `maestro.toml` keys
-- Main-file rule for splitting large artifacts into lowercase sub-folders
+- `/mae-help` — state-aware "what now?": one suggestion from a cheap probe of what exists; `all` lists every command with what it produces
+- `/mae-specs [part]` (`msp`) — builds the missing and relevant spec parts (requirements, visual design if there's a UI, architecture) in one question round and one review
 - `/mae-mock` — self-contained, clickable HTML screens in `docs/02-specs/mock/` with `_screens.md` (screens → requirement IDs, `GAP:` lines read by `/mae-requirements` and `/mae-poc`)
+- `/mae-scope` (`msc`) — scope-change intake: client-sendable impact analysis, applied on confirmation; `--direct` applies additive changes straight away
+- `/mae-idea` — append-only idea inbox `docs/01-explore/IDEAS.md`; `/mae-explore I-NN` explores one; rejected scope lands there too
+- `/mae-pr` — pushes the current branch and opens a draft PR (compare-URL fallback); `/mae-do` offers it at milestone end
+- `/mae-run {a}..{b}` and `/mae-yolo [stop]` — chain phases with one question round and one review (documented, not advertised)
+- `/mae-init upgrade` — moves a pre-0.5.0 `docs/` layout after showing the plan
+- `docs/01-explore/EXPLORE.md` — the fixed explore synthesis; the only explore file downstream commands read
+- Skills: `mae-explore`, `mae-specs`, `mae-scope`, `mae-idea`, `mae-mock` are Agent Skills the agent may offer; everything else stays a command. One copy of each protocol
+- `[git]` policy (commit per task, never push by default, PR description as markdown, drafts only) and `response_capture` (artifacts / minimal / all) with the work-product rule; `maestro.local.toml` for personal settings
+- `/mae-do`: verified README `## Quickstart`; running processes reported with their stop command
+- Explore questions grouped Business / Technical with consequence-based pre-fill (`Pre-answered:` / `Pre-answered (assumed):` / `OPEN`) and checkbox question types
+- Main-file rule for splitting large artifacts into lowercase sub-folders; Mermaid dependency graph in ROADMAP.md (`/status --graph`)
+
+### Changed
+- `/mae-plan` plans from REQUIREMENTS.md alone or from POC.md (PoC graduation now works)
+- Installer: upgrades append missing `maestro.toml` keys and never change existing ones; the documented upgrade command now downloads instead of reinstalling the project's own files; `issue.md` template now installed; asks when to commit and which responses to save
+- Browser setup wizard frozen at v0.4.0 options; the one-line install is the recommended path
+
+### Removed
+- `/mae-explore-lite` — question pre-fill makes the full explore cheap enough
+- The "save every response over 80 words" rule
 
 ## [0.4.0] — 2026-08-03
 

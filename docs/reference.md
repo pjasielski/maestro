@@ -16,8 +16,8 @@
 5. [Delivery Commands](#5-delivery-commands)
 6. [Utility Commands](#6-utility-commands)
 7. [The Explore Phase](#7-the-explore-phase)
-8. [The PRD Phase](#8-the-prd-phase)
-9. [The Design Phase](#9-the-design-phase)
+8. [The Specs Phase](#8-the-specs-phase)
+9. [Mock and PoC](#9-mock-and-poc)
 10. [The Plan Phase](#10-the-plan-phase)
 11. [Execution & Review](#11-execution--review)
 12. [Sessions & Artifacts](#12-sessions--artifacts)
@@ -72,7 +72,7 @@ Ideas become questions. Questions become decisions. Decisions flow into canonica
 
 ### Flexible, Not Rigid
 
-Maestro provides tools, not gates. You choose which phases to use and in what order. Want to build a PoC before writing requirements? Go for it. Want to skip the PRD for a personal project? That's fine. The framework adapts.
+Maestro provides tools, not gates. You choose which phases to use and in what order. Want to build a PoC before writing requirements? Go for it. Want to skip the requirements for a personal project? That's fine. The framework adapts.
 
 ### The Agent Asks, Doesn't Assume
 
@@ -107,7 +107,7 @@ git clone https://github.com/pjasielski/maestro.git /tmp/maestro
 ```
 
 What install.sh does:
-1. Creates the folder structure (docs/, sessions/, notes/, templates/)
+1. Creates the folder structure (docs/, .sessions/, .maestro/)
 2. Copies MAESTRO.md, command files, and templates into your project
 3. Creates tracking files (HANDOFF.md, DECISIONS.md, etc.) — only if they don't exist
 4. Creates CLAUDE.md with a reference to MAESTRO.md — only if it doesn't exist
@@ -156,61 +156,33 @@ After installation, start a Claude Code conversation in your project. The agent:
 
 ```
 your-project/
-├── MAESTRO.md                   ← Framework instructions (don't edit)
+├── MAESTRO.md                   ← Framework rules (don't edit)
 ├── CLAUDE.md                    ← Your project config (edit this)
-├── maestro.toml                 ← Framework settings
-├── HANDOFF.md                   ← Project status & key decisions
-├── DECISIONS.md                 ← Decision audit trail
-├── OPEN_QUESTIONS.md            ← Questions needing answers
-├── WORKLOG.md                   ← Activity log
+├── maestro.toml                 ← Settings: sessions, tools, questions, [git], response_capture
+├── HANDOFF.md · DECISIONS.md · OPEN_QUESTIONS.md · WORKLOG.md
 │
-├── docs/                    ← Confirmed, canonical artifacts
-│   ├── 01-explore/              ← EXPLORE.md (synthesis), IDEAS.md, artifacts
-│   ├── 02-specs/                ← REQUIREMENTS.md, ARCHITECTURE.md, ARCHITECTURE.md, mock/ (or POC.md)
+├── docs/                        ← Confirmed, canonical artifacts
+│   ├── 00-reference/            ← Material you didn't write (read-only, authoritative on intent)
+│   ├── 01-explore/              ← EXPLORE.md (synthesis), IDEAS.md, explore artifacts
+│   ├── 02-specs/                ← REQUIREMENTS.md, DESIGN.md, ARCHITECTURE.md, mock/ (or POC.md)
 │   ├── 03-plan/                 ← ROADMAP.md + tasks/
-│   │   └── tasks/               ← Task files (individual tickets)
-│   ├── 04-implementation/       ← Implementation reports
-│   ├── 05-review/               ← Review reports (on demand)
-│   ├── 06-test/                 ← Test plans (on demand)
-│   ├── 07-deploy/               ← Deployment config (on demand)
-│   └── 08-maintenance/          ← Bugs & maintenance (on demand)
-│       └── issues/              ← Issue files (bug-001.md, debt-001.md)
+│   ├── 04-implementation/       ← Implementation reports (when needed)
+│   ├── 05-review/               ← Review reports (when needed)
+│   ├── 06-test/                 ← Test plans (when needed)
+│   ├── 07-deploy/               ← Deployment config (when needed)
+│   └── 08-maintenance/issues/   ← Bugs & maintenance (when needed)
 │
-├── sessions/                    ← Working material (per-session folders)
-│   ├── 001-project-start/
-│   │   ├── _summary.md          ← Session summary (auto-updated)
-│   │   └── 01_initial-scope.md  ← Numbered working artifacts
-│   └── 002-api-design/
-│       ├── _summary.md
-│       └── ...
-│
-├── notes/                       ← Raw ideas, parking lot
-│   └── ideas.md
-│
+├── .sessions/{NNN}-{name}/      ← Working material, one folder per session
+├── .maestro/skills/             ← mae-explore, mae-specs (+ references/), mae-scope, mae-idea, mae-mock
+├── .maestro/commands/           ← Everything else, one file per command
 ├── .maestro/templates/          ← Document templates (customizable)
-│   ├── task.md
-│   ├── summary.md
-│   ├── report.md
-│   ├── prd.md
-│   ├── sdd.md
-│   └── explore.md
-│
-├── .claude/commands/            ← Framework commands
-│   ├── mae-explore.md           ← Delivery commands (8)
-│   ├── mae-req.md
-│   ├── mae-design.md
-│   ├── mae-plan.md
-│   ├── mae-do.md
-│   ├── mae-review.md
-│   ├── mae-init.md
-│   ├── mae-checkpoint (removed — use sync).md
-│   ├── status.md                ← Utility commands (4)
-│   ├── decide.md
-│   ├── sync.md
-│   └── md.md
-│
-└── src/                         ← Source code (project-specific)
+├── .claude/skills/ · .claude/commands/   ← Claude Code (skills, wrappers, aliases)
+├── .cursor/rules/ · .cursor/commands/    ← Cursor
+├── .agents/skills/              ← Skills for Cursor and Codex
+└── .github/copilot-instructions.md       ← Copilot / Codex
 ```
+
+**Main-file rule:** each artifact has one UPPERCASE main file at a fixed path. When it passes its size limit it splits into a lowercase sibling folder (`ARCHITECTURE.md` + `architecture/{component}.md`); the main file keeps a summary and link per moved section, and commands open a sub-file only when a task touches it.
 
 ### File Purposes
 
@@ -229,97 +201,36 @@ your-project/
 | Zone | Editing | Purpose |
 |------|---------|---------|
 | **docs/** | Review required | Canonical, confirmed artifacts |
-| **sessions/** | Free | Working material, drafts, analysis |
-| **notes/** | Free | Ideas, parking lot |
+| **.sessions/** | Free | Working material, drafts, analysis |
+| **docs/01-explore/IDEAS.md** | Append-only | Parked ideas (`/mae-idea`) |
 | **.maestro/templates/** | User customizable | Document structure templates |
 
 ---
 
 ## 5. Delivery Commands
 
-### /mae-init — Initialize
+Skills (the agent may offer them; they write nothing until you confirm, except `mae-explore`, which announces itself): `mae-explore`, `mae-specs`, `mae-scope`, `mae-idea`, `mae-mock`. Everything else is a command that runs when typed.
 
-Sets up project structure and configuration. Run once at project start.
+| Command | Alias | Does | Writes |
+|---|---|---|---|
+| `/mae-help [all\|{command}]` | — | What to run now, from a cheap probe of what exists | nothing |
+| `/mae-init [upgrade]` | — | Profile setup; `upgrade` moves a pre-0.5.0 layout after confirmation | `maestro.toml` |
+| `/mae-explore [topic\|file\|I-NN\|ask\|doc]` | `mex` | Build understanding; questions grouped Business / Technical, pre-filled only where a wrong guess is cheap | session; `doc` → `EXPLORE.md` |
+| `/mae-idea "…"` | — | Park a maybe-later; never asks | row in `IDEAS.md` |
+| `/mae-specs [part]` | `msp` | Routes to the parts below; bare = the missing and relevant ones, one question round, one review | `docs/02-specs/` |
+| `/mae-requirements` | `mrq` | What and why | `REQUIREMENTS.md` |
+| `/mae-design` | `mds` | Visual system (DESIGN.md format: YAML tokens + prose); from an approved mock, brand assets, or asks | `DESIGN.md` |
+| `/mae-architecture [component\|file]` | `mar` | How it's built; technical questionnaire first | `ARCHITECTURE.md`, `architecture/{component}.md` |
+| `/mae-mock [screens\|{screen}]` | — | Self-contained HTML screens; screen list confirmed in chat first | `mock/` + `_screens.md` |
+| `/mae-poc [--tasks]` | `mpoc` | One-file spec: requirements + architecture + roadmap | `POC.md` |
+| `/mae-scope ["…"\|file] [--direct]` | `msc` | Impact analysis of a change; applied on confirmation (`--direct`: additive ones straight away) | `scope-delta.md` → specs, roadmap; rejected → `IDEAS.md` |
+| `/mae-plan [milestone]` | `mpl` | Roadmap and task files; plans from ARCHITECTURE.md, REQUIREMENTS.md alone, or POC.md (graduation) | `docs/03-plan/` |
+| `/mae-do [id\|milestone\|poc\|"…"]` | `mdo` | Execute; commits per task, verified README quickstart, reports running processes | code, status, report when substantial |
+| `/mae-review [path\|artifact]` | `mrv` | Findings by severity | report |
+| `/mae-pr [milestone]` | — | Push the current branch, open a draft PR (only when typed) | remote |
+| `/mae-run {a}..{b}`, `/mae-yolo [stop]` | — | Chain phases: one question round, one review, per-task commits (documented, not advertised) | as the phases |
 
-- Creates folder structure if missing
-- Creates tracking files if missing
-- Configures mode (solo/team) and optional user profile
-- Detects if framework is already initialized
-
-### /mae-explore — Build Understanding
-
-The most sophisticated command. Adapts to project state and produces the most useful artifact.
-
-**Modes:**
-- No arguments → smart default (detects state, produces most useful artifact)
-- `{topic}` → targeted analysis
-- `{file path}` → analyze/summarize a document
-- `ask` → generate questions for the user or external audiences
-- `ask {audience}` → questions for: user, client, team, technical
-- `doc` → synthesize final explore report from all artifacts
-
-**Key behaviors:**
-- On first explore: scans for existing resources (docs/, data/, src/), asks before reading
-- Every artifact includes questions to deepen understanding
-- Tracks readiness signals (scope, coverage, gaps) and updates `_summary.md`
-- Final report uses `.maestro/templates/explore.md`
-
-### /mae-req — Formalize Requirements
-
-Generates PRD from explore artifacts using `.maestro/templates/requirements.md`.
-
-**Key behaviors:**
-- Prioritizes reading the final explore report over individual artifacts
-- Warns if explore report has unresolved gaps
-- Populates user stories (Section 6) with concrete stories and acceptance criteria
-- Saves draft to session, offers promotion to `docs/02-specs/REQUIREMENTS.md`
-
-### /mae-design — Technical Architecture
-
-Creates SDD from PRD + explore report using `.maestro/templates/architecture.md`.
-
-**Modes:**
-- No arguments → full solution design
-- `{component}` → detailed component spec
-- `{file path}` → file-level implementation spec
-
-**Key behaviors:**
-- Reads both PRD and explore report (technical sections)
-- Presents technical questionnaire before generating SDD (for decisions it can't make)
-- Cross-phase awareness: suggests running `/mae-explore` when information is missing
-- Saves draft to session, offers promotion to `docs/02-specs/ARCHITECTURE.md`
-
-### /mae-plan — Break Into Tasks
-
-Reads SDD and creates task files in `docs/03-plan/tasks/`.
-
-**Exception:** Tasks go directly to docs/ (not sessions-first) because they're immediately actionable.
-
-### /mae-do — Execute Work
-
-Universal task executor. Handles code, docs, config, PoCs.
-
-**Modes:**
-- No arguments → smart suggestion (what to work on next)
-- `task-{NNN}` → execute a specific planned task
-- `"{description}"` → ad-hoc task
-
-**PoC support:** Can be used at any point to build prototypes, even before requirements are defined. Encouraged for validating direction early.
-
-### /mae-review — Review Work
-
-Reviews code or delivery artifacts against the SDD and PRD.
-
-### /mae-checkpoint (removed — use sync) — Save Snapshot
-
-Creates named snapshots of project state for progress tracking.
-
-**Modes:**
-- `{name}` → save a checkpoint
-- `list` → show all checkpoints
-- `compare {a} {b}` → compare two checkpoints
-
----
+`/mae-req` is the pre-0.5.0 name of `/mae-requirements`, kept as a pointer for one release. `mds` used to mean architecture; it now means visual design.
 
 ## 6. Utility Commands
 
@@ -349,116 +260,51 @@ Saves the current response to a numbered markdown file in the session folder.
 
 ## 7. The Explore Phase
 
-### Purpose
+Build shared understanding before anything is specified. The first explore reads `docs/00-reference/` (authoritative on intent), lists other resources and asks before reading large ones. Every artifact ends with questions.
 
-Build mutual understanding between the user and the AI agent. Understand the problem, the business context, the technical landscape, the stakeholders, and the risks.
+**Questions.** Grouped Business / Technical, tagged `blocking` / `important` / `clarifying`. Pre-fill is decided by what a wrong guess costs: cheap to correct → `Pre-answered:`; changes a value but the build stays valid → `Pre-answered (assumed):`; wasted work, or any preference, priority, budget or business rule → `OPEN` (business questions: `OPEN — ask the client`). Types: confirm (`- [ ] Pre-answered: …`), multiple choice (one option labelled *(working default)*; ticking answers it), open (Response + separate working default). The header counts pre-answered vs open.
 
-### How It Works
+**Synthesis.** `/mae-explore doc` writes `docs/01-explore/EXPLORE.md`, the only explore file downstream commands read. If artifacts exist without it, they ask once whether to run `doc` first.
 
-1. **First explore:** Agent scans the project for existing resources. Reports what it finds. Asks which resources to include. Produces initial scope analysis with questions.
-
-2. **Iterative exploration:** Each subsequent explore reads existing artifacts, assesses readiness (what's covered, what's missing), and produces the most useful next artifact. This could be a deeper analysis, a gap analysis, a risk assessment, or more questions.
-
-3. **Ask mode:** Explicit question generation. Produces structured question documents with space for async responses. The user or client fills in answers in the file. Next explore reads the answers and incorporates them.
-
-4. **Final report:** `explore doc` synthesizes all exploration artifacts into a structured report using `.maestro/templates/explore.md`. This report becomes the input for the PRD phase.
-
-### Readiness Signals
-
-The agent evaluates exploration readiness based on:
-- Is the scope defined (business + technical overview)?
-- Are key questions resolved?
-- Do artifacts cover business, technical, AND stakeholder angles?
-- Are blocking gaps unresolved?
-- Has the user indicated readiness?
-
-After each explore artifact, the agent updates a readiness assessment in `_summary.md`.
-
-### Artifacts
-
-Explore artifacts are free-form — no template required for working artifacts. Only the final report (`doc`) uses the template. Artifacts are numbered files in the session folder.
+**Ideas.** `/mae-idea` appends `I-NN | date | idea | source | status` to `IDEAS.md`; `/mae-explore I-NN` explores one.
 
 ---
 
-## 8. The PRD Phase
+## 8. The Specs Phase
 
-### Purpose
+Three separate artifacts in `docs/02-specs/`, each with its own protocol (in `.maestro/skills/mae-specs/references/`):
 
-Formalize what you're building. Transform the understanding from exploration into structured product requirements.
+| Artifact | Answers | Signed by | Made by |
+|---|---|---|---|
+| `REQUIREMENTS.md` | What must it do, and why | Client | `/mae-requirements` |
+| `DESIGN.md` | Visual rules: tokens, type, components | Client may; designer or team usually | `/mae-design` |
+| `ARCHITECTURE.md` | How it's built | Team | `/mae-architecture` |
 
-### Input Priority
-
-1. Final explore report (primary — the synthesis)
-2. Individual explore artifacts (fallback if no report)
-3. DECISIONS.md, OPEN_QUESTIONS.md
-4. maestro.toml (project context)
-5. .maestro/templates/requirements.md (structure)
-
-The PRD does NOT read raw sources (docs/, data/). That's explore's job. The explore report should contain everything the PRD needs.
-
-### Template Structure
-
-7 core sections: Problem Statement, Users & Personas, Goals & Success Criteria, Requirements, Scope, Epics & User Stories, Risks.
-
-3 optional sections: Constraints, Release Strategy, Glossary.
-
-User stories follow the standard format: "As a {persona}, I want {action}, so that {benefit}" with acceptance criteria.
+`/mae-specs` routes: bare, it builds requirements if missing, then design if missing and the project has a UI, then architecture if missing (asking first only if you don't seem to be a developer). When all exist it points to `/mae-scope`. Drafts go to the session and are promoted after review. Requirements read `EXPLORE.md` and mock `GAP:` lines; architecture runs a technical questionnaire (Must answer / Recommend / Your call) before writing.
 
 ---
 
-## 9. The Design Phase
+## 9. Mock and PoC
 
-### Purpose
+**`/mae-mock`** writes clickable HTML to `docs/02-specs/mock/`: `index.html`, one file per screen, `_screens.md` mapping screens to requirement IDs. Self-contained (no external requests), sendable to a client. Reads function from REQUIREMENTS → POC → EXPLORE and look from DESIGN.md → brand assets → a neutral default recorded in `_screens.md`. It never edits requirements; gaps become `GAP:` lines. An approved mock is the source `/mae-design` extracts DESIGN.md from.
 
-Define how to build it. Translate product requirements into technical architecture.
-
-### Input Priority
-
-1. PRD (requirements — what to build)
-2. Explore report (technical context — current state, constraints, integrations)
-3. DECISIONS.md (confirmed technical decisions)
-4. maestro.toml (user profile for adaptation)
-5. .maestro/templates/architecture.md (structure)
-
-### Technical Questionnaire
-
-Before generating the SDD, the agent identifies technical decisions it can't make from available information. These are categorized:
-
-- **Must Answer:** Blocks the architecture. User must decide.
-- **Recommend:** Agent has a suggestion. User confirms or overrides.
-- **Your Call:** Multiple valid approaches. Agent presents trade-offs.
-
-### Cross-Phase Awareness
-
-If the design reveals missing information, the agent suggests returning to explore: "This design decision requires information we don't have. Consider running `/mae-explore {topic}`."
-
-### Three Levels
-
-1. **Full solution** (no args) — system architecture, components, tech stack, data model
-2. **Component** (`{name}`) — detailed spec for one component
-3. **File-level** (`{path}`) — implementation spec for a specific file
+**`/mae-poc`** writes one file, `docs/02-specs/POC.md` (scope, requirements, architecture, roadmap, risks & assumptions, current state), asks only blocking questions and caps at 4,000 words. `/mae-do poc` executes it; `/mae-plan` graduates it to M02 onward.
 
 ---
 
 ## 10. The Plan Phase
 
-Creates task files from the SDD. Each task is a markdown file in `docs/03-plan/tasks/` — your Jira replacement.
-
-Tasks have: description, acceptance criteria, referenced files, effort estimate, dependencies, status (todo → in-progress → done).
+`/mae-plan` writes `docs/03-plan/ROADMAP.md` (milestones, dependency graph) and task files `docs/03-plan/tasks/M{MM}.{NN}-{slug}.md`, directly. It plans from ARCHITECTURE.md; from REQUIREMENTS.md alone (architecture work flagged `GAP:`); or from POC.md (graduation — the PoC is M01).
 
 ---
 
 ## 11. Execution & Review
 
-### /mae-do
+**`/mae-do`** executes one task, a milestone (stopping on the first failure), or ad-hoc work. Per MAESTRO.md § Git Policy it commits after each task (`{type}({task-id}): {title}` + `Task:` trailer), never pushes by default, asks once per milestone about a branch, and writes the PR description at milestone end. For runnable projects it keeps a verified `## Quickstart` in the README and reports any process it leaves running (port, pid, stop command).
 
-Executes tasks. Can work from planned tasks or ad-hoc descriptions. Loads minimal context — only the files needed for the current task.
+**`/mae-review`** reviews code or an artifact (`requirements`, `design`, `architecture`) and flags `DRIFT:` / `CONSISTENCY:`.
 
-PoC/prototype tasks can be run at any point in the delivery process, even before requirements are defined.
-
-### /mae-review
-
-Reviews code or artifacts. Can review against the SDD, PRD, or general quality standards.
+**`/mae-pr`** pushes the current branch and opens a draft PR, or prints the compare URL.
 
 ---
 
@@ -490,7 +336,7 @@ Files in sessions use `NN_kebab-case-description.md` format. Sequential numberin
 ### The Pipeline
 
 ```
-notes/ideas.md  →  OPEN_QUESTIONS.md  →  DECISIONS.md  →  Canonical files
+IDEAS.md / chat  →  OPEN_QUESTIONS.md  →  DECISIONS.md  →  Canonical files
 "what if?"         "should we?"           "we decided"     (via /sync)
 ```
 
@@ -510,22 +356,20 @@ The agent auto-updates `_summary.md` when decisions are confirmed, proposed, par
 
 ## 14. Templates
 
-All templates use the **core + optional** pattern:
-- Core sections are always included
-- Optional sections (marked with HTML comments) are included when relevant
-- Empty optional sections are omitted, not left as placeholders
+| Template | Produces |
+|---|---|
+| `requirements.md` | `REQUIREMENTS.md` |
+| `design.md` | `DESIGN.md` — visual system, DESIGN.md format (google-labs-code/design.md) |
+| `architecture.md` | `ARCHITECTURE.md` |
+| `poc.md` | `POC.md` |
+| `screens.md` | `mock/_screens.md` |
+| `ideas.md` | `IDEAS.md` |
+| `roadmap.md` · `task.md` | `ROADMAP.md`, task files |
+| `explore.md` · `review.md` · `report.md` · `scope-delta.md` | Session artifacts |
+| `summary.md` | `_summary.md` |
+| `issue.md` | `docs/08-maintenance/issues/` |
 
-| Template | Purpose | Core | Optional |
-|----------|---------|------|----------|
-| `prd.md` | Product Requirements | 7 sections | 3 (constraints, release, glossary) |
-| `sdd.md` | Solution Design | 6 sections | 5 (AI/ML, integrations, infra, security, performance) |
-| `explore.md` | Explore Report | 6 sections | 4 (stakeholders, change readiness, data, AI feasibility) |
-| `task.md` | Task File | 4 fields | — |
-| `summary.md` | Session Summary | 4 sections | — |
-| `report.md` | Command Report | 5 sections | — |
-| `issue.md` | Bug/Maintenance Issue | 5 fields | Steps to Reproduce |
-
-Templates are customizable — edit them in `.maestro/templates/` to match your domain.
+Core sections are always included; optional ones only when relevant. Edit them in `.maestro/templates/`; `--force` reinstalls replace them, plain reinstalls keep your edits.
 
 ---
 
@@ -536,21 +380,22 @@ Templates are customizable — edit them in `.maestro/templates/` to match your 
 ```toml
 [project]
 name = "my-project"
-mode = "solo"         # "solo" or "team"
+session_visibility = "committed"   # or "gitignored"
+question_style = "async"           # or "sync"
+ai_tools = ["claude", "cursor"]
+response_capture = "artifacts"     # "artifacts" | "minimal" | "all"
 
-# Optional — user profile (solo mode)
-[user]
-description = "Senior Python architect, new to frontend"
-strengths = ["backend", "python", "system-design"]
-needs_help = ["frontend", "ux"]
+[git]
+commit = "task"                    # "task" | "milestone" | "never"
+push = "never"                     # "never" | "milestone"
+branch = "milestone"               # "milestone" | "never"
+pr = "markdown"                    # "off" | "markdown" | "milestone"
+merge = "never"
 
-# Optional — team profiles (team mode)
-[[team.members]]
-name = "Piotr"
-role = "architect"
-strengths = ["backend", "python"]
-needs_help = ["frontend"]
+# Optional profile: [user] or [[team.members]] (see § 16)
 ```
+
+A missing key uses its default; upgrades append new keys without touching existing ones. `maestro.local.toml` (gitignored) holds personal settings: `response_capture` freely, `[git]` only to make it stricter.
 
 ### CLAUDE.md
 
@@ -584,33 +429,15 @@ If no profile is configured, the agent behaves generically.
 
 ## 17. Delivery Pathways
 
-Maestro does not enforce a rigid sequence. Phases are tools, not gates.
+Phases are tools, not gates. `/mae-help` suggests the next one from what exists.
 
-### Standard
-```
-explore → prd → design → plan → do → review
-```
-Full process. Best for client projects, regulated industries, complex systems.
-
-### PoC-First
-```
-explore (light) → do (PoC) → [feedback] → explore (refined) → prd → design → do
-```
-Validate direction early. Best for uncertain requirements, stakeholder buy-in needed.
-
-### Fast-Track
-```
-explore → design → do → review
-```
-Skip formal PRD. Best for personal projects, clear requirements.
-
-### Iterative
-```
-explore → prd → do (MVP) → [feedback] → explore → prd (revised) → do
-```
-Continuous refinement. Best for startups, evolving products.
-
-The agent suggests next steps based on what exists but never blocks the user from choosing a different path.
+| Path | Sequence | Use when |
+|---|---|---|
+| Quick | explore → do | Small and clear |
+| Client-first | explore → mock → [client] → poc or specs → plan → do | The client needs to see something first |
+| PoC | explore → poc → do poc → plan (M02+) | One milestone, speed over reviewability |
+| Full | explore → specs → plan → do → review; changes via scope | Several milestones, reviewed specs |
+| Iterative | explore → requirements → do (MVP) → [feedback] → explore → requirements → do | Learning by shipping |
 
 ---
 
@@ -632,14 +459,14 @@ Every response follows these rules:
 | `GAP:` | Missing information |
 | `UNCLEAR:` | Ambiguous requirement |
 | `STALE:` | Outdated reference |
-| `DRIFT:` | Code diverges from SDD |
+| `DRIFT:` | Code diverges from ARCHITECTURE.md |
 
 ---
 
 ## 19. Agent Behavior Rules
 
 ### File Permissions
-- **Free zone:** Create new files anywhere. Edit sessions/, notes/. Append to WORKLOG.md, DECISIONS.md.
+- **Free zone:** Create new files anywhere. Edit .sessions/. Append to WORKLOG.md, DECISIONS.md, IDEAS.md.
 - **Review required:** Edit HANDOFF.md, docs/ files, source code, maestro.toml, OPEN_QUESTIONS.md.
 
 ### Context Budget
@@ -650,7 +477,7 @@ Every response follows these rules:
 Ask without a command only when:
 1. Ambiguity blocks the current task
 2. A contradiction is detected
-3. A component isn't in the SDD
+3. A component isn't in ARCHITECTURE.md
 4. A security concern is spotted
 
 ### File Size Limits
@@ -734,7 +561,7 @@ For full rationale on each decision, see `sessions/001-framework-bootstrap/11_de
 
 | Term | Definition |
 |------|-----------|
-| **Artifact** | A document or file produced during delivery (analysis, PRD, SDD, task, etc.) |
+| **Artifact** | A document or file produced during delivery (analysis, requirements, architecture, task, etc.) |
 | **Canonical** | The confirmed, authoritative version of an artifact (lives in docs/) |
 | **Delivery** | The full project lifecycle managed by Maestro. Canonical artifacts live in `docs/` organized by phase |
 | **Explore** | The initial phase of building project understanding |
@@ -742,8 +569,9 @@ For full rationale on each decision, see `sessions/001-framework-bootstrap/11_de
 | **Pathway** | A chosen sequence through delivery phases (standard, PoC, iterative, etc.) |
 | **Phase** | A stage in the delivery lifecycle (explore, prd, design, plan, do, review) |
 | **Promote** | Moving an artifact from sessions/ to docs/ after review |
-| **PRD** | Product Requirements Document |
-| **SDD** | Solution Design Document (also called technical architecture) |
+| **REQUIREMENTS.md** | What to build and why (was PRD) |
+| **ARCHITECTURE.md** | How it's built (was SDD, then DESIGN.md before v0.5.0) |
+| **DESIGN.md** | The visual system (since v0.5.0) |
 | **Session** | A working folder in sessions/ representing a stretch of related work |
 | **Sync** | Pushing confirmed decisions from _summary.md to canonical files |
 | **Working material** | Artifacts in sessions/ — drafts, analysis, exploration. Not canonical. |

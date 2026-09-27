@@ -7,10 +7,10 @@
 Your AI tool forgets everything between chats. Maestro keeps requirements, design, decisions, and tasks in your repo as files — so every session picks up where the last one ended.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-8B5CF6)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.4.0-F59E0B)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.5.0-F59E0B)](CHANGELOG.md)
 [![Tools](https://img.shields.io/badge/Claude%20Code%20·%20Cursor%20·%20Copilot-supported-64748B)](#multi-tool-support)
 
-[Install](#install) · [Commands](#commands) · [PoC track](#the-poc-track) · [How it works](#how-it-works) · [Docs](docs/user-guide.md)
+[Install](#install) · [Paths](#pick-a-path) · [Commands](#commands) · [PoC track](#the-poc-track) · [How it works](#how-it-works) · [Docs](docs/user-guide.md)
 
 </div>
 
@@ -20,7 +20,7 @@ Your AI tool forgets everything between chats. Maestro keeps requirements, desig
 
 AI coding tools have no memory of your project between chats. Every session starts the same way: re-explaining the architecture, re-litigating decisions you already made, watching the model rebuild context you paid for yesterday. Decisions live in scrollback. Nothing is auditable.
 
-**Maestro fixes this with files, not magic.** Twelve commands write structured artifacts to disk — requirements, design, roadmap, tasks, decisions — and a handoff file the agent reads at the start of every session. Your AI tool picks up where it left off because the context is on disk, not in a context window.
+**Maestro fixes this with files, not magic.** A small set of commands writes structured artifacts to disk — requirements, architecture, roadmap, tasks, decisions — and a handoff file the agent reads at the start of every session. Your AI tool picks up where it left off because the context is on disk, not in a context window.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
@@ -32,34 +32,56 @@ curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh 
 ## What a session looks like
 
 ```
-/mae-explore          Build understanding — analyze docs, code, transcripts
-/mae-req              Formalize what you're building
-/mae-design           Technical architecture, with trade-offs written down
+/mae-help             What should I run now? One suggestion, from what's on disk
+/mae-explore          Build understanding — analyze docs, code, transcripts → EXPLORE.md
+/mae-specs            Requirements, visual design (if there's a UI), architecture — whatever is missing
 /mae-plan             Roadmap and task files
-/mae-do M02.03        Execute a task
+/mae-do M02.03        Execute a task; commits it, never pushes
 /sync                 End of session — update HANDOFF, ROADMAP, DECISIONS
 ```
 
 Next week, in a brand-new chat, the agent reads `HANDOFF.md` first and greets you with where you left off. That's the whole idea.
 
-> [!NOTE]
-> **Not every project needs every command.** Each command has a `## Skip When` section. A weekend project might be `explore → do`. A client engagement runs the full pipeline. The agent suggests; it never blocks.
-> ```
-> Simple:   explore → do
-> PoC:      explore → poc → do
-> Medium:   explore → design → plan → do
-> Complex:  explore → req → design → plan → do → review
-> ```
+## Pick a path
+
+Not every project needs every command. Each has a `## Skip When` section; the agent suggests, it never blocks.
+
+```mermaid
+flowchart LR
+  E["/mae-explore"]
+  E -->|"Quick: small and clear"| D0["/mae-do"]
+  E -->|"Client-first: they want to see it"| M["/mae-mock"]
+  M --> F1{{client feedback}}
+  F1 -->|prove it works| P
+  F1 -->|agreed, spec it| S
+  E -->|"PoC: one milestone, speed"| P["/mae-poc"]
+  P --> DP["/mae-do poc"]
+  DP --> F2{{works?}}
+  F2 -->|keep going| PL
+  E -->|"Full: multi-milestone, reviewable"| S["/mae-specs"]
+  S --> PL["/mae-plan"]
+  PL --> D["/mae-do"]
+  D --> RV["/mae-review"]
+  RV -.->|change request| SC["/mae-scope"]
+  SC -.-> PL
+```
+
+| Path | Use it when | Commands |
+|------|-------------|----------|
+| **Quick** | Small, clear, one sitting | `explore → do` |
+| **Client-first** | The client needs to see something before agreeing | `explore → mock → [client] → poc or specs → plan → do` |
+| **PoC** | One milestone, speed over reviewability | `explore → poc → do poc` → `plan` for M02 if it works |
+| **Full** | Several milestones, reviewed specs | `explore → specs → plan → do → review`, changes through `scope` |
 
 ## The PoC track
 
 Sometimes the full pipeline costs more than it returns. A prototype, a spike, a time-boxed build where you need to be writing code in twenty minutes, not reviewing three documents.
 
-`/mae-poc` collapses requirements, design, and roadmap into **one file** — `docs/02-specs/POC.md` — and `/mae-do poc` executes straight from it.
+`/mae-poc` collapses requirements, architecture, and roadmap into **one file** — `docs/02-specs/POC.md` — and `/mae-do poc` executes straight from it.
 
 ```
 /mae-explore          Understand the problem (or skip, if a brief already exists)
-/mae-poc              One spec: scope, requirements, design, roadmap, risks
+/mae-poc              One spec: scope, requirements, architecture, roadmap, risks
 /mae-do poc           Execute the whole milestone
 ```
 
@@ -79,7 +101,7 @@ It asks only blocking questions — stack, data source, deployment target — an
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 ```
 
-The installer asks three questions (session visibility, which AI tools, how to ask you questions), scaffolds `docs/`, and writes adapters for the tools you picked. **It never overwrites your files** — `HANDOFF.md`, `DECISIONS.md`, `CLAUDE.md`, and `maestro.toml` are preserved on reinstall.
+The installer asks five questions (session visibility, AI tools, how to ask you questions, when to commit, which responses to save as files), scaffolds `docs/`, and writes adapters for the tools you picked. **It never overwrites your files** — `HANDOFF.md`, `DECISIONS.md`, `CLAUDE.md`, and `maestro.toml` are preserved on reinstall.
 
 Upgrading from an earlier version, or want the framework files refreshed:
 
@@ -89,22 +111,29 @@ curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh 
 
 Upgrades keep your files and existing `maestro.toml` keys, and add any keys that are new. A pre-0.5.0 `docs/` layout is detected; run `/mae-init upgrade` in your agent to move it.
 
-→ **[Full installation guide](docs/installation.md)** — browser wizard, manual install, Cursor setup, teams, troubleshooting
+→ **[Full installation guide](docs/installation.md)** — install from a branch or tag, manual install, Cursor setup, teams, troubleshooting
 
 ## Commands
 
-Eight delivery commands, four utilities. Every delivery command has a short alias.
+Every delivery command has a short alias. `/mae-help` tells you which one matters now; `/mae-help all` lists everything.
 
 | Command | Alias | What it does | Writes to |
 |---------|-------|--------------|-----------|
-| `/mae-explore` | `mex` | Build understanding; surface questions and gaps | `docs/01-explore/` |
+| `/mae-explore` | `mex` | Build understanding; surface questions and gaps | `docs/01-explore/` (`EXPLORE.md`) |
+| `/mae-idea "…"` | — | Park a maybe-later idea without interrupting the work | `docs/01-explore/IDEAS.md` |
+| `/mae-specs [part]` | `msp` | Build the missing spec parts in one question round | `docs/02-specs/` |
+| `/mae-requirements` | `mrq` | What to build and why (client signs) | `docs/02-specs/REQUIREMENTS.md` |
+| `/mae-design` | `mds` | Visual system: colours, type, components | `docs/02-specs/DESIGN.md` |
+| `/mae-architecture` | `mar` | How it's built, with trade-offs written down | `docs/02-specs/ARCHITECTURE.md` |
+| `/mae-mock` | — | Clickable, self-contained HTML screens to show a client | `docs/02-specs/mock/` |
 | `/mae-poc` | `mpoc` | One-file spec for prototypes and time-boxed builds | `docs/02-specs/POC.md` |
-| `/mae-req` | `mrq` | Formalize requirements | `docs/02-specs/REQUIREMENTS.md` |
-| `/mae-design` | `mds` | Technical architecture with trade-offs | `docs/02-specs/ARCHITECTURE.md` |
+| `/mae-scope` | `msc` | Scope change: impact analysis, applied on confirmation | session → specs, roadmap |
 | `/mae-plan` | `mpl` | Roadmap and task files | `docs/03-plan/` |
-| `/mae-do` | `mdo` | Execute a task, planned or ad-hoc | code + `docs/04-implementation/` |
+| `/mae-do` | `mdo` | Execute a task, planned or ad-hoc; commits per task | code + `docs/04-implementation/` |
 | `/mae-review` | `mrv` | Review code or delivery artifacts | `docs/05-review/` |
-| `/mae-init` | — | One-time profile setup | `maestro.toml` |
+| `/mae-pr` | — | Push the branch and open a draft PR (only when you type it) | remote |
+| `/mae-init` | — | Profile setup; `upgrade` migrates a pre-0.5.0 layout | `maestro.toml` |
+| `/mae-help` | — | What to run now, from what's on disk | — |
 
 | Utility | What it does |
 |---------|--------------|
@@ -118,13 +147,16 @@ Eight delivery commands, four utilities. Every delivery command has a short alia
 
 | Command | What it does |
 |---------|--------------|
-| `/mae-explore` | Analyze docs, topics, transcripts |
-| `/mae-explore ask` | Generate questions for you, the client, or the team |
-| `/mae-explore doc` | Synthesize the final explore report |
+| `/mae-explore ask` | Questions for you, the client, or the team, grouped Business / Technical, pre-filled where safe |
+| `/mae-explore doc` | Synthesize `EXPLORE.md`, the one explore file other commands read |
+| `/mae-explore I-07` | Explore a parked idea |
+| `/mae-specs architecture {component}` | One component, in `architecture/{component}.md` |
+| `/mae-mock {screen}` | Regenerate one screen |
+| `/mae-scope --direct "…"` | Apply additive changes without asking; conflicts still stop |
 | `/mae-poc --tasks` | Also emit individual task files, not just the roadmap table |
 | `/mae-do poc` | Execute the whole PoC milestone from `POC.md` |
 | `/mae-do M02.03` | Execute one planned task |
-| `/mae-do path/to/task.md` | Execute a task from a specific file |
+| `/mae-init upgrade` | Move a pre-0.5.0 `docs/` layout to the current one, after you confirm |
 
 </details>
 
@@ -135,14 +167,14 @@ Eight delivery commands, four utilities. Every delivery command has a short alia
 Commands write drafts to `.sessions/`. You review. Confirmed work gets **promoted** to `docs/`.
 
 ```
-/mae-explore  → session artifacts  ──promote──→  docs/01-explore/
-/mae-req      → requirements draft ──promote──→  docs/02-specs/REQUIREMENTS.md
-/mae-design   → design draft       ──promote──→  docs/02-specs/ARCHITECTURE.md
-/mae-plan     → roadmap + tasks    ──────────→  docs/03-plan/
-/mae-poc      → POC spec           ──────────→  docs/02-specs/POC.md
+/mae-explore doc   → explore synthesis  ──promote──→  docs/01-explore/EXPLORE.md
+/mae-specs         → spec drafts        ──promote──→  docs/02-specs/REQUIREMENTS.md, DESIGN.md, ARCHITECTURE.md
+/mae-mock          → HTML screens       ──────────→  docs/02-specs/mock/
+/mae-poc           → POC spec           ──────────→  docs/02-specs/POC.md
+/mae-plan          → roadmap + tasks    ──────────→  docs/03-plan/
 ```
 
-Only reviewed artifacts reach `docs/`, so `docs/` stays trustworthy — which is what makes it safe for the agent to treat as canonical. (`/mae-plan` and `/mae-poc` write straight through: their output is immediately actionable, so a review round-trip would only cost you time.)
+Only reviewed artifacts reach `docs/`, so `docs/` stays trustworthy — which is what makes it safe for the agent to treat as canonical. (`/mae-plan`, `/mae-poc` and `/mae-mock` write straight through: their output is immediately actionable, so a review round-trip would only cost you time.)
 
 ### Nothing falls through the cracks
 
@@ -170,7 +202,7 @@ your-project/
 ├── docs/
 │   ├── 00-reference/         ← Material you didn't write (read-only)
 │   ├── 01-explore/           ← EXPLORE.md (synthesis), IDEAS.md, explore artifacts
-│   ├── 02-specs/             ← REQUIREMENTS.md, ARCHITECTURE.md, ARCHITECTURE.md, mock/ — or POC.md (PoC track)
+│   ├── 02-specs/             ← REQUIREMENTS.md, DESIGN.md, ARCHITECTURE.md, mock/ — or POC.md (PoC track)
 │   ├── 03-plan/              ← ROADMAP.md + tasks/
 │   ├── 04-implementation/    ← Reports from /mae-do
 │   ├── 05-review/            ← Review reports        (on demand)
@@ -179,8 +211,10 @@ your-project/
 │   └── 08-maintenance/       ← Bugs, tech debt       (on demand)
 ├── .sessions/                ← Working material, per session
 ├── .maestro/templates/       ← Document templates (customizable)
+├── .maestro/skills/          ← Skills the agent may offer (explore, specs, scope, idea, mock)
 ├── .maestro/commands/        ← Canonical command definitions
-└── .claude/commands/         ← Tool adapters + aliases
+├── .claude/                  ← Claude Code: skills + command wrappers and aliases
+└── .agents/skills/           ← Skills for Cursor and Codex
 ```
 
 A phase command is named after its folder: `/mae-explore` → `01-explore/`, `/mae-specs` → `02-specs/`, `/mae-plan` → `03-plan/`.
@@ -197,6 +231,14 @@ name = "my-project"
 session_visibility = "committed"   # or "gitignored"
 question_style = "async"           # or "sync"
 ai_tools = ["claude", "cursor"]
+response_capture = "artifacts"     # or "minimal", "all"
+
+[git]
+commit = "task"                    # or "milestone", "never"
+push = "never"                     # or "milestone"
+branch = "milestone"               # or "never"
+pr = "markdown"                    # or "off", "milestone"
+merge = "never"
 ```
 
 | Setting | Options | Effect |
@@ -204,6 +246,10 @@ ai_tools = ["claude", "cursor"]
 | `session_visibility` | `committed` / `gitignored` | Whether `.sessions/` is in git. Committed suits solo projects; gitignored suits teams where sessions are personal |
 | `question_style` | `async` / `sync` | `async` writes questions to a file you answer in your own time; `sync` asks in chat |
 | `ai_tools` | `claude`, `cursor`, `copilot`, `codex` | Which adapters get generated |
+| `response_capture` | `artifacts` / `minimal` / `all` | Files for work products only (default), for docs promotions and explore only, or for every response. `/md` saves anything on demand |
+| `[git]` | see comments | Commit per task by default; never push unless you set it; PR description written as markdown; any PR is a draft. `maestro.local.toml` may only tighten it |
+
+Keys added in a newer version are appended on upgrade; a missing key uses its default.
 
 <details>
 <summary><b>Optional: user and team profiles</b></summary>
@@ -247,12 +293,12 @@ Every artifact is generated from a markdown template in `.maestro/templates/`. E
 
 ## Multi-tool support
 
-Command definitions live once in `.maestro/commands/`. Each tool gets a thin adapter pointing at them — so a command behaves identically everywhere, and adding a tool never means rewriting prompts.
+Each protocol lives once, in `.maestro/skills/` or `.maestro/commands/`. Each tool gets a thin adapter pointing at it — so a command behaves identically everywhere, and adding a tool never means rewriting prompts.
 
 | Tool | Adapter | Usage |
 |------|---------|-------|
-| **Claude Code** | `.claude/commands/` | `/mae-explore` or `/mex` — autocomplete works |
-| **Cursor** | `.cursor/rules/` + `.cursor/commands/` | Type `mae-explore` or `mex` in chat |
+| **Claude Code** | `.claude/skills/` + `.claude/commands/` | `/mae-explore` or `/mex` — autocomplete works; skills can also be offered by the agent |
+| **Cursor** | `.cursor/rules/` + `.cursor/commands/` + `.agents/skills/` | Type `mae-explore` or `mex` in chat |
 | **Copilot / Codex** | `.github/copilot-instructions.md` | Type the command name in chat |
 
 ## FAQ
@@ -274,7 +320,7 @@ You can, and for a one-off script you should. Maestro earns its keep when a proj
 <details>
 <summary><b>This looks heavy for a prototype.</b></summary>
 
-Then use the [PoC track](#the-poc-track): `explore → poc → do`, one spec file, no promotion round-trips. The full pipeline is there when a project earns it, not before.
+Then use the [PoC track](#the-poc-track): `explore → poc → do`, one spec file, no promotion round-trips. Or just `explore → do`. The full pipeline is there when a project earns it, not before.
 
 </details>
 
@@ -288,7 +334,7 @@ No. Maestro is markdown files in your repo. There's no runtime, no service, no a
 <details>
 <summary><b>Do I have to use all the docs folders?</b></summary>
 
-No. `04` through `08` are created on demand — when you file your first bug, or the first time deployment gets non-trivial. A small project may never leave `01`–`03`, and a PoC may only ever touch `00`, `02-specs` (POC.md), and `04`.
+No. `04` through `08` stay empty until needed — your first bug, or the first time deployment gets non-trivial. A small project may never leave `01`–`03`, and a PoC may only ever touch `00`, `02-specs` (POC.md), and `04`.
 
 </details>
 
@@ -308,7 +354,7 @@ Yes — that's what `/mae-explore` is for. Point it at a codebase and it builds 
 
 | Guide | Contents |
 |-------|----------|
-| [Installation](docs/installation.md) | Wizard, manual install, per-tool setup, troubleshooting |
+| [Installation](docs/installation.md) | One-line install, branches and tags, upgrades, manual install, per-tool setup, troubleshooting |
 | [User guide](docs/user-guide.md) | Working through a project phase by phase |
 | [Reference](docs/reference.md) | Every command, flag, and config key |
 | [Changelog](CHANGELOG.md) | Version history |
