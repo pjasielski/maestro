@@ -26,6 +26,11 @@ AI coding tools have no memory of your project between chats. Every session star
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 ```
 
+> [!NOTE]
+> **Trying v0.5.0 before its release?** From your project folder:
+> `MAESTRO_BRANCH=release/v0.5.0 bash -c 'curl -fsSL "https://raw.githubusercontent.com/pjasielski/maestro/$MAESTRO_BRANCH/install.sh" | bash'`
+> — see [Installing from a branch or tag](docs/installation.md#installing-from-a-branch-or-tag).
+
 > [!TIP]
 > Maestro is prompts and markdown. No daemon, no API key, no vendor lock-in — delete `MAESTRO.md` and `.maestro/` and your project is exactly as it was.
 
@@ -157,8 +162,44 @@ Every delivery command has a short alias. `/mae-help` tells you which one matter
 | `/mae-do poc` | Execute the whole PoC milestone from `POC.md` |
 | `/mae-do M02.03` | Execute one planned task |
 | `/mae-init upgrade` | Move a pre-0.5.0 `docs/` layout to the current one, after you confirm |
+| `/mae-help all` | Every command, grouped by phase, with what it produces |
+| `/mae-help {command}` | One command: when to use it, when to skip it, what it reads and writes |
+| `/status --graph` | Print the milestone map and task dependency graph |
 
 </details>
+
+<details>
+<summary><b>Running several phases in one go</b></summary>
+
+Once you know the flow, you can chain phases. A chain asks all its questions **once** at the start, has **one** review after the last spec phase, and commits every task inside `do`.
+
+```
+/mae-run requirements..plan              requirements → design (if UI) → architecture → roadmap, one interruption
+/mae-specs -> /mae-plan                  the same, written out
+/mae-run architecture..do M02            through to implementation of milestone M02
+/mae-yolo [stop]                         from wherever you are to `stop` (default: do)
+```
+
+What a chain never does: skip explore, promote to `docs/` without your review, continue after a failed task, or push.
+
+</details>
+
+## When the scope changes
+
+It will. `/mae-scope` takes the change — a sentence, or a file you dropped into `docs/00-reference/` — and classifies each part:
+
+| Kind | What happens |
+|---|---|
+| **Additive** | New requirements and tasks; nothing existing changes |
+| **Modifying** | Existing requirements, architecture, or tasks change — each is listed |
+| **Conflicting** | Contradicts a recorded decision — you resolve it before anything is applied |
+
+It writes a `scope-delta.md` you can send to a client as-is, then applies only what you approve across the specs, ROADMAP and tasks. In a hurry? `/mae-scope --direct …` applies the additive parts straight away and still stops on anything that changes or contradicts what you decided. Anything you don't approve is parked in `docs/01-explore/IDEAS.md`, not lost. A change too big to classify is sent to `/mae-explore` first.
+
+```
+/mae-scope "client wants multi-currency and an approvals queue"
+/mae-scope docs/00-reference/change-request-2.md
+```
 
 ## How it works
 
@@ -194,7 +235,8 @@ The agent writes new files and session material without asking. Editing `docs/`,
 your-project/
 ├── MAESTRO.md                ← Framework instructions (don't edit)
 ├── CLAUDE.md                 ← Your project config (edit this)
-├── maestro.toml              ← Settings: visibility, profile, tools
+├── maestro.toml              ← Settings: visibility, tools, [git], response_capture, profile
+├── maestro.local.toml        ← Optional personal overrides (gitignored; may only tighten [git])
 ├── HANDOFF.md                ← Single source of truth for status
 ├── DECISIONS.md              ← Decision audit trail
 ├── OPEN_QUESTIONS.md         ← Questions needing answers
@@ -320,7 +362,14 @@ You can, and for a one-off script you should. Maestro earns its keep when a proj
 <details>
 <summary><b>This looks heavy for a prototype.</b></summary>
 
-Then use the [PoC track](#the-poc-track): `explore → poc → do`, one spec file, no promotion round-trips. Or just `explore → do`. The full pipeline is there when a project earns it, not before.
+Then use the [PoC track](#the-poc-track): `explore → poc → do`, one spec file, no promotion round-trips. Or just `explore → do`. And if what feels heavy is the number of files: set `response_capture = "minimal"` and Maestro saves only what ends up in `docs/` plus explore notes.
+
+</details>
+
+<details>
+<summary><b>Does the agent leave servers running?</b></summary>
+
+It tells you. Whenever it starts a long-running process, its report ends with the process, port, pid and the command to stop it, and says whether it left it up on purpose. `/sync` reports anything still running from the session. The project README's `## Quickstart` is kept true — updated in the same task that changes a port, entry point, env var or dependency. The full pipeline is there when a project earns it, not before.
 
 </details>
 

@@ -18,6 +18,7 @@ You need:
 | I am… | Best option |
 |-------|-------------|
 | Anyone with a terminal (recommended) | [Option A — One-Line Install](#option-a--one-line-install) |
+| Installing an unreleased branch or a tag | [Installing from a branch or tag](#installing-from-a-branch-or-tag) |
 | A developer who wants full control | [Option B — Manual Install](#option-b--manual-install) |
 | Not comfortable with terminals | [Option C — Browser Setup Wizard](#option-c--browser-setup-wizard-frozen) (frozen) |
 
@@ -59,18 +60,37 @@ Replaces MAESTRO.md, commands, templates, and adapters. Project files (HANDOFF.m
 
 **Upgrading from before v0.5.0:** the installer never moves your docs. It prints `Old layout found` when `docs/02-requirements/`, `02-poc/`, `03-design/` or `04-plan/` hold files; then run `/mae-init upgrade` in your agent, which shows the moves and link rewrites and commits once after you confirm.
 
-**Install from a specific branch:**
-
-```bash
-MAESTRO_BRANCH=feat/my-branch bash -c \
-  'curl -fsSL "https://raw.githubusercontent.com/pjasielski/maestro/$MAESTRO_BRANCH/install.sh" | bash -s -- . --force'
-```
-
-A tag works the same way (`MAESTRO_BRANCH=v0.5.0-alpha.2`), which is also how you roll back.
-
 ### Step 3 — Follow the printed instructions
 
 The installer prints tool-specific next steps when it finishes.
+
+---
+
+## Installing from a branch or tag
+
+`main` is the released version. Any branch or tag installs the same way: `release/v0.5.0` and `dev` carry the next version before it's released; a tag such as `v0.5.0-rc.1` never moves, which makes it the safest pick for real work.
+
+**New project** — from the project folder:
+
+```bash
+MAESTRO_BRANCH=release/v0.5.0 bash -c 'curl -fsSL "https://raw.githubusercontent.com/pjasielski/maestro/$MAESTRO_BRANCH/install.sh" | bash'
+```
+
+Add `-s -- . --quick` after the last `bash` (inside the quotes) to skip the questions.
+
+**Existing Maestro project** (refreshes framework files; keeps `HANDOFF.md`, `DECISIONS.md`, `OPEN_QUESTIONS.md`, `WORKLOG.md`, `CLAUDE.md` and every existing `maestro.toml` key, and adds new keys):
+
+```bash
+MAESTRO_BRANCH=release/v0.5.0 bash -c 'curl -fsSL "https://raw.githubusercontent.com/pjasielski/maestro/$MAESTRO_BRANCH/install.sh" | bash -s -- . --force'
+```
+
+`MAESTRO_BRANCH` is used twice: in the URL it picks which installer runs; as a variable it picks which files that installer downloads. Swap in any branch or tag.
+
+**Going back** (roll back): run the same command with the previous tag, or with `MAESTRO_BRANCH=main` for the release.
+
+**Right after a push**, GitHub's raw CDN can serve the previous version for a few minutes. If a new command is missing, wait and re-run.
+
+**Check it worked:** open your AI tool in the project and run `/mae-help`. If it answers with the project's state and a suggested next command, the install is good.
 
 ---
 
