@@ -27,7 +27,7 @@ Mid-project, new scope arrives: a client request, a change file, a new brief in 
 
 Alias: `msc`
 
-$ARGUMENTS — optional: `"{description}"`, or a path to a request file; none → look in `docs/00-reference/`
+$ARGUMENTS — optional: `"{description}"`, or a path to a request file; none → look in `docs/00-reference/`. Flag `--direct`: fast path (§ Direct mode)
 
 ## Gate (auto-invocation only)
 
@@ -39,11 +39,12 @@ When you chose this skill yourself, write nothing and say one line: "This looks 
 /mae-scope "client wants multi-currency and an approvals queue"
 /mae-scope docs/00-reference/change-request-2.md
 /mae-scope                → lists files in docs/00-reference/ newer than REQUIREMENTS.md, asks which one
+/mae-scope --direct "…"   → same analysis; additive capabilities applied without asking
 ```
 
 ## Prerequisites
 
-- `docs/02-specs/REQUIREMENTS.md` or `docs/02-specs/POC.md` must exist — without one there is no scope to change; say so and suggest `/mae-explore` or `/mae-req`
+- `docs/02-specs/REQUIREMENTS.md` or `docs/02-specs/POC.md` must exist — without one there is no scope to change; say so and suggest `/mae-explore` or `/mae-specs`
 - `ARCHITECTURE.md` and `ROADMAP.md` are optional inputs; a missing one drops its section from the delta with a one-line note
 
 ## Behavior
@@ -80,7 +81,11 @@ This file is client-sendable: it answers "what does this cost" in their vocabula
 
 Then ask: "Apply all, apply some (list capability IDs), or stop here?"
 
-### Step 4 — Apply (only on explicit confirmation)
+### Direct mode (`--direct`)
+
+Steps 1–3 run unchanged; the delta file is still written (it is the audit trail). Then, instead of asking: **additive** capabilities go straight to Step 4. **Modifying** and **conflicting** ones still stop for a decision, because a conflict overturns a recorded decision and needs a human every time. Chat reports what was applied and what waits. A flag only, never a `maestro.toml` setting: skipping review is a per-use choice.
+
+### Step 4 — Apply (only on explicit confirmation, or additive capabilities under `--direct`)
 
 For the approved capabilities, in this order, each as a review-required diff:
 
