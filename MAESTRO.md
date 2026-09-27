@@ -345,6 +345,7 @@ Rules that a chain cannot override: explore is never skipped; nothing is promote
 | 03 | Plan         | `/mae-plan`         | `mpl`  | ROADMAP.md + tasks/ — milestones and task files            |
 | 04 | Do           | `/mae-do`           | `mdo`  | Executed work (code, docs, config, PoCs)                   |
 | 05 | Review       | `/mae-review`       | `mrv`  | Review findings, suggestions                               |
+| —  | PR           | `/mae-pr`           | —      | Pushes the current branch, opens a **draft** PR (or prints the compare URL); only when typed |
 | —  | Init         | `/mae-init`         | —      | Profile setup (run once at start); `upgrade` migrates a legacy layout |
 | —  | Help         | `/mae-help`         | —      | State-aware next step; `all` lists every command; `{command}` explains one |
 | —  | Chain        | `/mae-run`          | —      | `/mae-run {a}..{b}` or `/mae-x -> /mae-y` — phases in one pass, one question round, one review (documented, not advertised) |
@@ -591,7 +592,7 @@ merge = "never"       # the agent never merges
 | `commit` | `task`: `/mae-do` commits after each completed task. `milestone`: one commit when the milestone completes. `never`: the user commits |
 | `push` | `milestone`: push the current branch when its milestone completes. Never the default branch, never force |
 | `branch` | `milestone`: at a milestone's first task, ask once: "Create `milestone/m{NN}-{slug}`?" Unrelated uncommitted changes → refuse; offer to stash or stay on the current branch |
-| `pr` | `markdown`: at milestone end or on request, write the PR description to the session (`NN_pr-{milestone}.md`: title, summary, tasks with IDs and "done when", commits, how to test); nothing pushed. `milestone`: also push that branch and open a **draft** PR (`gh`), else print the compare URL. `/mae-pr` does the same on request |
+| `pr` | `markdown`: at milestone end or on request, write the PR description to the session (`NN_pr-{milestone}.md`: title, summary, tasks with IDs and "done when", commits, how to test); nothing pushed. `milestone`: also push that branch and open a **draft** PR (`gh`), else print the compare URL. `/mae-pr` does the same on request (it pushes only when typed) |
 | `merge` | Only `never` |
 
 **Commit convention:** `{type}({task-id}): {title}` plus a `Task: {task file path}` trailer (PoC track: `Task: docs/02-specs/POC.md#{task-id}`). The type (`feat`, `fix`, `docs`, `chore`…) follows the task's subject. Stage only the task's files.

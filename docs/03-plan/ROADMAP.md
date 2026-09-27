@@ -73,7 +73,7 @@ Six small behavior changes to command *content*, shipped before the skill conver
 | P42.08 | **Installer fixes: local-mode detection, `issue.md` download, append missing `maestro.toml` blocks; v0.5.0 lists; clean-install test** | P1 | S | P42.09 | ✅ done | [P42.08](tasks/P42.08-installer-fixes.md) | hq 22/11 §5 |
 | P42.09 | **Canonical layout (`02-specs/`, `03-plan/`, `EXPLORE.md`, main-file rule) + command names (`/mae-requirements`, `/mae-architecture`, visual `/mae-design`, `/mae-specs`)** | P1 | L | — | ✅ done | [P42.09](tasks/P42.09-layout-and-commands.md) | hq 22/15, 18 |
 | P42.10 | **`/mae-idea` — append-only idea inbox `01-explore/IDEAS.md`; parks, never asks** | P2 | XS | P42.09 | 🔄 in progress | [P42.10](tasks/P42.10-mae-idea.md) | hq 22/15 §7 |
-| P42.11 | **`/mae-pr` — push the current branch, open a draft PR (compare-URL fallback)** | P3 | S | P42.01 | ☐ todo | [P42.11](tasks/P42.11-mae-pr.md) | hq 22/14 §4, 15 §8 |
+| P42.11 | **`/mae-pr` — push the current branch, open a draft PR (compare-URL fallback)** | P3 | S | P42.01 | ✅ done | [P42.11](tasks/P42.11-mae-pr.md) | hq 22/14 §4, 15 §8 |
 
 **Done when:** A developer who dislikes file noise can set `response_capture = "minimal"` in `maestro.local.toml` and get a chat-first experience without losing canonical artifacts; commits happen per task with task-ID messages; no generated README lies about how to run the app.
 

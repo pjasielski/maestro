@@ -76,7 +76,7 @@ When invoked without arguments, suggest work in this priority order:
 7. **Update roadmap status** — set the Status column to ✅ in whichever source owns the task: `docs/03-plan/ROADMAP.md` or `docs/02-specs/POC.md` § 4
 8. **Update § 6 Current State** (PoC track) — done / in progress / next / blocked
 9. **Commit** per MAESTRO.md § Git Policy (`commit = "task"`: the task's files and status updates, commit convention, report the hash)
-10. **Milestone complete** (no todo task left in it): run the `commit`, `push` and `pr` steps of § Git Policy
+10. **Milestone complete** (no todo task left in it): run the `commit`, `push` and `pr` steps of § Git Policy. With `pr = "markdown"`, end with one line, no action: "M05 is done: N tasks, N commits on `{branch}`. Run `/mae-pr` to push and open a draft PR?"
 11. **Report:** substantial task (several files, a decision, or findings worth keeping) → save to the session folder, promotable to `docs/04-implementation/`; otherwise report in chat
 12. **Update `_summary.md`** → Tasks Touched section
 

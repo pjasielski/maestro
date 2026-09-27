@@ -56,7 +56,7 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ] || [ ! -d "$SCRIPT_DIR/.maestro/commands" ]
   fi
 
   mkdir -p "$SOURCE_DIR/.maestro/commands"
-  for _cmd in mae-requirements mae-design mae-architecture mae-req mae-poc mae-plan mae-do mae-review mae-init mae-help mae-run mae-yolo status decide sync md; do
+  for _cmd in mae-requirements mae-design mae-architecture mae-req mae-poc mae-plan mae-do mae-review mae-init mae-help mae-run mae-yolo mae-pr status decide sync md; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/commands/$_cmd.md" -o "$SOURCE_DIR/.maestro/commands/$_cmd.md" 2>/dev/null; then
       echo "  Warning: failed to download $_cmd.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
@@ -524,7 +524,7 @@ alwaysApply: true
 
 When the user types a Maestro command in chat, load the corresponding file from `.maestro/commands/` and follow its protocol.
 
-Commands: mae-explore (mex), mae-idea, mae-mock, mae-specs (msp), mae-requirements (mrq), mae-design (mds), mae-architecture (mar), mae-poc (mpoc), mae-scope (msc), mae-plan (mpl), mae-do (mdo), mae-review (mrv), mae-init, mae-help, mae-run, mae-yolo, sync, decide, status, md. Old name: mae-req → mae-requirements
+Commands: mae-explore (mex), mae-idea, mae-mock, mae-specs (msp), mae-requirements (mrq), mae-design (mds), mae-architecture (mar), mae-poc (mpoc), mae-scope (msc), mae-plan (mpl), mae-do (mdo), mae-review (mrv), mae-init, mae-help, mae-run, mae-yolo, mae-pr, sync, decide, status, md. Old name: mae-req → mae-requirements
 
 Always read the command file before executing — do not guess the protocol.
 CURSOREOF
@@ -635,6 +635,7 @@ When user types any of these, read the corresponding file and follow its full pr
 | mae-help | — | .maestro/commands/mae-help.md |
 | mae-run | — | .maestro/commands/mae-run.md |
 | mae-yolo | — | .maestro/commands/mae-yolo.md |
+| mae-pr | — | .maestro/commands/mae-pr.md |
 | status | — | .maestro/commands/status.md |
 | decide | — | .maestro/commands/decide.md |
 | sync | — | .maestro/commands/sync.md |
@@ -885,6 +886,7 @@ echo "  /mae-scope   (msc)   Scope change: classify, impact analysis, apply"
 echo "  /mae-plan    (mpl)   Create roadmap and tasks"
 echo "  /mae-do      (mdo)   Execute tasks"
 echo "  /mae-review  (mrv)   Review code and artifacts"
+echo "  /mae-pr              Push the branch, open a draft PR (only when you type it)"
 echo "  /mae-help            What should I run now? (/mae-help all for everything)"
 echo ""
 

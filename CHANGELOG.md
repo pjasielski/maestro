@@ -12,6 +12,8 @@ All notable changes to the Maestro framework.
 ### Added
 - `/mae-specs [part]` (`msp`) — builds the missing and relevant spec parts in one question round and one review
 - `docs/01-explore/EXPLORE.md` — the fixed explore synthesis; the only explore file downstream commands read
+- `/mae-pr` — pushes the current branch and opens a draft PR (compare-URL fallback); `/mae-do` offers it at milestone end
+- `[git]` policy (commit per task, never push by default, PR description as markdown) and `response_capture` (artifacts / minimal / all); upgrades append missing `maestro.toml` keys
 - Main-file rule for splitting large artifacts into lowercase sub-folders
 - `/mae-mock` — self-contained, clickable HTML screens in `docs/02-specs/mock/` with `_screens.md` (screens → requirement IDs, `GAP:` lines read by `/mae-requirements` and `/mae-poc`)
 

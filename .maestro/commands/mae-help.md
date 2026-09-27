@@ -76,7 +76,7 @@ Every command, grouped, one line each — command, alias, what it produces:
 
 - **Explore** — `mae-explore` (`mex`) → EXPLORE.md + questions · `mae-idea` → a row in IDEAS.md · `mae-poc` (`mpoc`) → one-file POC.md
 - **Specify** — `mae-specs` (`msp`) → the missing spec parts · `mae-requirements` (`mrq`) → REQUIREMENTS.md · `mae-design` (`mds`) → DESIGN.md, visual system · `mae-architecture` (`mar`) → ARCHITECTURE.md · `mae-mock` → clickable HTML screens in `mock/` · `mae-scope` (`msc`) → scope-delta, applied on confirmation
-- **Plan and build** — `mae-plan` (`mpl`) → ROADMAP.md + tasks · `mae-do` (`mdo`) → executed task + report · `mae-review` (`mrv`) → findings
+- **Plan and build** — `mae-plan` (`mpl`) → ROADMAP.md + tasks · `mae-do` (`mdo`) → executed task + report · `mae-review` (`mrv`) → findings · `mae-pr` → push + draft PR, only when typed
 - **Session** — `status` → where things stand · `decide` → DECISIONS.md row · `sync` → HANDOFF and ROADMAP updated · `md` → saves the last response · `mae-init` → profile, or `upgrade` for the old layout
 - **Chaining** — `mae-run`, `mae-yolo`, each with its one-line warning from its command file
 

@@ -24,6 +24,7 @@ Recognize these patterns (with or without `/` prefix):
 | `mae-plan` or `mpl` | `.maestro/commands/mae-plan.md` |
 | `mae-do` or `mdo` | `.maestro/commands/mae-do.md` |
 | `mae-review` or `mrv` | `.maestro/commands/mae-review.md` |
+| `mae-pr` | `.maestro/commands/mae-pr.md` |
 | `mae-init` | `.maestro/commands/mae-init.md` |
 | `mae-help` | `.maestro/commands/mae-help.md` |
 | `mae-run` | `.maestro/commands/mae-run.md` |
