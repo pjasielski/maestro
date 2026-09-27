@@ -46,11 +46,12 @@ Apply per-command: `/mae-explore -v` produces a verbose report. `/mae-explore -c
 | Command | Auto-include                                                                                   |
 | ------- | ---------------------------------------------------------------------------------------------- |
 | explore | Surface questions. Flag unknowns. Compare options when multiple approaches exist.              |
-| req     | Flag ambiguities. Note assumptions. Identify missing requirements.                             |
-| design  | List trade-offs as tables. State recommendation with rationale. Compare alternatives.          |
+| requirements | Flag ambiguities. Note assumptions. Identify missing requirements.                        |
+| design  | Name the source of each visual choice (mock, brand asset, default). Flag gaps.                 |
+| architecture | List trade-offs as tables. State recommendation with rationale. Compare alternatives.     |
 | plan    | Flag dependencies and blockers. Estimate effort. Sequence tasks logically.                     |
 | do      | Report what was done. Flag issues found. Show verification results.                            |
-| review  | List findings by severity. Suggest concrete fixes. Cross-reference with DESIGN/REQUIREMENTS.   |
+| review  | List findings by severity. Suggest concrete fixes. Cross-reference with ARCHITECTURE/REQUIREMENTS. |
 
 ---
 
@@ -78,16 +79,17 @@ If the user doesn't provide a title and jumps into work, ask: "Should I open a s
 
 | Task                         | Load                                                                        | Skip                          |
 | ---------------------------- | --------------------------------------------------------------------------- | ----------------------------- |
-| **Exploration**        | HANDOFF.md, docs/00-reference/, docs/01-explore/                                    | Code, design, plan                 |
-| **PoC spec**           | HANDOFF.md, docs/00-reference/, docs/01-explore/, DECISIONS.md                      | Code, full-track docs              |
-| **Requirements**       | HANDOFF.md, docs/01-explore/, DECISIONS.md                                          | Code, design                       |
-| **Design**             | HANDOFF.md, REQUIREMENTS.md, docs/01-explore/ (technical sections), maestro.toml    | Code, test files                   |
-| **Planning**           | HANDOFF.md, DESIGN.md, ROADMAP.md, existing tasks                                       | Full code, exploration             |
-| **Implementation**     | HANDOFF.md, task file, DESIGN.md (relevant section), source files                       | Other tasks, exploration, req      |
-| **Implementation (PoC)** | HANDOFF.md, docs/02-poc/POC.md, source files                                          | Explore artifacts, reference       |
-| **Code review**        | HANDOFF.md, DESIGN.md, files being reviewed                                              | Exploration, planning              |
-| **Testing**            | HANDOFF.md, task file, source code, DESIGN.md (expected behaviour)                      | Exploration, planning              |
-| **Debugging**          | HANDOFF.md, error context, source files, DESIGN.md                                       | Everything unrelated               |
+| **Exploration**        | HANDOFF.md, docs/00-reference/, docs/01-explore/                                    | Code, specs, plan                  |
+| **PoC spec**           | HANDOFF.md, docs/00-reference/, EXPLORE.md, DECISIONS.md                            | Code, full-track specs             |
+| **Requirements**       | HANDOFF.md, EXPLORE.md, DECISIONS.md                                                | Code, architecture                 |
+| **Design (visual)**    | HANDOFF.md, REQUIREMENTS.md, mock/, brand assets in docs/00-reference/              | Code, architecture                 |
+| **Architecture**       | HANDOFF.md, REQUIREMENTS.md, EXPLORE.md (technical sections), maestro.toml          | Code, test files                   |
+| **Planning**           | HANDOFF.md, ARCHITECTURE.md, ROADMAP.md, existing tasks                             | Full code, exploration             |
+| **Implementation**     | HANDOFF.md, task file, ARCHITECTURE.md (relevant section), source files             | Other tasks, exploration, requirements |
+| **Implementation (PoC)** | HANDOFF.md, docs/02-specs/POC.md, source files                                    | Explore artifacts, reference       |
+| **Code review**        | HANDOFF.md, ARCHITECTURE.md, files being reviewed                                   | Exploration, planning              |
+| **Testing**            | HANDOFF.md, task file, source code, ARCHITECTURE.md (expected behaviour)            | Exploration, planning              |
+| **Debugging**          | HANDOFF.md, error context, source files, ARCHITECTURE.md                            | Everything unrelated               |
 | **Session management** | HANDOFF.md, DECISIONS.md, OPEN_QUESTIONS.md                                 | Code, delivery docs           |
 
 ### Context Budget
@@ -107,18 +109,22 @@ Open questions              → OPEN_QUESTIONS.md
 Activity log                → WORKLOG.md
 Project config              → maestro.toml
 
-Source materials (given)    → docs/00-reference/   (client briefs, specs, transcripts — read-only to Maestro,
+Source materials (given)    → docs/00-reference/   (client briefs, brand assets, transcripts — read-only to Maestro,
                                                     authoritative on intent, read first by /mae-explore)
-Exploration artifacts       → docs/01-explore/
-PoC spec (PoC track)        → docs/02-poc/POC.md   (requirements + design + roadmap in one)
-Requirements               → docs/02-requirements/REQUIREMENTS.md
-Design (architecture)      → docs/03-design/DESIGN.md
-Roadmap & tasks            → docs/04-plan/ROADMAP.md and docs/04-plan/tasks/
-Implementation reports     → docs/05-implementation/  (created on demand)
-Review artifacts            → docs/06-review/  (created on demand)
-Test artifacts              → docs/07-test/    (created on demand)
-Deployment config           → docs/08-deploy/  (created on demand)
-Maintenance & bugs          → docs/09-maintenance/  (created on demand)
+Explore synthesis           → docs/01-explore/EXPLORE.md  (the only explore file other commands read)
+Idea inbox                  → docs/01-explore/IDEAS.md    (append-only)
+Explore artifacts           → docs/01-explore/{topic}.md  (linked from EXPLORE.md)
+Requirements (what/why)     → docs/02-specs/REQUIREMENTS.md   (client signs)
+Design (visual system)      → docs/02-specs/DESIGN.md         (client may sign)
+Architecture (how)          → docs/02-specs/ARCHITECTURE.md   (team only)
+PoC spec (PoC track)        → docs/02-specs/POC.md            (instead of the three above)
+Mockups                     → docs/02-specs/mock/             (index.html + {screen}.html + _screens.md)
+Roadmap & tasks             → docs/03-plan/ROADMAP.md and docs/03-plan/tasks/
+Implementation reports      → docs/04-implementation/  (created on demand)
+Review artifacts            → docs/05-review/          (created on demand)
+Test artifacts              → docs/06-test/            (created on demand)
+Deployment config           → docs/07-deploy/          (created on demand)
+Maintenance & bugs          → docs/08-maintenance/     (created on demand)
 
 Templates                   → .maestro/templates/
 Session history             → .sessions/{NNN}-{name}/_summary.md
@@ -127,18 +133,24 @@ Framework commands          → .maestro/commands/mae-*.md
 Framework skills            → .maestro/skills/{name}/SKILL.md  (Agent Skills standard; M04 migration in progress)
 Skill conventions           → .maestro/skills/CONVENTIONS.md  (tiers, description pattern, frontmatter)
 Claude Code adapters        → .claude/commands/mae-*.md  (thin wrappers → .maestro/commands/)
-Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-dispatch.mdc)
+Cursor adapters             → .cursor/rules/ (maestro-core.mdc + maestro-dispatch.mdc), .cursor/commands/
 ```
+
+### Layout Rules
+
+- **A phase command is named after its folder:** `explore` → `01-explore/`, `specs` → `02-specs/`, `plan` → `03-plan/`.
+- **One main file per artifact:** UPPERCASE, at a path that never changes. Sub-files go in a lowercase sibling folder (`ARCHITECTURE.md` + `architecture/`), split by the unit that changes independently (component, epic, screen group). The main file keeps cross-cutting content plus a 1–3 line summary and link per moved section. Commands read main files and open a sub-file only when the task touches that unit. Split past the hard max (§ File Size Limits) or on request; announce it, one commit, never silently.
+- **Downstream commands read `EXPLORE.md`**, never individual explore artifacts. If explore artifacts exist but `EXPLORE.md` doesn't, ask once: "Run `/mae-explore doc` first, or use the latest report?"
 
 ### On-Demand Folder Details
 
 | Folder                       | Contains                                                       | Create when                                    |
 | ---------------------------- | -------------------------------------------------------------- | ---------------------------------------------- |
-| `docs/05-implementation/` | Implementation reports from `/mae-do` execution              | First substantial implementation task          |
-| `docs/06-review/`      | Review reports (code, docs, architecture), audit findings      | First formal review cycle                      |
-| `docs/07-test/`        | Test plans, test reports, coverage summaries, QA checklists    | Test planning needed beyond inline tests       |
-| `docs/08-deploy/`      | Deployment runbooks, environment configs, release checklists   | Deployment is non-trivial or multi-environment |
-| `docs/09-maintenance/` | Bug reports (`issues/`), tech debt log, maintenance runbooks | First bug filed or maintenance task identified |
+| `docs/04-implementation/` | Implementation reports from `/mae-do` execution              | First substantial implementation task          |
+| `docs/05-review/`      | Review reports (code, docs, architecture), audit findings      | First formal review cycle                      |
+| `docs/06-test/`        | Test plans, test reports, coverage summaries, QA checklists    | Test planning needed beyond inline tests       |
+| `docs/07-deploy/`      | Deployment runbooks, environment configs, release checklists   | Deployment is non-trivial or multi-environment |
+| `docs/08-maintenance/` | Bug reports (`issues/`), tech debt log, maintenance runbooks | First bug filed or maintenance task identified |
 
 ---
 
@@ -147,8 +159,8 @@ Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-disp
 ### Decision Protection
 
 - NEVER change established architecture decisions without user approval
-- When you spot an inconsistency between code and DESIGN.md, flag it: `CONSISTENCY: [details]`
-- Treat `docs/` artifacts as canonical truth for requirements and design
+- When you spot an inconsistency between code and ARCHITECTURE.md, flag it: `CONSISTENCY: [details]`
+- Treat `docs/` artifacts as canonical truth for requirements, design and architecture
 - `.sessions/` are working material, NOT canonical
 
 ### Code Standards
@@ -203,7 +215,7 @@ Cursor adapters             → .cursor/rules/  (maestro-core.mdc + maestro-disp
 | `GAP:`         | Missing information relevant to current work    |
 | `UNCLEAR:`     | Ambiguous requirement                           |
 | `STALE:`       | Delivery artifact references outdated decisions |
-| `DRIFT:`       | Code diverges from DESIGN.md                    |
+| `DRIFT:`       | Code diverges from ARCHITECTURE.md              |
 
 ### Auto-Update Triggers for _summary.md
 
@@ -245,12 +257,13 @@ The user can override per-message (e.g., "ask me directly" or "put questions in 
 
 **During explore:** Questions are first-class output. Ask freely — that's the purpose of the phase.
 
-**Outside of explore commands,** ask WITHOUT a command ONLY when:
+**Ask when unsure:** if a missing input would change the output and can't be read or inferred, ask, batched into one round. Otherwise proceed and state the assumption.
 
-1. Ambiguity blocks the current task
-2. A contradiction between artifacts is detected
-3. An implementation task references a component not in DESIGN.md
-4. A security or data concern is spotted
+**Outside of explore commands,** also ask WITHOUT a command when:
+
+1. A contradiction between artifacts is detected
+2. An implementation task references a component not in ARCHITECTURE.md
+3. A security or data concern is spotted
 
 NEVER proactively ask about future phases, technology preferences when the stack is decided, or topics unrelated to the current task.
 
@@ -281,49 +294,56 @@ Use in `_summary.md` to track decision lifecycle:
 
 ## Delivery Phases
 
-Eight delivery commands, six utility commands (`init`, `help`, `status`, `decide`, `sync`, `md`), two chaining commands. `/mae-help` shows the three or four that matter now (D33). Not all projects need all phases — the user decides which to use and in what order.
+The delivery commands below, plus utility commands (`init`, `help`, `status`, `decide`, `sync`, `md`) and two chaining commands. `/mae-help` shows the three or four that matter now (D33). Not all projects need all phases — the user decides which to use and in what order.
 
 **Maestro does not enforce a rigid sequence.** Phases are tools, not gates. The user can revisit any phase, skip phases, or run them in any order that fits the project. Each command has a `## Skip When` section describing when to skip it. Common patterns:
 
 ```
-Standard:   explore → req → design → plan → do → review
-PoC track:  explore → poc → do → [review]            ← time-boxed builds, prototypes, spikes
-Graduation: ... poc → do → plan (M02+) → do          ← the PoC worked; keep going
-PoC-first:  explore (light) → do (PoC) → [feedback] → explore (refined) → req → design → do
-Fast-track: explore → design → do → review
-Iterative:  explore → req → do (MVP) → [feedback] → explore → req (revised) → do
+Standard:   explore → specs → plan → do → review          ← specs = requirements → design (if UI) → architecture
+PoC track:  explore → poc → do → [review]                 ← time-boxed builds, prototypes, spikes
+Graduation: ... poc → do → plan (M02+) → do               ← the PoC worked; keep going
+PoC-first:  explore (light) → do (PoC) → [feedback] → explore (refined) → specs → do
+Fast-track: explore → architecture → do → review
+Iterative:  explore → requirements → do (MVP) → [feedback] → explore → requirements (revised) → do
 ```
 
-**PoC track vs. full track.** `/mae-poc` produces one file containing requirements, design, and roadmap; the full track produces three. They are mutually exclusive — a project uses one or the other, which is why `docs/02-poc/` and `docs/02-requirements/` share a number without colliding. Use the PoC track when the whole build is one milestone and speed matters more than reviewability.
+**PoC track vs. full track.** `/mae-poc` produces one file (`02-specs/POC.md`) containing requirements, architecture, and roadmap; the full track produces separate specs plus a plan. Use the PoC track when the whole build is one milestone and speed matters more than reviewability.
+
+**`/mae-specs` routes, it doesn't merge.** It runs the part commands (`requirements`, `design`, `architecture`) as a chain, each writing its own file; it never restates their protocols. Bare `/mae-specs` builds what is missing and relevant. A merged spec artifact is still rejected (D32); POC.md is the one deliberate exception.
 
 The agent should suggest next steps based on what exists, but never block the user from choosing a different path.
 
 ### Chaining (documented, not advertised)
 
-The same phases with the interruptions removed — **one question round at the front, one review after the last specifying phase, per-task commits inside `do`.** Not in the quickstart; `/mae-help all` lists it. Cumulative commands (`/mae-spec`) and `/mae-until` are not built (D32): a chain covers the fast path without a new artifact shape.
+The same phases with the interruptions removed — **one question round at the front, one review after the last specifying phase, per-task commits inside `do`.** Not in the quickstart; `/mae-help all` lists it. `/mae-until` is not built (D32): a chain covers the fast path without a new artifact shape.
 
 ```
-/mae-run req..plan                    REQUIREMENTS + DESIGN + ROADMAP + tasks, three interruptions → one
-/mae-req -> /mae-design -> /mae-plan  same thing, explicit list
-/mae-yolo [stop]                      /mae-run {current}..{stop}; default stop is do; ⚠️ never skips explore
+/mae-run requirements..plan                 REQUIREMENTS + DESIGN (if UI) + ARCHITECTURE + ROADMAP + tasks, interruptions → one
+/mae-specs -> /mae-plan                     same thing, explicit list
+/mae-yolo [stop]                            /mae-run {current}..{stop}; default stop is do; ⚠️ never skips explore
 ```
 
 Rules that a chain cannot override: explore is never skipped; nothing is promoted to `docs/` without the one review; `do` stops on first failure; every task is committed, nothing is pushed. Details: `.maestro/commands/mae-run.md`.
 
-| #  | Phase        | Command           | Alias  | Output                                                    |
-| -- | ------------ | ----------------- | ------ | --------------------------------------------------------- |
-| 01 | Explore      | `/mae-explore`  | `mex` | Understanding docs, questions, gaps, readiness assessment |
-| 02 | PoC spec     | `/mae-poc`      | `mpoc` | POC.md — requirements + design + roadmap in one file (PoC track) |
-| 02 | Requirements | `/mae-req`      | `mrq` | REQUIREMENTS.md — formalized requirements                |
-| 03 | Design       | `/mae-design`   | `mds` | DESIGN.md — technical architecture                       |
-| 02+ | Scope change | `/mae-scope`    | `msc` | scope-delta.md (session, client-sendable) → deltas applied to REQUIREMENTS, DESIGN, ROADMAP, tasks on confirmation |
-| 04 | Plan         | `/mae-plan`     | `mpl` | ROADMAP.md + tasks/ — milestones and task files          |
-| 05 | Do           | `/mae-do`       | `mdo` | Executed work (code, docs, config, PoCs)                  |
-| 06 | Review       | `/mae-review`   | `mrv` | Review findings, suggestions                              |
-| —  | Init         | `/mae-init`     | —      | Profile setup (run once at start)                         |
-| —  | Help         | `/mae-help`     | —      | State-aware next step; `all` lists every command; `{command}` explains one |
-| —  | Chain        | `/mae-run`      | —      | `/mae-run {a}..{b}` or `/mae-x -> /mae-y` — phases in one pass, one question round, one review (documented, not advertised) |
-| —  | Chain        | `/mae-yolo`     | —      | `/mae-yolo [stop]` = `/mae-run {current}..{stop}`; never skips explore; commits per task; ⚠️ unattended between questions and review |
+| #  | Phase        | Command               | Alias  | Output                                                    |
+| -- | ------------ | --------------------- | ------ | --------------------------------------------------------- |
+| 01 | Explore      | `/mae-explore`      | `mex`  | EXPLORE.md (`doc`), artifacts, questions, gaps, readiness; accepts `I-NN` |
+| 01 | Idea         | `/mae-idea "…"`     | —      | `I-NN` row in IDEAS.md; parks, never asks                  |
+| 02 | Specs        | `/mae-specs [part]` | `msp`  | Missing + relevant spec parts, one question round, one review |
+| 02 | Requirements | `/mae-requirements` | `mrq`  | REQUIREMENTS.md — what and why                             |
+| 02 | Design       | `/mae-design`       | `mds`  | DESIGN.md — visual system: tokens, type, components         |
+| 02 | Architecture | `/mae-architecture` | `mar`  | ARCHITECTURE.md — how it's built; `{component}` → `architecture/{component}.md` |
+| 02 | PoC spec     | `/mae-poc`          | `mpoc` | POC.md — requirements + architecture + roadmap in one file (PoC track) |
+| 02+ | Scope change | `/mae-scope`       | `msc`  | scope-delta.md (session, client-sendable) → deltas applied to specs, ROADMAP, tasks on confirmation; rejected → IDEAS.md |
+| 03 | Plan         | `/mae-plan`         | `mpl`  | ROADMAP.md + tasks/ — milestones and task files            |
+| 04 | Do           | `/mae-do`           | `mdo`  | Executed work (code, docs, config, PoCs)                   |
+| 05 | Review       | `/mae-review`       | `mrv`  | Review findings, suggestions                               |
+| —  | Init         | `/mae-init`         | —      | Profile setup (run once at start); `upgrade` migrates a legacy layout |
+| —  | Help         | `/mae-help`         | —      | State-aware next step; `all` lists every command; `{command}` explains one |
+| —  | Chain        | `/mae-run`          | —      | `/mae-run {a}..{b}` or `/mae-x -> /mae-y` — phases in one pass, one question round, one review (documented, not advertised) |
+| —  | Chain        | `/mae-yolo`         | —      | `/mae-yolo [stop]` = `/mae-run {current}..{stop}`; never skips explore; commits per task; ⚠️ unattended between questions and review |
+
+`/mae-req` is the pre-0.5.0 name: a pointer to `/mae-requirements`, removed in the next release. `mds` now means visual design (was architecture).
 
 ### On-Demand Phases
 
@@ -331,11 +351,11 @@ These folders are created when first needed, not by `init`:
 
 | Phase       | Folder                              | Created when                       |
 | ----------- | ----------------------------------- | ---------------------------------- |
-| Implementation | `docs/05-implementation/`  | First substantial `/mae-do` execution |
-| Review      | `docs/06-review/`             | Formal review cycles or audits     |
-| Test        | `docs/07-test/`               | Test plans need dedicated storage  |
-| Deploy      | `docs/08-deploy/`             | Deployment is non-trivial          |
-| Maintenance | `docs/09-maintenance/issues/` | Bugs, tech debt, maintenance tasks |
+| Implementation | `docs/04-implementation/`  | First substantial `/mae-do` execution |
+| Review      | `docs/05-review/`             | Formal review cycles or audits     |
+| Test        | `docs/06-test/`               | Test plans need dedicated storage  |
+| Deploy      | `docs/07-deploy/`             | Deployment is non-trivial          |
+| Maintenance | `docs/08-maintenance/issues/` | Bugs, tech debt, maintenance tasks |
 
 ---
 
@@ -348,50 +368,55 @@ docs/00-reference/  ← placed by the user before anything runs; read-only to Ma
 
 /mae-explore
   ← reads docs/00-reference/ (authoritative on intent)
-  → working artifacts (session)  ──promote──→  docs/01-explore/
-  → /mae-explore doc (session)   ──promote──→  docs/01-explore/
+  → working artifacts (session)  ──promote──→  docs/01-explore/{topic}.md
+  → /mae-explore doc (session)   ──promote──→  docs/01-explore/EXPLORE.md
+/mae-idea                        ──────────→  docs/01-explore/IDEAS.md (append)
 
 ── PoC track ──────────────────────────────────────────────
 /mae-poc
-  ← reads docs/00-reference/ + docs/01-explore/
-  → POC.md                        ──────────→  docs/02-poc/POC.md
+  ← reads docs/00-reference/ + EXPLORE.md
+  → POC.md                        ──────────→  docs/02-specs/POC.md
   → report (session)
 
 /mae-do poc
-  ← reads docs/02-poc/POC.md (one read: req + design + roadmap)
+  ← reads docs/02-specs/POC.md (one read: requirements + architecture + roadmap)
   → code, docs, config           ──────────→  in-place
   → status + § 6 Current State updated in POC.md after each task
 
-── Full track ─────────────────────────────────────────────
-/mae-req
-  ← reads docs/01-explore/*
-  → requirements draft (session)  ──promote──→  docs/02-requirements/REQUIREMENTS.md
+── Full track (/mae-specs runs the three parts in order) ──
+/mae-requirements
+  ← reads EXPLORE.md
+  → requirements draft (session)  ──promote──→  docs/02-specs/REQUIREMENTS.md
 
-/mae-design
-  ← reads docs/02-requirements/REQUIREMENTS.md
-  → design draft (session)        ──promote──→  docs/03-design/DESIGN.md
+/mae-design                                     (projects with a UI)
+  ← reads REQUIREMENTS.md, mock/ (approved), brand assets in docs/00-reference/
+  → design draft (session)        ──promote──→  docs/02-specs/DESIGN.md
+
+/mae-architecture
+  ← reads REQUIREMENTS.md
+  → architecture draft (session)  ──promote──→  docs/02-specs/ARCHITECTURE.md
 
 /mae-plan
-  ← reads docs/03-design/DESIGN.md
-  → ROADMAP.md                    ──────────→  docs/04-plan/ROADMAP.md
-  → task files                    ──────────→  docs/04-plan/tasks/
+  ← reads ARCHITECTURE.md
+  → ROADMAP.md                    ──────────→  docs/03-plan/ROADMAP.md
+  → task files                    ──────────→  docs/03-plan/tasks/
 
 /mae-do
-  ← reads task file + DESIGN.md (relevant section) + source files
+  ← reads task file + ARCHITECTURE.md (relevant section) + source files
   → code, docs, config           ──────────→  in-place
-  → implementation report         ──promote──→  docs/05-implementation/
-```
+  → implementation report         ──promote──→  docs/04-implementation/
 
 ── Scope change (either track, after requirements exist) ──────
 /mae-scope
-  ← reads the request + REQUIREMENTS.md, DESIGN.md (sections), ROADMAP.md, task index, DECISIONS.md
-  → NN_scope-delta.md (session)  ──apply on confirmation──→  REQUIREMENTS.md, DESIGN.md, ROADMAP.md, tasks/, DECISIONS.md
-  → capabilities not approved     ──────────→  HANDOFF.md § Deferred scope
+  ← reads the request + REQUIREMENTS.md, ARCHITECTURE.md (sections), ROADMAP.md, task index, DECISIONS.md
+  → NN_scope-delta.md (session)  ──apply on confirmation──→  specs, ROADMAP.md, tasks/, DECISIONS.md
+  → capabilities not approved     ──────────→  docs/01-explore/IDEAS.md
+```
 
 All commands save to `.sessions/` first. User reviews, then promotes to `docs/` when ready.
 Exceptions: `/mae-plan` saves ROADMAP and tasks directly to docs/ (immediately actionable).
-`/mae-poc` saves POC.md directly to `docs/02-poc/` for the same reason.
-`/mae-do` saves reports to session; substantial reports can be promoted to `docs/05-implementation/`.
+`/mae-poc` saves POC.md directly to `docs/02-specs/` for the same reason; `/mae-idea` appends directly.
+`/mae-do` saves reports to session; substantial reports can be promoted to `docs/04-implementation/`.
 
 ### Adaptive Workflow Guidance
 
@@ -402,14 +427,14 @@ After /mae-explore:
   "Is the whole build one milestone, with speed over reviewability?"
     Yes → run /mae-poc, then /mae-do poc
     No  → "Can I describe what to build in 2 sentences?"
-            Yes → skip req, go to /mae-design or /mae-do
-            No  → run /mae-req to formalize requirements
+            Yes → skip requirements, go to /mae-architecture or /mae-do
+            No  → run /mae-specs
 
 After /mae-poc:
   → /mae-do poc  (whole milestone)  or  /mae-do M01.01  (one task at a time)
   If the PoC succeeds and work continues → /mae-plan for M02 onward
 
-After /mae-req or /mae-design:
+After /mae-specs (or one of its parts):
   "Is there more than one milestone of work?"
     Yes → run /mae-plan to sequence it
     No  → go straight to /mae-do
@@ -503,7 +528,7 @@ Every command saves a report to the session folder:
 
 ## Task Management
 
-Tasks are markdown files in `docs/04-plan/tasks/`. Each file IS the ticket.
+Tasks are markdown files in `docs/03-plan/tasks/`. Each file IS the ticket.
 
 **Naming & IDs — one ID everywhere.** Task ID = `M{MM}.{NN}` (zero-padded, e.g., `M03.01`). The identical string appears in the ROADMAP `#` column, the task filename `M{MM}.{NN}-{slug}.md` (e.g., `M03.01-skill-spike.md`), and the task title (`# Task M03.01: …`) — searching one ID finds all three. Sub-tasks append a letter: `M03.01a`. Milestone headers use `M{MM}`.
 
@@ -587,8 +612,9 @@ If no profile is configured, the agent behaves generically (no adaptation). This
 | ----------- | ------------------ | ----------- |
 | HANDOFF.md       | 200–300 lines     | 400 lines   |
 | REQUIREMENTS.md  | 1,500–3,000 words | 5,000 words |
-| DESIGN.md        | 2,000–4,000 words | 6,000 words |
+| DESIGN.md        | 800–2,000 words   | 3,000 words |
+| ARCHITECTURE.md  | 2,000–4,000 words | 6,000 words |
 | Task file   | 200–500 words     | 800 words   |
 | _summary.md | 200–400 words     | 600 words   |
 
-If exceeding max, split into sub-documents and link from the main file.
+Past the hard max, split per the main-file rule (§ Layout Rules).
