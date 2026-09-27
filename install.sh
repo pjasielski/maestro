@@ -57,7 +57,7 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
   done
 
   mkdir -p "$SOURCE_DIR/.maestro/templates"
-  for _tmpl in requirements design explore poc task summary report review roadmap scope-delta; do
+  for _tmpl in requirements design architecture explore poc task summary report review roadmap scope-delta; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/templates/$_tmpl.md" -o "$SOURCE_DIR/.maestro/templates/$_tmpl.md" 2>/dev/null; then
       echo "  Warning: failed to download template $_tmpl.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))

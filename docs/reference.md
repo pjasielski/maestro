@@ -276,7 +276,7 @@ Generates PRD from explore artifacts using `.maestro/templates/requirements.md`.
 
 ### /mae-design — Technical Architecture
 
-Creates SDD from PRD + explore report using `.maestro/templates/design.md`.
+Creates SDD from PRD + explore report using `.maestro/templates/architecture.md`.
 
 **Modes:**
 - No arguments → full solution design
@@ -418,7 +418,7 @@ Define how to build it. Translate product requirements into technical architectu
 2. Explore report (technical context — current state, constraints, integrations)
 3. DECISIONS.md (confirmed technical decisions)
 4. maestro.toml (user profile for adaptation)
-5. .maestro/templates/design.md (structure)
+5. .maestro/templates/architecture.md (structure)
 
 ### Technical Questionnaire
 

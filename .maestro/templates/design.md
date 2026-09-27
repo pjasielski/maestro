@@ -1,172 +1,76 @@
-# DESIGN: {Product / Feature Name}
-
-**Date:** {YYYY-MM-DD}
-**Version:** {v1}
-**Status:** Draft | In Review | Approved
-**Requirements:** {link to docs/02-specs/REQUIREMENTS.md}
+---
+version: alpha
+name: {Product} Design System
+description: {one line: the look and feel}
+colors:
+  primary: "{#hex}"
+  on-primary: "{#hex}"
+  surface: "{#hex}"
+  on-surface: "{#hex}"
+  error: "{#hex}"
+typography:
+  heading-lg:
+    fontFamily: {Font}
+    fontSize: {32px}
+    fontWeight: {700}
+    lineHeight: {1.2}
+  body-md:
+    fontFamily: {Font}
+    fontSize: {16px}
+    fontWeight: {400}
+    lineHeight: {1.5}
+rounded:
+  md: {8px}
+spacing:
+  sm: {8px}
+  md: {16px}
+  lg: {24px}
+components:
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.sm}"
+---
 
 <!--
-  Maestro Design Template (Technical Architecture)
-  Core sections: always include (1-6)
-  Optional sections: include when relevant (marked OPTIONAL)
-  Target: 2,000-4,000 words | Hard max: 6,000 words
-  If exceeding max, split into DESIGN.md + component-{name}.md
+  Maestro visual design template: DESIGN.md format (google-labs-code/design.md, version alpha).
+  Front matter = exact tokens; prose = why and how to apply them. Keep the eight sections in this order.
+  Token references: {colors.primary}. Component keys: backgroundColor, textColor, typography, rounded, padding, size, height, width.
+  Source of each choice: approved mock → brand assets in docs/00-reference/ → ask. Name it per section.
+  Target: 800–2,000 words | Hard max: 3,000. Past it, split per the main-file rule: DESIGN.md + design/{component-group}.md.
 -->
 
----
+## Overview
 
-## 1. Overview
+{Look and feel in 2–3 sentences; audience; source: mock / brand assets / default.}
 
-### 1.1 Purpose
-{What this document covers. Link to PRD requirements it addresses.}
+## Colors
 
-### 1.2 Scope
-{Technical scope — systems, components, integrations covered.}
+{Role of each colour token; contrast rules.}
 
-### 1.3 Design Principles
-{3-5 principles guiding technical decisions.
-Example: "Prefer managed services", "Design for horizontal scaling".}
+## Typography
 
----
+{Scale and when each style is used.}
 
-## 2. Architecture
+## Layout
 
-### 2.1 System Diagram
+{Grid, spacing scale, breakpoints.}
 
-```
-{ASCII, Mermaid, or description of architecture diagram}
-```
+## Elevation & Depth
 
-### 2.2 Component Overview
+{Shadows or flat; how hierarchy is shown.}
 
-| Component | Responsibility | Technology | Notes |
-|---|---|---|---|
-| {component} | {what it does} | {tech/framework} | {key decisions} |
+## Shapes
 
-### 2.3 Data Flow
+{Corner radius, borders.}
 
-| Step | From | To | Data | Protocol |
-|---|---|---|---|---|
-| 1 | {source} | {destination} | {what data} | {HTTP/gRPC/queue} |
+## Components
 
----
+{Each component in the front matter: states, usage.}
 
-## 3. Tech Stack
+## Do's and Don'ts
 
-| Category | Choice | Alternatives Considered | Rationale |
-|---|---|---|---|
-| Backend | {choice} | {alternatives} | {why} |
-| Frontend | {choice} | {alternatives} | {why} |
-| Database | {choice} | {alternatives} | {why} |
-| Infrastructure | {choice} | {alternatives} | {why} |
-
-### ADRs (Architecture Decision Records)
-
-**ADR-001: {Decision Title}**
-- **Context:** {why this decision is needed}
-- **Decision:** {what we decided}
-- **Consequences:** {trade-offs accepted}
-
----
-
-## 4. Data Model
-
-### 4.1 Entities
-
-| Entity | Key Fields | Relationships | Notes |
-|---|---|---|---|
-| {entity} | {fields} | {related to} | {constraints} |
-
-### 4.2 ER Diagram
-
-```
-{Entity relationship diagram — ASCII or Mermaid}
-```
-
----
-
-## 5. Source Structure
-
-```
-{project}/
-├── src/
-│   ├── {module}/
-│   └── ...
-├── tests/
-└── ...
-```
-
----
-
-## 6. Open Questions
-
-| # | Question | Blocks | Owner | Due |
-|---|---|---|---|---|
-| 1 | {question} | {what it blocks} | {who answers} | {when needed} |
-
----
-
-<!-- OPTIONAL: Include only for AI/ML projects -->
-## 7. AI / ML Pipeline
-
-| Stage | Input | Processing | Output | Technology |
-|---|---|---|---|---|
-| Ingestion | {source} | {cleaning} | {processed data} | {tools} |
-| Inference | {input} | {model call} | {output} | {model} |
-
-**Model selection rationale:** {why this model}
-**Evaluation strategy:** {metrics, targets, test sets}
-**Prompting strategy:** {zero-shot / few-shot / chain-of-thought}
-
----
-
-<!-- OPTIONAL: Include when external systems are involved -->
-## 8. Integrations
-
-| System | Direction | Protocol | Auth | Error Handling |
-|---|---|---|---|---|
-| {system} | In / Out / Both | {REST/gRPC} | {method} | {retry strategy} |
-
----
-
-<!-- OPTIONAL: Include for non-trivial infrastructure -->
-## 9. Infrastructure & Deployment
-
-| Environment | Purpose | Configuration |
-|---|---|---|
-| Development | Active coding | {config} |
-| Staging | Pre-prod testing | {config} |
-| Production | Live system | {config} |
-
-**CI/CD:** {pipeline description}
-**Monitoring:** {what's tracked, alerting thresholds}
-
----
-
-<!-- OPTIONAL: Include for regulated domains -->
-## 10. Security & Compliance
-
-| Concern | Approach | Implementation |
-|---|---|---|
-| Authentication | {method} | {details} |
-| Authorization | {method} | {details} |
-| Data encryption | {method} | {details} |
-| Secrets management | {method} | {details} |
-
-**Compliance:** {requirements — GDPR, HIPAA, SOC2, etc.}
-
----
-
-<!-- OPTIONAL: Include for high-scale systems -->
-## 11. Performance & Scalability
-
-| Metric | Target | Design Approach |
-|---|---|---|
-| Response time (P95) | {target} | {how achieved} |
-| Throughput | {target} | {how achieved} |
-| Concurrent users | {target} | {how achieved} |
-
----
-
-**Notes:**
-- {observations, questions, flags for the user}
+- {Do}
+- {Don't}

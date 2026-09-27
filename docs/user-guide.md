@@ -218,7 +218,7 @@ mode = "team"
 
 Templates in `.maestro/templates/` are starting points. Edit them to match your domain:
 - Add industry-specific sections to `requirements.md` (e.g., regulatory requirements)
-- Add compliance sections to `design.md`
+- Add compliance sections to `architecture.md`
 - Change the explore report structure in `explore.md`
 
 ### Adding Custom Commands

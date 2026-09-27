@@ -235,7 +235,8 @@ Every artifact is generated from a markdown template in `.maestro/templates/`. E
 | Template | Produces |
 |----------|----------|
 | `requirements.md` | `REQUIREMENTS.md` |
-| `design.md` | `ARCHITECTURE.md` |
+| `design.md` | `DESIGN.md` (visual system) |
+| `architecture.md` | `ARCHITECTURE.md` |
 | `poc.md` | `POC.md` |
 | `roadmap.md` | `ROADMAP.md` |
 | `task.md` | `tasks/M{MM}.{NN}-{slug}.md` |
