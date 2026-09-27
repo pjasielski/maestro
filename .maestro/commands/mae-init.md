@@ -65,7 +65,7 @@ Migrates a pre-0.5.0 `docs/` layout. The installer never moves user docs; this d
    - Link rewrites: every old path in tracked Markdown outside `.sessions/` (docs, HANDOFF.md, CLAUDE.md, task files, README), and `DESIGN.md` → `ARCHITECTURE.md` where it means architecture. Listed per file with counts
    - Conflicts: a target file already exists (empty folders from the installer are fine) → list them and stop
 3. **Ask:** "Apply? (yes / no)". Nothing moves without yes.
-4. **Apply:** unrelated uncommitted changes → offer to stash or stop. Run moves and rewrites, then one commit: `chore(maestro): upgrade docs layout to v0.5.0`. Never push.
+4. **Apply:** unrelated uncommitted changes → offer to stash or stop. Run moves and rewrites, remove old folders left empty (pre-0.5.0 installs created all of them), then one commit: `chore(maestro): upgrade docs layout to v0.5.0`. Never push.
 5. **Report:** files moved, links rewritten, commit hash, and one line: "`/mae-design` (`mds`) now means visual design; architecture is `/mae-architecture` (`mar`)."
 
 ## What init does NOT do

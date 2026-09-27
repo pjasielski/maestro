@@ -4,7 +4,7 @@
 # Usage:
 #   ./install.sh [target-directory]            # interactive setup
 #   ./install.sh [target-directory] --quick    # skip prompts, defaults
-#   ./install.sh [target-directory] --force    # overwrite ALL files (full reinstall)
+#   ./install.sh [target-directory] --force    # overwrite framework files; project files and maestro.toml keys kept
 #   ./install.sh [target-directory] --preconfigured  # read settings from env vars
 #   curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 #
@@ -33,7 +33,10 @@ PRECONFIGURED_MODE=""
 # ─────────────────────────────────────────────
 
 _CLEANUP_SOURCE=false
-if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
+# Local mode only from a framework checkout installing into another directory.
+# An installed project also has MAESTRO.md + .maestro/commands/, so a script run
+# inside its own target (the documented upgrade) must download instead.
+if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ] || [ ! -d "$SCRIPT_DIR/.maestro/commands" ] || [ "$SCRIPT_DIR" = "$TARGET" ]; then
   echo "Downloading framework files from branch: $MAESTRO_BRANCH"
   if [ "$MAESTRO_BRANCH" = "main" ] && ! $_BRANCH_EXPLICIT; then
     echo "  (To install from a different branch, set MAESTRO_BRANCH=<branch>)"
@@ -49,7 +52,7 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
   fi
 
   mkdir -p "$SOURCE_DIR/.maestro/commands"
-  for _cmd in mae-explore mae-req mae-poc mae-design mae-plan mae-do mae-review mae-init mae-explore-lite mae-help mae-run mae-yolo mae-scope status decide sync md; do
+  for _cmd in mae-explore mae-idea mae-specs mae-requirements mae-design mae-architecture mae-req mae-poc mae-plan mae-do mae-review mae-init mae-explore-lite mae-help mae-run mae-yolo mae-scope status decide sync md; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/commands/$_cmd.md" -o "$SOURCE_DIR/.maestro/commands/$_cmd.md" 2>/dev/null; then
       echo "  Warning: failed to download $_cmd.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
@@ -57,7 +60,7 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ]; then
   done
 
   mkdir -p "$SOURCE_DIR/.maestro/templates"
-  for _tmpl in requirements design architecture explore poc task summary report review roadmap scope-delta; do
+  for _tmpl in requirements design architecture explore ideas poc task summary report review roadmap scope-delta issue; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/templates/$_tmpl.md" -o "$SOURCE_DIR/.maestro/templates/$_tmpl.md" 2>/dev/null; then
       echo "  Warning: failed to download template $_tmpl.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
@@ -251,6 +254,11 @@ mkdir -p "$TARGET/docs/06-test"
 mkdir -p "$TARGET/docs/07-deploy"
 mkdir -p "$TARGET/docs/08-maintenance/issues"
 echo "  Created: docs/ (full structure)"
+_LEGACY=""
+for _d in 02-requirements 02-poc 03-design 04-plan; do
+  [ -n "$(find "$TARGET/docs/$_d" -type f 2>/dev/null | head -1)" ] && _LEGACY="$_LEGACY $_d/"
+done
+[ -n "$_LEGACY" ] && echo "  Old layout found (docs/:$_LEGACY). In your agent, run /mae-init upgrade."
 if [ ! -f "$TARGET/docs/00-reference/README.md" ]; then
   cat > "$TARGET/docs/00-reference/README.md" <<'REFEOF'
 # Reference material
@@ -339,6 +347,17 @@ if [ -d "$TARGET/notes" ]; then
   echo "  Note: notes/ folder found — no longer used in new version"
   _MIGRATED=$((_MIGRATED + 1))
 fi
+# v0.5.0: design.md was the architecture template; it is now the visual system
+if [ -f "$TARGET/.maestro/templates/design.md" ] && head -1 "$TARGET/.maestro/templates/design.md" | grep -q '^# DESIGN:'; then
+  if [ ! -f "$TARGET/.maestro/templates/architecture.md" ]; then
+    mv "$TARGET/.maestro/templates/design.md" "$TARGET/.maestro/templates/architecture.md"
+    echo "  Renamed: .maestro/templates/design.md → architecture.md (design.md is now the visual system)"
+  else
+    rm "$TARGET/.maestro/templates/design.md"
+    echo "  Removed: .maestro/templates/design.md (old architecture template; architecture.md exists)"
+  fi
+  _MIGRATED=$((_MIGRATED + 1))
+fi
 [ "$_MIGRATED" -eq 0 ] && echo "  No deprecated files found"
 
 # ─────────────────────────────────────────────
@@ -402,7 +421,7 @@ EOF
   done
 
   # Create aliases
-  for pair in mex:mae-explore mrq:mae-req mpoc:mae-poc mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review msc:mae-scope; do
+  for pair in mex:mae-explore msp:mae-specs mrq:mae-requirements mds:mae-design mar:mae-architecture mpoc:mae-poc mpl:mae-plan mdo:mae-do mrv:mae-review msc:mae-scope; do
     alias_name="${pair%%:*}"
     canonical="${pair##*:}"
     cat > "$TARGET/.claude/commands/$alias_name.md" <<EOF
@@ -454,7 +473,7 @@ alwaysApply: true
 
 When the user types a Maestro command in chat, load the corresponding file from `.maestro/commands/` and follow its protocol.
 
-Commands: mae-explore (mex), mae-poc (mpoc), mae-req (mrq), mae-design (mds), mae-plan (mpl), mae-do (mdo), mae-review (mrv), mae-init, sync, decide, status, md
+Commands: mae-explore (mex), mae-idea, mae-specs (msp), mae-requirements (mrq), mae-design (mds), mae-architecture (mar), mae-poc (mpoc), mae-scope (msc), mae-plan (mpl), mae-do (mdo), mae-review (mrv), mae-init, mae-help, mae-run, mae-yolo, sync, decide, status, md. Old name: mae-req → mae-requirements
 
 Always read the command file before executing — do not guess the protocol.
 CURSOREOF
@@ -484,7 +503,7 @@ EOF
   fi
 done
 
-for pair in mex:mae-explore mrq:mae-req mpoc:mae-poc mds:mae-design mpl:mae-plan mdo:mae-do mrv:mae-review msc:mae-scope; do
+for pair in mex:mae-explore msp:mae-specs mrq:mae-requirements mds:mae-design mar:mae-architecture mpoc:mae-poc mpl:mae-plan mdo:mae-do mrv:mae-review msc:mae-scope; do
   alias_name="${pair%%:*}"
   canonical="${pair##*:}"
   cat > "$TARGET/.cursor/commands/$alias_name.md" <<EOF
@@ -526,9 +545,13 @@ When user types any of these, read the corresponding file and follow its full pr
 | Command | Alias | File |
 |---------|-------|------|
 | mae-explore | mex | .maestro/commands/mae-explore.md |
-| mae-poc | mpoc | .maestro/commands/mae-poc.md |
-| mae-req | mrq | .maestro/commands/mae-req.md |
+| mae-idea | — | .maestro/commands/mae-idea.md |
+| mae-specs | msp | .maestro/commands/mae-specs.md |
+| mae-requirements | mrq | .maestro/commands/mae-requirements.md |
 | mae-design | mds | .maestro/commands/mae-design.md |
+| mae-architecture | mar | .maestro/commands/mae-architecture.md |
+| mae-poc | mpoc | .maestro/commands/mae-poc.md |
+| mae-req (old name) | — | .maestro/commands/mae-req.md |
 | mae-scope | msc | .maestro/commands/mae-scope.md |
 | mae-plan | mpl | .maestro/commands/mae-plan.md |
 | mae-do | mdo | .maestro/commands/mae-do.md |
@@ -626,6 +649,32 @@ ai_tools = $AI_TOOLS_TOML
 # strengths = [\"area1\"]
 # needs_help = [\"area2\"]"
 
+# Upgrades: add keys introduced since the project was installed. Existing keys
+# are never changed. One line per key: section|key|line to insert under [section].
+TOML_KEYS=(
+  "project|name|name = \"$PROJECT_NAME\""
+  "project|session_visibility|session_visibility = \"$SESSION_VISIBILITY\""
+  "project|question_style|question_style = \"$QUESTION_STYLE\""
+  "project|ai_tools|ai_tools = $AI_TOOLS_TOML"
+)
+toml_has_key() {  # file section key → 0 if key is set inside [section]
+  awk -v sec="[$2]" -v key="$3" '
+    /^[[:space:]]*\[/ { insec = ($0 ~ "^[[:space:]]*\\[" substr(sec, 2, length(sec)-2) "\\][[:space:]]*$") ; next }
+    insec && $0 ~ "^[[:space:]]*" key "[[:space:]]*=" { found = 1 }
+    END { exit found ? 0 : 1 }' "$1"
+}
+for _entry in "${TOML_KEYS[@]}"; do
+  IFS='|' read -r _sec _key _line <<< "$_entry"
+  toml_has_key "$TARGET/maestro.toml" "$_sec" "$_key" && continue
+  if grep -q "^\[$_sec\]" "$TARGET/maestro.toml"; then
+    awk -v hdr="[$_sec]" -v add="$_line" '{ print } $0 == hdr { print add }' "$TARGET/maestro.toml" > "$TARGET/maestro.toml.tmp" \
+      && mv "$TARGET/maestro.toml.tmp" "$TARGET/maestro.toml"
+  else
+    printf '\n[%s]\n%s\n' "$_sec" "$_line" >> "$TARGET/maestro.toml"
+  fi
+  echo "  Added:   maestro.toml [$_sec] $_key"
+done
+
 # ─────────────────────────────────────────────
 # CLAUDE.md (never overwrite)
 # ─────────────────────────────────────────────
@@ -643,7 +692,7 @@ Always save substantive responses to a file in the session folder unless the res
 
 ## Project
 
-- **Framework:** Maestro (command prefix: `mae-`, aliases: `mex`/`mpoc`/`mrq`/`mds`/`mpl`/`mdo`/`mrv`)
+- **Framework:** Maestro (command prefix: `mae-`, aliases: `mex`/`msp`/`mrq`/`mds`/`mar`/`mpoc`/`msc`/`mpl`/`mdo`/`mrv`)
 - **What this is:** {describe your project}
 - **Current phase:** exploration
 - **Stack:** {your tech stack}
@@ -730,10 +779,10 @@ echo "  4. Put any client briefs / specs in docs/00-reference/"
 echo "  5. Run /mae-explore to start"
 echo ""
 echo "── Commands ────────────────────────────"
-echo "  /mae-explore (mex)   Build project understanding"
-echo "  /mae-poc     (mpoc)  PoC spec: requirements + design + roadmap"
-echo "  /mae-req     (mrq)   Formalize requirements"
-echo "  /mae-design  (mds)   Create technical architecture"
+echo "  /mae-explore (mex)   Build project understanding → EXPLORE.md"
+echo "  /mae-idea            Park an idea in IDEAS.md"
+echo "  /mae-specs   (msp)   Requirements, design (if UI), architecture — whatever is missing"
+echo "  /mae-poc     (mpoc)  PoC spec: requirements + architecture + roadmap in one file"
 echo "  /mae-scope   (msc)   Scope change: classify, impact analysis, apply"
 echo "  /mae-plan    (mpl)   Create roadmap and tasks"
 echo "  /mae-do      (mdo)   Execute tasks"

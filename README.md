@@ -84,8 +84,10 @@ The installer asks three questions (session visibility, which AI tools, how to a
 Upgrading from an earlier version, or want the framework files refreshed:
 
 ```bash
-curl -fsSL .../install.sh -o install.sh && bash install.sh . --force
+curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash -s -- . --force
 ```
+
+Upgrades keep your files and existing `maestro.toml` keys, and add any keys that are new. A pre-0.5.0 `docs/` layout is detected; run `/mae-init upgrade` in your agent to move it.
 
 → **[Full installation guide](docs/installation.md)** — browser wizard, manual install, Cursor setup, teams, troubleshooting
 
