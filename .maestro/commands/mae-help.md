@@ -20,6 +20,7 @@ Existence checks, `grep`, and header lines only. Never read a canonical file in 
 
 | # | Probe | How |
 |---|---|---|
+| 0 | Legacy layout | Any of `docs/02-requirements/`, `docs/02-poc/`, `docs/03-design/`, `docs/04-plan/` holds files (pre-0.5.0 layout) |
 | 1 | Session | Highest-numbered `.sessions/{NNN}-*/`; whether its `_summary.md` exists |
 | 2 | Reference | `docs/00-reference/` has files; newest modification time |
 | 3 | Explore | `docs/01-explore/` has files other than `.gitkeep`; `EXPLORE.md` exists |
@@ -37,6 +38,7 @@ First matching row wins. This table is also the auto-trigger heuristic for skill
 
 | State | Next | Also relevant |
 |---|---|---|
+| Legacy layout (0) | `/mae-init upgrade` — moves docs to the 0.5.0 layout on confirmation | — (other rows read the new paths; they are unreliable until upgraded) |
 | Unanswered questions in the session (8) | Answer them — name the file | the command that asked them |
 | No explore artifacts, no session (1, 3) | `/mae-explore` | `/mae-init` if `maestro.toml` has no profile |
 | Explore artifacts; no REQUIREMENTS.md, no POC.md (3, 4) | `/mae-specs` — or `/mae-poc` if the build is one milestone and time-boxed | `/mae-explore doc` if there is no EXPLORE.md yet |
