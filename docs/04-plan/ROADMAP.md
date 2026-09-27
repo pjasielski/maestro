@@ -69,6 +69,11 @@ Six small behavior changes to command *content*, shipped before the skill conver
 | P42.04 | **Append-only session summary + decision log; two zones (curated top / log bottom); compact and reconcile at `/sync` with contradiction flagging** | P1 | S | — | ☐ todo | [P42.04](tasks/P42.04-append-only-state.md) | 22 §6a |
 | P42.05 | **`/mae-do`: generated README gets a verified `## Quickstart`; report running processes with stop instructions; `## Running Processes` in `_summary.md`, checked at `/sync`** | P1 | S | — | ☐ todo | [P42.05](tasks/P42.05-readme-and-processes.md) | 22 §10 |
 | P42.06 | **Explore question pre-filling: consequence-based rule, three markers, working-default-on-open, technical vs. business-logic audience split** (was M04.14 — earmarked for v0.4.1 and never shipped) | P2 | S | — | ☐ todo | [P42.06](tasks/P42.06-explore-prefill.md) | 018/05 |
+| P42.07 | **PoC graduation: `/mae-plan` accepts POC.md and requirements-only planning** | P1 | XS | P42.09 | ☐ todo | [P42.07](tasks/P42.07-poc-graduation.md) | 018 §1.1 |
+| P42.08 | **Installer fixes: local-mode detection, `issue.md` download, append missing `maestro.toml` blocks; v0.5.0 lists; clean-install test** | P1 | S | P42.09 | ☐ todo | [P42.08](tasks/P42.08-installer-fixes.md) | hq 22/11 §5 |
+| P42.09 | **Canonical layout (`02-specs/`, `03-plan/`, `EXPLORE.md`, main-file rule) + command names (`/mae-requirements`, `/mae-architecture`, visual `/mae-design`, `/mae-specs`)** | P1 | L | — | ☐ todo | [P42.09](tasks/P42.09-layout-and-commands.md) | hq 22/15, 18 |
+| P42.10 | **`/mae-idea` — append-only idea inbox `01-explore/IDEAS.md`; parks, never asks** | P2 | XS | P42.09 | ☐ todo | [P42.10](tasks/P42.10-mae-idea.md) | hq 22/15 §7 |
+| P42.11 | **`/mae-pr` — push the current branch, open a draft PR (compare-URL fallback)** | P3 | S | P42.01 | ☐ todo | [P42.11](tasks/P42.11-mae-pr.md) | hq 22/14 §4, 15 §8 |
 
 **Done when:** A developer who dislikes file noise can set `response_capture = "minimal"` in `maestro.local.toml` and get a chat-first experience without losing canonical artifacts; commits happen per task with task-ID messages; no generated README lies about how to run the app.
 
@@ -95,7 +100,7 @@ Commands become skills per the Agent Skills open standard (D17, D22, D23). Inclu
 | M04.10 | **Installer hotfix: graceful non-interactive fallback — detect missing/unreadable /dev/tty, announce defaults loudly, clarify reinstall skips questions** | P1 | S | — | ☐ todo | [M04.10](tasks/M04.10-installer-tty-fallback.md) | 015/08 field report |
 | M04.11 | **`poc` flag on the remaining delivery commands (carried from M03)** | P2 | M | M04.03 | ☐ todo | — | 005 |
 | M04.12 | **Post-do state sync (checklist or required /sync) (carried from M03)** | P2 | S | — | ☐ todo | — | 009 |
-| M04.13 | **Definition of done: acceptance criteria checked before status → done (carried from M03)** | P2 | S | — | ☐ todo | — | 009 |
+| M04.13 | **Definition of done: acceptance criteria checked before status → done (carried from M03)** | P2 | S | — | ☐ todo | [M04.13](tasks/M04.13-definition-of-done.md) | 009 |
 | M04.14 | ⊘ **Explore question pre-filling — moved to P42.06 (v0.4.2 patch)** | — | — | — | ⊘ moved | — | 018 |
 | M04.15 | **`/mae-help` — state-aware next-step suggestion; `/mae-help {command}`; shows 3 relevant commands, not 11. Build FIRST in this milestone** | P1 | S | — | ✅ done | [M04.15](tasks/M04.15-mae-help.md) | 22 §4 |
 | M04.16 | *(vacant — held both aliases; `/mae-arch` promoted to M05.12 as primary name, `/mae-spec` dropped as unnecessary once chaining exists)* | — | — | — | ⊘ vacant | — | 22 §2, §7 |
@@ -143,8 +148,9 @@ Canonical docs stay current transactionally (D19, D20, D21).
 | M05.05 | **PoC graduation via delta merge (carried from M03 — currently graduates by `/mae-plan` at M02)** | P2 | M | M05.02 | ☐ todo | — | 015/018 |
 | M05.06 | **ADR supersession lifecycle: superseded-by graph, ADR ↔ DESIGN.md drift reporting in /sync** | P1 | M | M05.02, M04 ADR migration | ☐ todo | — | 018 (hq 11 §3) |
 | M05.07 | **`/mae-scope` — scope-change intake: intake → classify (additive/modifying/conflicting) → `scope-delta.md` impact analysis → apply on confirmation. Emits ADRs for conflicts; consumes partial approval from `/mae-approve`; detects when the change is large enough to warrant `/mae-explore` first** | P1 | M | M05.01 (soft) | ✅ done | [M05.07](tasks/M05.07-mae-scope.md) | 018 (absorbs F.6), 22 §9 |
+| M05.07a | **`/mae-scope --direct`: delta file still written; additive applied without asking; modifying/conflicting still stop** | P2 | XS | M05.07 | ☐ todo | [M05.07a](tasks/M05.07a-scope-direct.md) | hq 22/11 §A4 |
 | M05.08 | **Canonical-file consolidation: OPEN_QUESTIONS → HANDOFF section; delete WORKLOG (git log with task-ID messages replaces it); DECISIONS → `adr/_index.md`; add ADR index to context-loading for Design/Implementation/Review; mechanical staleness reporting in `/sync`** | P1 | M | M05.06 | ☐ todo | — | 22 §6b |
-| M05.09 | **`/mae-mock` — standalone HTML mockups, self-contained, `_screens.md` index mapping screens to requirements; two destinations (`01-explore/mock/` pre-requirements, `03-design/mock/` post)** | P2 | M | M05.12 | ☐ todo | — | 22 §7 |
+| M05.09 | **`/mae-mock` — standalone HTML mockups, self-contained, `_screens.md` index mapping screens to requirements; one destination `02-specs/mock/`; born as a skill** | P1 | M | P42.09, M04.03 | ☐ todo | [M05.09](tasks/M05.09-mae-mock.md) | 22 §7, hq 22/11 §A5, 15 §5 |
 | M05.10 | **`/mae-approve` full: frontmatter approval stamp; approved sections are never silently regenerated — conflict flagged instead** | P2 | S | M04.17, M05.01 | ☐ todo | — | 22 §8 |
 | M05.11 | **`/mae-run {a}..{b}` chaining + `->` syntax + `/mae-yolo [stop-phase]`: one question round at the front, one review at the end; never skips explore; commits per task** | P1 | M | P42.01 (soft) | ✅ done | [M05.11](tasks/M05.11-run-chaining-yolo.md) | 22 §2 |
 | M05.12 | **⚠️ DECISION-GATED — design/architecture naming + phase placement.** Needs its own session before any task spec exists. `/mae-arch` as primary with `/mae-design` alias (research: Anthropic shipped `frontend-design`, not `design`; Kiro/spec-kit keep `design.md` for architecture). Artifact names stay. Decide before M05.09 | P1 | S | — | ⏳ blocked (needs decision session) | — | 22 §7 |
