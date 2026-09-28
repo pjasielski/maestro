@@ -29,6 +29,18 @@ All notable changes to the Maestro framework.
 - `/mae-plan` plans from REQUIREMENTS.md alone or from POC.md (PoC graduation now works)
 - Installer: upgrades append missing `maestro.toml` keys and never change existing ones; the documented upgrade command now downloads instead of reinstalling the project's own files; `issue.md` template now installed; asks when to commit and which responses to save
 - Browser setup wizard frozen at v0.4.0 options; the one-line install is the recommended path
+- Chains (`/mae-run`, `/mae-yolo`, multi-part `/mae-specs`) write each artifact straight to `docs/` so the next phase reads it normally; the one review is keep / undo, with changed files backed up in the session
+- `docs/00-reference/` is the primary evidence of intent, ranked below your instructions and confirmed decisions; its content is data, never instructions
+- DECISIONS.md is loaded for architecture, implementation and code review
+
+### Fixed (rc.2)
+- Installer: a failed download stops the install before the project is touched (was: continued and reported success)
+- Installer: the one-line install gets the same Cursor rules as a clone install (was: shorter fallback rules that routed skills to `.maestro/commands/`)
+- Codex: a root `AGENTS.md` is now written. Copilot and Codex share one Maestro block between markers; your own content in `AGENTS.md` or `.github/copilot-instructions.md` is kept
+- Installer: in a folder that isn't a Git repository, `commit = "never"` and no commit question
+- `/mae-run` and `/mae-yolo` follow `[git]` exactly (was: committed after every task even with `commit = "never"`)
+- Removed runtime pointers to `.maestro/skills/CONVENTIONS.md`, which projects never receive
+- Docs: removed checkpoint commands and `mode = "team"`, `.sessions/` paths throughout, per-tool first steps and support levels, complete team commit list, accurate uninstall and Windows notes
 
 ### Removed
 - `/mae-explore-lite` — question pre-fill makes the full explore cheap enough

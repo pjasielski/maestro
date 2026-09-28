@@ -12,10 +12,10 @@ curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh 
 
 ### First Steps
 
-1. **Edit `CLAUDE.md`** — add your project name, tech stack, and any project-specific notes
-2. **Put source material** (client briefs, specs, transcripts, brand assets) in `docs/00-reference/`
-3. **Start a conversation** in your project directory; the agent reads `CLAUDE.md` → `MAESTRO.md` → `HANDOFF.md`
-4. Run `/mae-help` — it names the command to run now (on a new project, `/mae-explore`)
+1. **Put source material** (client briefs, specs, transcripts, brand assets) in `docs/00-reference/`
+2. **Start a conversation** in your project directory. Your tool's adapter points the agent to `MAESTRO.md`, which reads `HANDOFF.md`: `CLAUDE.md` (Claude Code), `.cursor/rules/` (Cursor), `AGENTS.md` (Codex), `.github/copilot-instructions.md` (Copilot)
+3. Run `/mae-help` (Codex and Copilot: type `mae-help`) — it names the command to run now (on a new project, `/mae-explore`)
+4. Optional: add your project name and stack to `CLAUDE.md`, or to `AGENTS.md` outside the Maestro block
 
 ### Understanding the Structure
 
@@ -74,7 +74,7 @@ A phase command is named after its folder: `/mae-explore` → `docs/01-explore/`
 /mae-mock                        # Clickable HTML screens in docs/02-specs/mock/
 ```
 
-Bare `/mae-specs` builds only the missing parts: requirements, then design if there's a UI, then architecture. When everything exists it points you to `/mae-scope` for changes. Drafts go to your session; promote them to `docs/02-specs/` after review.
+Bare `/mae-specs` builds only the missing parts: requirements, then design if there's a UI, then architecture. When everything exists it points you to `/mae-scope` for changes. One part is drafted in your session and promoted to `docs/02-specs/` after review. Several parts are written straight to `docs/02-specs/`, so each builds on the last, and one review at the end keeps or undoes them.
 
 `/mae-mock` confirms the screen list in chat, then writes self-contained HTML you can send to a client. Gaps it exposes are listed as `GAP:` lines in `_screens.md`, which `/mae-requirements` and `/mae-poc` pick up. Once the client approves the mock, `/mae-design` extracts `DESIGN.md` from it.
 
@@ -126,13 +126,13 @@ By default `/mae-do` commits after each task (`feat(M02.03): …` with a `Task:`
 
 ### What Is a Session?
 
-A session is a working folder in `.sessions/` (e.g., `.sessions/002-api-design/`). It holds all artifacts from a stretch of related work: analysis files, drafts, reports, checkpoints.
+A session is a working folder in `.sessions/` (e.g., `.sessions/002-api-design/`). It holds all artifacts from a stretch of related work: analysis files, drafts, reports.
 
 Sessions are your **workbench** — messy, iterative, exploratory. Delivery is your **showcase** — clean, confirmed, canonical.
 
 ### Starting a Session
 
-When you start a new Claude Code conversation, the agent:
+When you start a new conversation, the agent:
 1. Reads `HANDOFF.md` and `MAESTRO.md`
 2. Checks for the latest session
 3. Greets you with a summary
@@ -144,7 +144,6 @@ If you start working without naming a session, the agent will ask: "Should I ope
 
 - `_summary.md` — Living summary of what happened (auto-updated)
 - `NN_description.md` — Numbered working artifacts (analysis, drafts, reports)
-- `checkpoints/` — Project state snapshots (via `/mae-checkpoint (removed — use sync)`)
 
 ---
 
@@ -185,38 +184,22 @@ Used in `_summary.md` to track lifecycle:
 /status questions    # Open questions by priority
 ```
 
-### Checkpoints
-
-Save named snapshots for progress tracking:
-
-```
-/mae-checkpoint (removed — use sync) pre-design       # Before starting design
-/mae-checkpoint (removed — use sync) sprint-1-end     # End of sprint
-/mae-checkpoint (removed — use sync) list             # See all checkpoints
-/mae-checkpoint (removed — use sync) compare pre-design sprint-1-end  # See what changed
-```
-
 ---
 
-## Solo vs Team Mode
+## Solo and Team Projects
 
-### Solo Mode (default)
+Two independent settings in `maestro.toml`:
 
-- Sessions and notes are committed to git
-- WORKLOG has no "Who" column
-- Good for personal projects and solo development
+- **`session_visibility`** — `"committed"` (default; sessions in git, full audit trail) or `"gitignored"` (each person's working material stays local; `docs/` is still shared)
+- **`[[team.members]]`** — define team members and team behaviour switches on: the agent asks who it's working with, WORKLOG gets a "Who" column, and `/sync` is how decisions reach everyone
 
-### Team Mode
-
-- Sessions and notes are gitignored (each person's working material stays local)
-- WORKLOG includes a "Who" column
-- Delivery artifacts are shared via git
-- Use `/sync` regularly to keep canonical files current
-
-Switch mode in `maestro.toml`:
 ```toml
 [project]
-mode = "team"
+session_visibility = "gitignored"
+
+[[team.members]]
+name = "Ana"
+role = "backend"
 ```
 
 ---
@@ -232,7 +215,7 @@ Templates in `.maestro/templates/` are starting points. Edit them to match your 
 
 ### Adding Custom Commands
 
-Create a `.md` file in `.claude/commands/`:
+Create a `.md` file in `.maestro/commands/` and a one-line wrapper pointing to it in `.claude/commands/` (Claude Code) or `.cursor/commands/` (Cursor), like the installed ones:
 
 ```markdown
 # /mae-estimate — Effort Estimation
@@ -247,7 +230,7 @@ Generate effort estimates for planned tasks.
 4. Save report to session folder
 ```
 
-Name it `mae-estimate.md` and it becomes `/mae-estimate`.
+Name it `mae-estimate.md` and it becomes `/mae-estimate`. Codex and Copilot won't see it unless you add a row to the command table outside the Maestro block in `AGENTS.md` / `.github/copilot-instructions.md`.
 
 ### Extending Delivery Structure
 

@@ -32,7 +32,7 @@ curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh 
 > — see [Installing from a branch or tag](docs/installation.md#installing-from-a-branch-or-tag).
 
 > [!TIP]
-> Maestro is prompts and markdown. No daemon, no API key, no vendor lock-in — delete `MAESTRO.md` and `.maestro/` and your project is exactly as it was.
+> Maestro is prompts and markdown. No daemon, no API key, no proprietary format — stop using it and your requirements, decisions and plans are still ordinary Markdown in your repo. ([Uninstalling](docs/installation.md#uninstalling))
 
 ## What a session looks like
 
@@ -205,7 +205,7 @@ It writes a `scope-delta.md` you can send to a client as-is, then applies only w
 
 ### Sessions are a workbench; `docs/` is the record
 
-Commands write drafts to `.sessions/`. You review. Confirmed work gets **promoted** to `docs/`.
+Specs and the explore synthesis are drafted in `.sessions/`. You review. Confirmed work gets **promoted** to `docs/`.
 
 ```
 /mae-explore doc   → explore synthesis  ──promote──→  docs/01-explore/EXPLORE.md
@@ -215,7 +215,7 @@ Commands write drafts to `.sessions/`. You review. Confirmed work gets **promote
 /mae-plan          → roadmap + tasks    ──────────→  docs/03-plan/
 ```
 
-Only reviewed artifacts reach `docs/`, so `docs/` stays trustworthy — which is what makes it safe for the agent to treat as canonical. (`/mae-plan`, `/mae-poc` and `/mae-mock` write straight through: their output is immediately actionable, so a review round-trip would only cost you time.)
+`/mae-plan`, `/mae-poc` and `/mae-mock` create their files straight in `docs/`: the output is immediately actionable, so a review round-trip would only cost you time. Changing a file that already exists in `docs/` always shows you the change first. A chain (`/mae-run`, several `/mae-specs` parts) writes straight to `docs/` so each step builds on the last, then asks once: keep, or undo.
 
 ### Nothing falls through the cracks
 
@@ -256,7 +256,10 @@ your-project/
 ├── .maestro/skills/          ← Skills the agent may offer (explore, specs, scope, idea, mock)
 ├── .maestro/commands/        ← Canonical command definitions
 ├── .claude/                  ← Claude Code: skills + command wrappers and aliases
-└── .agents/skills/           ← Skills for Cursor and Codex
+├── .cursor/                  ← Cursor: rules + slash commands
+├── .agents/skills/           ← Skills for Cursor and Codex
+├── AGENTS.md                 ← Codex: a Maestro block (your own content kept)
+└── .github/copilot-instructions.md  ← Copilot: a Maestro block
 ```
 
 A phase command is named after its folder: `/mae-explore` → `01-explore/`, `/mae-specs` → `02-specs/`, `/mae-plan` → `03-plan/`.
@@ -337,11 +340,14 @@ Every artifact is generated from a markdown template in `.maestro/templates/`. E
 
 Each protocol lives once, in `.maestro/skills/` or `.maestro/commands/`. Each tool gets a thin adapter pointing at it — so a command behaves identically everywhere, and adding a tool never means rewriting prompts.
 
-| Tool | Adapter | Usage |
-|------|---------|-------|
-| **Claude Code** | `.claude/skills/` + `.claude/commands/` | `/mae-explore` or `/mex` — autocomplete works; skills can also be offered by the agent |
-| **Cursor** | `.cursor/rules/` + `.cursor/commands/` + `.agents/skills/` | Type `mae-explore` or `mex` in chat |
-| **Copilot / Codex** | `.github/copilot-instructions.md` | Type the command name in chat |
+| Tool | Support | Adapter | Usage |
+|------|---------|---------|-------|
+| **Claude Code** | verified | `.claude/skills/` + `.claude/commands/` | `/mae-explore` or `/mex` — autocomplete works; skills can also be offered by the agent |
+| **Cursor** | beta | `.cursor/rules/` + `.cursor/commands/` + `.agents/skills/` | `/mae-explore`, or `mae-explore` / `mex` in chat |
+| **Codex** | beta | `AGENTS.md` + `.agents/skills/` | `mae-explore` (no slash); `$mae-explore` invokes the skill |
+| **Copilot** | beta | `.github/copilot-instructions.md` | Type the command name in chat |
+
+*Beta:* installed and pointer-checked, not yet run end to end in that tool for this release.
 
 ## FAQ
 
@@ -396,8 +402,9 @@ Yes — that's what `/mae-explore` is for. Point it at a codebase and it builds 
 
 ## Requirements
 
-- An AI coding tool: [Claude Code](https://claude.com/claude-code), [Cursor](https://cursor.sh), or GitHub Copilot
-- A project directory
+- An AI coding tool: [Claude Code](https://claude.com/claude-code), [Cursor](https://cursor.sh), GitHub Copilot, or [Codex](https://developers.openai.com/codex)
+- Bash to run the installer (macOS, Linux; on Windows, Git Bash or WSL)
+- Git, recommended — the agent commits each task and never pushes. Without a repository, commits are off (`commit = "never"`)
 
 ## Documentation
 
