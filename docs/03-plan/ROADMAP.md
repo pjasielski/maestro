@@ -93,7 +93,7 @@ Commands become skills per the Agent Skills open standard (D17, D22, D23). Inclu
 | M04.02 | **Frontmatter convention: tiers (auto/suggest/explicit), trigger + anti-trigger phrases** | P1 | S | M04.01 | ✅ done | [M04.02](tasks/M04.02-frontmatter-convention.md) | 015 |
 | M04.03 | **Convert all remaining commands to skills (incl. `/mae-poc`); templates as supporting files** | P1 | L | M04.02 | ✅ done | [M04.03](tasks/M04.03-convert-commands-to-skills.md) | 015 |
 | M04.05 | **`mae-prd` / `mae-sdd` alias skills with synonym descriptions** | P2 | S | M04.03 | ☐ todo | [M04.05](tasks/M04.05-prd-sdd-aliases.md) | 015 |
-| M04.06 | **Installer: place skills per tool; retire .cursor dispatch where skills suffice** | P1 | M | M04.03 | ☐ todo | [M04.06](tasks/M04.06-installer-skill-placement.md) | 015 |
+| M04.06 | **Installer: place skills per tool; retire .cursor dispatch where skills suffice** | P1 | M | M04.03 | 🔄 in progress (placement shipped in v0.5.0; dispatch retirement open) | [M04.06](tasks/M04.06-installer-skill-placement.md) | 015 |
 | M04.07 | **Layered config: maestro.local.toml (gitignored personal prefs) + response_capture/question_budget settings** | P1 | S | — | ☐ todo | [M04.07](tasks/M04.07-layered-config.md) | 015 |
 | M04.08 | **Question-budget rules in req/design/plan (explore exempt)** | P2 | S | M04.03 | ☐ todo | [M04.08](tasks/M04.08-question-budget.md) | 015 |
 | M04.09 | **Installer hotfix: Windows story — document Git Bash/WSL requirement, evaluate install.ps1 (interim until M06 CLI)** | P1 | S | — | ☐ todo | [M04.09](tasks/M04.09-installer-windows-support.md) | 015/08 field report |

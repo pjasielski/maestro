@@ -1,15 +1,16 @@
 # HANDOFF.md — Maestro Framework
 
 ## Current Status
-- **Phase:** packaging — v0.5.0 at `rc.1`, waiting for the user's test before `main`
-- **Last worked on:** 2026-09-27 — v0.5.0 blocks 0–5 per `maestro-hq/.sessions/22-new-scope/18-implementation-brief.md` (Opus, one session)
-- **Active branch:** `release/v0.5.0`. Tags `v0.5.0-alpha.0` (baseline) … `alpha.4`, `rc.1`; `dev` fast-forwarded. Rollback = install from a tag (`MAESTRO_BRANCH=v0.5.0-alpha.N`)
+- **Phase:** packaging — v0.5.0 at `rc.2`, waiting for the user's test before `main`
+- **Last worked on:** 2026-09-28 — rc.2 hotfix after the Codex review (`maestro-hq/.sessions/025-v05-review/03-review-reconciliation.md`, H1–H12); before that, blocks 0–5 per `maestro-hq/.sessions/22-new-scope/18-implementation-brief.md`
+- **Active branch:** `release/v0.5.0`. Tags `v0.5.0-alpha.0` (baseline) … `alpha.4`, `rc.1`, `rc.2`; `dev` fast-forwarded. Rollback = install from a tag (`MAESTRO_BRANCH=v0.5.0-alpha.N`)
 - **Version:** v0.4.0 released; v0.5.0 unreleased (CHANGELOG `[0.5.0]`)
 - **Done in v0.5.0:** P42.01 git policy, P42.02 response_capture, P42.05 quickstart + processes, P42.06 question pre-fill, P42.07 PoC graduation, P42.08 installer fixes, P42.09 layout & commands, P42.10 `/mae-idea`, P42.11 `/mae-pr`, M04.03 five skills (+ minimal M04.06 placement), M05.07a `--direct`, M05.09 `/mae-mock`; decisions D34–D45
-- **Next task:** (user) test `rc.1` (fresh install + one real project), merge `release/v0.5.0` to `main`, tag `v0.5.0`. Then delete stale branches (`milestone/m03-skill-first`, `milestone/m04-poc`, `feat/new-installation`); back up `maestro/.sessions/` and drop the two stashes
-- **Not in this release:** P42.03 artifact consolidation + `/md` two modes · P42.04 append-only state + review 018 fix-first 1–2 (DECISIONS.md in the Design/Implementation/Review loading rows; Synced/Supersedes columns) · M04.13 definition of done (task file only) · M05.07a delta-file marks (not approved) · M04.17 `/mae-approve` (Q7) · M05.06/M05.08 canonical files + ADR folder · M05.13 parallel view · plugin install / `maestro` CLI · YAML workflows
-- **Known gaps:** trigger evals (CONVENTIONS §9.3–4) not run for the five skills; skill placement on Windows untested; `mae-explore` SKILL.md is 240 lines (target 150); upgraded projects keep their own CLAUDE.md, including the old "< 80 words" line, because the installer never edits it — remove that line by hand
-- **Where state is read:** the state probe and state table live in `.maestro/commands/mae-help.md`; `/status`, `/mae-yolo` and CONVENTIONS §3 point at it. Change it there only.
+- **Next task:** (user) test `rc.2` (fresh install + one real project; `docs/06-test/install-check.sh` must pass), merge `release/v0.5.0` to `main`, tag `v0.5.0`. Then delete stale branches (`milestone/m03-skill-first`, `milestone/m04-poc`, `feat/new-installation`); back up `maestro/.sessions/` and drop the two stashes
+- **Not in this release:** P42.03 artifact consolidation + `/md` two modes · P42.04 append-only state + review 018 fix-first 2 (Synced/Supersedes columns; fix-first 1 done in rc.2) · M04.13 definition of done (task file only) · M05.07a delta-file marks (not approved) · M04.17 `/mae-approve` (Q7) · M05.06/M05.08 canonical files + ADR folder · M05.13 parallel view · plugin install / `maestro` CLI · YAML workflows
+- **After v0.5.0 (from review 025):** trigger evals for the four other skills + a manual 4-tool smoke matrix (beta → verified) · P42.04 state ownership, HANDOFF as resume index · MAESTRO.md kernel ≤200 lines · legacy-path grep in CI · a command registry that generates installer lists, adapter tables and the help catalogue — before any new command (user decision)
+- **Known gaps:** trigger evals (CONVENTIONS §9.3–4) run only for `mae-explore`; Cursor, Copilot and Codex are beta (installed and pointer-checked, not run end to end); skill placement on Windows untested; `mae-explore` SKILL.md is 240 lines (target 150); upgraded projects keep their own CLAUDE.md, including the old "< 80 words" line, because the installer never edits it — remove that line by hand
+- **Where state is read:** the state probe and state table live in `.maestro/commands/mae-help.md`; `/status` and `/mae-yolo` point at it (CONVENTIONS §3 too, in this repo). Change it there only.
 - **Blockers:** none. Q7 (`/mae-approve`) still open
 
 ## Recent Changes (2026-09-27) — v0.5.0 (session 22-new-scope, maestro-hq)
