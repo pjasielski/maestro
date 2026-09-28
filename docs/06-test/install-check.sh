@@ -12,6 +12,9 @@
 # 4. No Git: an install outside a repository writes commit = "never".
 # 5. AGENTS.md: an existing file keeps its content; a re-run replaces only the
 #    Maestro block.
+# 6. Upgrade: a v0.4.0-shaped project keeps its keys, notes and docs and gets
+#    the new commands, skills, templates and adapters; a plain re-run changes
+#    nothing of the user's.
 
 set -u
 REPO="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -91,6 +94,39 @@ if grep -q 'Use tabs.' "$A" && [ "$(grep -c 'maestro:start' "$A")" = 1 ]; then
   pass "AGENTS.md: user content kept, one Maestro block after a re-run"
 else
   fail "AGENTS.md merge: user content lost or block duplicated"
+fi
+
+# 6. Upgrade a v0.4.0-shaped project (download mode, --force), then re-run
+U="$WORK/upgrade/proj"
+mkdir -p "$U/docs/04-plan" "$U/.maestro/commands" "$U/.maestro/templates" "$U/.github"
+git -C "$U" init -q
+printf '[project]\nname = "proj"\nsession_visibility = "gitignored"\nquestion_style = "sync"\nai_tools = ["claude", "copilot", "codex"]\n' > "$U/maestro.toml"
+echo "# MAESTRO v0.4" > "$U/MAESTRO.md"
+printf '# HANDOFF\nmy notes\n' > "$U/HANDOFF.md"
+echo x > "$U/docs/04-plan/ROADMAP.md"
+echo old > "$U/.maestro/commands/mae-explore.md"
+printf '# DESIGN: {name}\n' > "$U/.maestro/templates/design.md"
+printf '# Maestro — AI-Assisted Delivery Framework\n\nold generated\n' > "$U/.github/copilot-instructions.md"
+MAESTRO_URL="file://$REPO" bash "$WORK/bin/install.sh" "$U" --force > "$WORK/upgrade.log" 2>&1 \
+  || fail "upgrade exited non-zero"
+UP_OK=true
+grep -q 'Old layout found' "$WORK/upgrade.log"                  || { fail "upgrade: no legacy-layout hint"; UP_OK=false; }
+grep -q 'question_style = "sync"' "$U/maestro.toml"             || { fail "upgrade: existing toml key changed"; UP_OK=false; }
+grep -q '^\[git\]' "$U/maestro.toml"                            || { fail "upgrade: [git] not appended"; UP_OK=false; }
+grep -q 'my notes' "$U/HANDOFF.md"                              || { fail "upgrade: HANDOFF.md changed"; UP_OK=false; }
+[ -f "$U/docs/04-plan/ROADMAP.md" ]                             || { fail "upgrade: installer moved user docs"; UP_OK=false; }
+[ ! -f "$U/.maestro/commands/mae-explore.md" ]                  || { fail "upgrade: old command copy kept"; UP_OK=false; }
+[ -f "$U/.maestro/skills/mae-explore/SKILL.md" ]                || { fail "upgrade: skill not installed"; UP_OK=false; }
+grep -q '^# ARCHITECTURE\|^# DESIGN: {name}' "$U/.maestro/templates/architecture.md" 2>/dev/null || { fail "upgrade: old design.md not migrated"; UP_OK=false; }
+grep -q 'old generated' "$U/.github/copilot-instructions.md"    && { fail "upgrade: pre-0.5.0 Copilot file not replaced"; UP_OK=false; }
+[ -f "$U/AGENTS.md" ]                                           || { fail "upgrade: AGENTS.md missing (codex in ai_tools)"; UP_OK=false; }
+$UP_OK && pass "v0.4.0-shaped project upgraded: keys, notes and docs kept; commands, skills, templates, adapters migrated"
+cp "$U/maestro.toml" "$WORK/toml.before"
+MAESTRO_URL="file://$REPO" bash "$WORK/bin/install.sh" "$U" > /dev/null 2>&1 || fail "re-run exited non-zero"
+if diff -q "$WORK/toml.before" "$U/maestro.toml" > /dev/null && [ "$(grep -c 'maestro:start' "$U/AGENTS.md")" = 1 ] && grep -q 'my notes' "$U/HANDOFF.md"; then
+  pass "re-run without --force changes nothing of the user's"
+else
+  fail "re-run changed maestro.toml, HANDOFF.md or duplicated the AGENTS.md block"
 fi
 
 echo ""
