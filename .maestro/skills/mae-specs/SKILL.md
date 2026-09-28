@@ -58,7 +58,7 @@ Follow `references/{part}.md` with the remaining arguments. Regenerating an exis
 
 2. **Nothing selected** → "All specs exist. Changes: `/mae-scope`. Regenerate one part: `/mae-specs {part}`." Stop. Bare never regenerates an existing part.
 3. **One part** → follow its reference file.
-4. **Several parts** → chain them under the `mae-run.md` rules: one question round first (each part's question step in collect mode), each part reads the previous part's session draft, one review before promotion, one report.
+4. **Several parts** → chain them under the `mae-run.md` rules: one question round first (each part's question step in collect mode), each part written straight to `docs/02-specs/` and read by the next, one keep/undo review, one report.
 5. Architecture skipped → end with: "Hand-off: a developer runs `/mae-specs architecture`."
 
 ## Skip When

@@ -14,7 +14,7 @@ $ARGUMENTS — optional: `all`, or one command name (`mae-requirements`, `mrq`, 
 
 ## State probe (shared — defined here, nowhere else)
 
-The framework's one state reader. `/status` renders it as "where am I"; `/mae-help` renders it as "what do I do"; `/mae-yolo` uses it to find the current phase; skill fit checks and gates (`.maestro/skills/CONVENTIONS.md` §1) use it to decide whether to announce or stay quiet. Change it here; every other file points here.
+The framework's one state reader. `/status` renders it as "where am I"; `/mae-help` renders it as "what do I do"; `/mae-yolo` uses it to find the current phase; skill fit checks and gates use it to decide whether to announce or stay quiet. Change it here; every other file points here.
 
 Existence checks, `grep`, and header lines only. Never read a canonical file in full to answer "what next".
 
@@ -34,7 +34,7 @@ Existence checks, `grep`, and header lines only. Never read a canonical file in 
 
 ## State table
 
-First matching row wins. This table is also the auto-trigger heuristic for skills — CONVENTIONS.md §3 points here.
+First matching row wins. This table is also the auto-trigger heuristic for skills.
 
 | State | Next | Also relevant |
 |---|---|---|

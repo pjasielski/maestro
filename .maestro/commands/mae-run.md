@@ -24,7 +24,7 @@ Phase order: `explore` → `requirements` → `design` → `architecture` → `p
 - `a..b` expands to the phase list; `a` must precede `b`. A one-phase range is refused: "that is just `/mae-{a}`".
 - The `->` list must contain delivery commands only, in ascending phase order. Mixing `->` with `..` is an error; say which form to use.
 - **Missing prerequisites.** Each phase's prerequisite artifact must exist on disk or be produced earlier in the same chain. `architecture..do` with no REQUIREMENTS.md → stop: "`architecture` needs REQUIREMENTS.md, which does not exist. `/mae-run requirements..do` works." Never fill the gap silently.
-- Print the resolved plan, one line per phase, plus the trade-off in one line: "N phases, one question round now, one review after `{last specifying phase}`, per-task commits inside `do`." Confirm once. This is the only confirmation before the question round.
+- Print the resolved plan, one line per phase, plus the trade-off in one line: "N phases, one question round now; each artifact is written straight to `docs/`; one review after `{last specifying phase}` keeps or undoes them; commits per `[git]`." Confirm once. This confirmation is the approval for the chain's `docs/` writes, and the only confirmation before the question round.
 
 ### 2. One question round
 
@@ -35,28 +35,28 @@ Phase order: `explore` → `requirements` → `design` → `architecture` → `p
 
 ### 3. Run the specifying phases
 
-- Each phase runs its own protocol (command file, or skill / `mae-specs` reference) unchanged, with two suppressions: no "ready to promote?" prompt and no per-phase report. Chat gets one line per phase: "`requirements` → `.sessions/{NNN}/04_requirements-draft.md`".
-- Each phase reads the previous phase's **session draft** as its input, because the canonical file does not exist yet.
-- `/mae-plan` (and `/mae-poc`) write to `docs/` directly as they always do — creating is free; the chain does not change that.
+- Each phase runs its own protocol (command file, or skill / `mae-specs` reference) unchanged, with two changes: it writes its artifact **straight to the canonical path in `docs/`** instead of a session draft, and it skips its "ready to promote?" prompt and per-phase report. The next phase reads that file the normal way.
+- Before a phase overwrites or edits a file that already exists, copy it to `.sessions/{NNN}/_chain-backup/{same path}`. Record every file the chain creates or changes, in order.
+- Chat gets one line per phase: "`requirements` → `docs/02-specs/REQUIREMENTS.md` (new)".
 
 ### 4. One review
 
-- After the last specifying phase (`plan`; or `architecture`, `design`, `requirements`, `explore` when the range ends earlier): one message listing every artifact produced, in order, each with its link and its report header (Summary, Flags). Then: "Promote to `docs/`? (all / list the ones to promote / no)".
-- Promotion applies the review-required rule once, for the set. Anything not approved stays in the session; say so, and stop the chain there if `do` was in range — `do` runs only against promoted specs.
+- After the last specifying phase (`plan`; or `architecture`, `design`, `requirements`, `explore` when the range ends earlier): one message listing every file the chain created or changed, in order, each with its link, `(new)` or `(changed)`, and its report header (Summary, Flags). Then: "Keep? (all / undo {list} / undo all)".
+- Undo deletes a file the chain created and restores a changed one from `_chain-backup/`. Undoing a spec also undoes everything built on it later in the chain (undo `requirements` → its plan too); list those before acting. After any undo, stop the chain there if `do` was in range — `do` runs only against kept specs.
 
 ### 5. `do` and `review` after the review
 
 - `do` runs as `/mae-do M{MM}` multi-task execution on the milestone the chain planned (or the one named in the argument): stop on first failure, task status and ROADMAP updated after every task, never batched.
-- **Commit after every completed task**, regardless of any `[git]` `commit` setting, using the commit convention in MAESTRO.md § Git Policy. Never push, never branch, never merge, never open a PR inside a chain — a `[git]` policy is honoured for everything except commit frequency.
+- **Git follows `[git]` exactly** (MAESTRO.md § Git Policy). A chain batches questions and reviews; it never loosens a git setting. `commit = "never"` → no commits, and the report says "not committed". `branch = "milestone"` → the branch question is asked once, before the first task. Never push, merge or open a PR inside a chain.
 - `review` runs `/mae-review` over what the chain produced and saves its findings as usual.
 
 ### 6. Final report
 
-Saved to the session as `NN_chain-report.md`; chat gets the link and one sentence. Contents: phases run; artifacts produced, with links; questions answered vs. deferred, with the defaults used; commits made (hashes, one line each); what was **not** done and why — failure, unapproved artifact, missing prerequisite. Never paste the artifacts back into chat.
+Saved to the session as `NN_chain-report.md`; chat gets the link and one sentence. Contents: phases run; files kept and undone, with links; questions answered vs. deferred, with the defaults used; commits made (hashes, one line each) or "not committed"; what was **not** done and why — failure, undone artifact, missing prerequisite. Never paste the artifacts back into chat.
 
 ## Rules
 
-- Stop on first failure at any phase. Leave an accurate record: session drafts, task statuses, commits.
+- Stop on first failure at any phase. Leave an accurate record: files written, `_chain-backup/`, task statuses, commits. The keep/undo review still runs for what was written.
 - Instruction priority is unchanged: an explicit instruction in the question file wins over any default.
 - If a phase's protocol changes, the chain changes with it. Fix behaviour in that file, never here.
 

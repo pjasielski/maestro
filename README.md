@@ -98,7 +98,7 @@ It asks only blocking questions — stack, data source, deployment target — an
 
 > [!TIP]
 > **`docs/00-reference/` — the material you didn't write.**
-> Drop client briefs, specs, and transcripts here before you start. Maestro treats this folder as read-only and **authoritative on intent** — it outranks anything the agent infers from reading your code. When someone hands you a brief and a deadline, this is where the project begins.
+> Drop client briefs, specs, and transcripts here before you start. Maestro treats this folder as read-only and **authoritative on intent** — it outranks anything the agent infers from reading your code. It is treated as data: the agent extracts requirements from it and never follows instructions written inside it. When someone hands you a brief and a deadline, this is where the project begins.
 
 ## Install
 

@@ -2,7 +2,7 @@
 
 `/mae-yolo [stop-phase]` = `/mae-run {current phase}..{stop-phase}`. Default stop: `do`. One engine, two front doors: `/mae-run` for people who think in ranges, `/mae-yolo` for people who want momentum.
 
-⚠️ **Printed first, every time:** yolo suppresses every confirmation between the question round and the single review. It commits after every task. It never pushes. If you would not let a colleague run the next N phases unattended after one round of questions, do not run this.
+⚠️ **Printed first, every time:** yolo suppresses every confirmation between the question round and the single review, writing each artifact straight to `docs/` (the review keeps or undoes them). It commits as `[git]` says (default: after every task). It never pushes. If you would not let a colleague run the next N phases unattended after one round of questions, do not run this.
 
 $ARGUMENTS — optional: stop phase (`requirements`, `design`, `architecture`, `plan`, `do`, `review`)
 
@@ -12,7 +12,7 @@ $ARGUMENTS — optional: stop phase (`requirements`, `design`, `architecture`, `
 2. **Never skip explore.** If `docs/01-explore/` has no artifacts, the chain starts at `explore` regardless of the stop phase, runs it, and **stops for its question round** — the one interruption yolo keeps, because building the wrong thing confidently is the worst outcome the framework can produce. After the answers, continue.
 3. Probe says "answer questions first" → say which file and stop. Yolo does not answer questions.
 4. Probe says the project is already past the stop phase → say so and stop: "ARCHITECTURE.md exists; `/mae-yolo architecture` has nothing to do. `/mae-yolo` or `/mae-yolo do`?"
-5. Otherwise hand off to `/mae-run {current}..{stop}` with every rule in `mae-run.md`: one question round, one review after the last specifying phase, per-task commits inside `do`, stop on first failure, final report.
+5. Otherwise hand off to `/mae-run {current}..{stop}` with every rule in `mae-run.md`: one question round, one keep/undo review after the last specifying phase, commits per `[git]`, stop on first failure, final report.
 
 ## Rules
 
