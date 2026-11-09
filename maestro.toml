@@ -1,7 +1,7 @@
 [project]
 name = "maestro"
 description = "AI-Assisted Project Delivery Framework"
-session_visibility = "committed"
+session_visibility = "gitignored"
 
 [user]
 description = "AI Solutions Architect, Python/FastAPI specialist, planning-heavy workflow"

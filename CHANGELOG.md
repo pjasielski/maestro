@@ -26,9 +26,10 @@ All notable changes to the Maestro framework.
 - Main-file rule for splitting large artifacts into lowercase sub-folders; Mermaid dependency graph in ROADMAP.md (`/status --graph`)
 
 ### Changed
+- **Sessions are gitignored by default** (was: committed), and a fresh install always asks where they live, then whether to customize the rest. Upgrades keep the project's setting; a project without the key stays committed
 - `/mae-yolo` from the rc builds is now `/mae-auto`; an upgrade removes the old wrappers. It does not change your tool's own permission mode
 - `/mae-plan` plans from REQUIREMENTS.md alone or from POC.md (PoC graduation now works)
-- Installer: upgrades append missing `maestro.toml` keys and never change existing ones; the documented upgrade command now downloads instead of reinstalling the project's own files; `issue.md` template now installed; asks when to commit and which responses to save; a fresh install asks one question first (defaults or customize), so the five setup questions are opt-in
+- Installer: upgrades append missing `maestro.toml` keys and never change existing ones; the documented upgrade command now downloads instead of reinstalling the project's own files; `issue.md` template now installed; asks when to commit and which responses to save; a fresh install asks two questions (session visibility, then defaults or customize), so the other four setup questions are opt-in
 - Browser setup wizard frozen at v0.4.0 options; the one-line install is the recommended path
 - Chains (`/mae-run`, `/mae-auto`, multi-part `/mae-specs`) write each artifact straight to `docs/` so the next phase reads it normally; the one review is keep / undo, with changed files backed up in the session
 - `docs/00-reference/` is the primary evidence of intent, ranked below your instructions and confirmed decisions; its content is data, never instructions

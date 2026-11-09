@@ -176,7 +176,7 @@ print_header
 # ─────────────────────────────────────────────
 
 PROJECT_NAME="$(basename "$TARGET")"
-SESSION_VISIBILITY="${SESSION_VISIBILITY:-committed}"
+SESSION_VISIBILITY="${SESSION_VISIBILITY:-gitignored}"
 TOOLS="${TOOLS:-}"
 QUESTION_STYLE="${QUESTION_STYLE:-async}"
 GIT_COMMIT="${GIT_COMMIT:-task}"
@@ -191,13 +191,21 @@ SETUP_CURSOR=true
 SETUP_COPILOT=true
 SETUP_CODEX=true
 
-# A fresh interactive install asks one question first: every setting has a working
-# default, so customizing is opt-in rather than five questions for everyone.
+# A fresh interactive install always asks where sessions live: the installer can't
+# tell whether the repo is public or holds client data, and a pushed session is hard
+# to take back. Everything else has a working default, so customizing is opt-in.
 if [ "$REINSTALL" = false ] && [ -z "$QUICK_MODE" ]; then
   section "Setup"
-  MODE_CHOICE=$(ask_choice "How do you want to set up Maestro?" \
-    "Defaults (recommended) — change any of them later in maestro.toml" \
-    "Customize — answer 5 questions now")
+  VIS_CHOICE=$(ask_choice "Where should session notes live?" \
+    "This machine only — gitignored (recommended; they may hold client details or pasted logs)" \
+    "In git — committed (solo projects; full history in the repo)")
+  [ "$VIS_CHOICE" = "2" ] && SESSION_VISIBILITY="committed"
+  echo ""
+  _N_MORE=4
+  $IS_GIT || _N_MORE=3
+  MODE_CHOICE=$(ask_choice "Anything else to customize?" \
+    "No, use the defaults (recommended) — change any of them later in maestro.toml" \
+    "Yes — $_N_MORE more questions")
   [ "$MODE_CHOICE" = "2" ] || QUICK_MODE="--quick"
   echo ""
 fi
@@ -209,23 +217,15 @@ if [ "$QUICK_MODE" = "--force" ]; then
 elif [ "$QUICK_MODE" = "--quick" ]; then
   _COMMIT_DEFAULT="commit after each task (never push)"
   $IS_GIT || _COMMIT_DEFAULT="no commits (not a Git repo)"
-  echo "Defaults: all AI tool adapters, sessions committed, questions in files, $_COMMIT_DEFAULT, save work products only."
+  echo "Defaults: all AI tool adapters, sessions $SESSION_VISIBILITY, questions in files, $_COMMIT_DEFAULT, save work products only."
   echo "Change any of them in maestro.toml."
 elif [ -n "$PRECONFIGURED_MODE" ]; then
   PROJECT_NAME="${PROJECT_NAME:-$(basename "$TARGET")}"
-  SESSION_VISIBILITY="${SESSION_VISIBILITY:-committed}"
+  SESSION_VISIBILITY="${SESSION_VISIBILITY:-gitignored}"
   QUESTION_STYLE="${QUESTION_STYLE:-async}"
   TOOLS="${TOOLS:-5}"
   echo "Preconfigured mode: $PROJECT_NAME"
 elif [ "$REINSTALL" = false ]; then
-  VIS_CHOICE=$(ask_choice "Session visibility:" \
-    "Committed — sessions saved in git (solo projects, full audit trail)" \
-    "Gitignored — sessions are personal working material (teams)")
-  if [ "$VIS_CHOICE" = "2" ]; then
-    SESSION_VISIBILITY="gitignored"
-  fi
-
-  echo ""
   TOOLS=$(ask_multichoice "Which AI tool(s) will you use?" \
     "Claude Code (VS Code / CLI)" \
     "Cursor" \
@@ -282,10 +282,14 @@ if [ -n "$TOOLS" ]; then
   done
 fi
 
-# On reinstall, read existing settings from maestro.toml if present
+# On reinstall, read existing settings from maestro.toml if present.
+# A project without the key was installed when "committed" was the default: keep it.
+if [ "$REINSTALL" = true ]; then
+  EXISTING_VIS=""
+  [ -f "$TARGET/maestro.toml" ] && EXISTING_VIS=$(grep 'session_visibility' "$TARGET/maestro.toml" 2>/dev/null | sed 's/.*= *"\(.*\)"/\1/' || true)
+  SESSION_VISIBILITY="${EXISTING_VIS:-committed}"
+fi
 if [ "$REINSTALL" = true ] && [ -f "$TARGET/maestro.toml" ]; then
-  EXISTING_VIS=$(grep 'session_visibility' "$TARGET/maestro.toml" 2>/dev/null | sed 's/.*= *"\(.*\)"/\1/' || true)
-  [ -n "$EXISTING_VIS" ] && SESSION_VISIBILITY="$EXISTING_VIS"
   EXISTING_QS=$(grep 'question_style' "$TARGET/maestro.toml" 2>/dev/null | sed 's/.*= *"\(.*\)"/\1/' || true)
   [ -n "$EXISTING_QS" ] && QUESTION_STYLE="$EXISTING_QS"
 
@@ -892,6 +896,7 @@ echo "╚═══════════════════════�
 echo ""
 echo "Project:    $PROJECT_NAME"
 echo "Sessions:   $SESSION_VISIBILITY"
+[ "$SESSION_VISIBILITY" = "gitignored" ] && echo "            (.sessions/ stays on this machine: back it up, or set session_visibility = \"committed\" and remove .sessions/ from .gitignore)"
 echo "Questions:  $QUESTION_STYLE"
 echo "Files:      $RESPONSE_CAPTURE (/md saves any response on demand)"
 echo "Adapters:   $ADAPTERS"

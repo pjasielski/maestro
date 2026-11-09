@@ -190,7 +190,7 @@ Used in `_summary.md` to track lifecycle:
 
 Two independent settings in `maestro.toml`:
 
-- **`session_visibility`** — `"committed"` (default; sessions in git, full audit trail) or `"gitignored"` (each person's working material stays local; `docs/` is still shared)
+- **`session_visibility`** — `"gitignored"` (default; working material stays on each machine, `docs/` is still shared) or `"committed"` (sessions in git, full audit trail)
 - **`[[team.members]]`** — define team members and team behaviour switches on: the agent asks who it's working with, WORKLOG gets a "Who" column, and `/sync` is how decisions reach everyone
 
 ```toml

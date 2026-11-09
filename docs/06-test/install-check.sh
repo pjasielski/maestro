@@ -15,6 +15,8 @@
 # 6. Upgrade: a v0.4.0-shaped project keeps its keys, notes and docs and gets
 #    the new commands, skills, templates and adapters; a plain re-run changes
 #    nothing of the user's.
+# 7. Sessions: a fresh install gitignores .sessions/; an upgrade of a project whose
+#    maestro.toml has no session_visibility key keeps it committed.
 
 set -u
 REPO="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -127,6 +129,26 @@ if diff -q "$WORK/toml.before" "$U/maestro.toml" > /dev/null && [ "$(grep -c 'ma
   pass "re-run without --force changes nothing of the user's"
 else
   fail "re-run changed maestro.toml, HANDOFF.md or duplicated the AGENTS.md block"
+fi
+
+# 7. Session visibility default
+C="$WORK/clone/proj"
+if grep -q '^session_visibility = "gitignored"' "$C/maestro.toml" && git -C "$C" check-ignore -q .sessions/x; then
+  pass "fresh install: session_visibility = \"gitignored\", .sessions/ ignored"
+else
+  fail "fresh install did not default to gitignored sessions"
+fi
+K="$WORK/nokey/proj"
+mkdir -p "$K"
+git -C "$K" init -q
+bash "$REPO/install.sh" "$K" --quick > /dev/null 2>&1
+grep -v 'session_visibility' "$K/maestro.toml" > "$WORK/nokey.toml" && cp "$WORK/nokey.toml" "$K/maestro.toml"
+rm "$K/.gitignore"
+bash "$REPO/install.sh" "$K" > /dev/null 2>&1
+if grep -q '^session_visibility = "committed"' "$K/maestro.toml" && ! git -C "$K" check-ignore -q .sessions/x; then
+  pass "upgrade without the key: sessions stay committed"
+else
+  fail "upgrade without session_visibility flipped the project to gitignored"
 fi
 
 echo ""

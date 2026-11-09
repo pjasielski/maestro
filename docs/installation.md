@@ -41,15 +41,15 @@ cd /path/to/your-project
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 ```
 
-The installer asks one question: use the defaults, or customize. Press Enter for the defaults. **Customize** asks five more (session visibility, AI tools, question style, when to commit, which responses to save as files).
+The installer asks two questions. First, where session notes live: on this machine only (gitignored, the default) or in git. Second, whether to customize the rest; press Enter for the defaults. **Customize** asks four more (AI tools, question style, when to commit, which responses to save as files).
 
-**Skip even that question (use defaults):**
+**Skip the questions (use defaults):**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash -s -- . --quick
 ```
 
-Defaults: all adapters, sessions committed, async questions, commit per task (never push), files for work products only.
+Defaults: all adapters, sessions gitignored, async questions, commit per task (never push), files for work products only.
 
 **Force reinstall (overwrite all framework files):**
 

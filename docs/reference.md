@@ -367,7 +367,7 @@ Core sections are always included; optional ones only when relevant. Edit them i
 ```toml
 [project]
 name = "my-project"
-session_visibility = "committed"   # or "gitignored"
+session_visibility = "gitignored"  # or "committed"
 question_style = "async"           # or "sync"
 ai_tools = ["claude", "cursor"]
 response_capture = "artifacts"     # "artifacts" | "minimal" | "all"

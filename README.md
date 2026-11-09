@@ -106,7 +106,7 @@ It asks only blocking questions — stack, data source, deployment target — an
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 ```
 
-The installer asks one question — defaults (press Enter) or customize, which asks about session visibility, AI tools, how to ask you questions, when to commit and which responses to save as files — then scaffolds `docs/` and writes the tool adapters. **It never overwrites your files** — `HANDOFF.md`, `DECISIONS.md`, `CLAUDE.md`, and `maestro.toml` are preserved on reinstall.
+The installer asks two questions — whether session notes stay on your machine (gitignored, the default) or go in git, and whether to customize the rest (AI tools, how to ask you questions, when to commit, which responses to save as files) — then scaffolds `docs/` and writes the tool adapters. **It never overwrites your files** — `HANDOFF.md`, `DECISIONS.md`, `CLAUDE.md`, and `maestro.toml` are preserved on reinstall.
 
 Upgrading from an earlier version, or want the framework files refreshed:
 
@@ -273,7 +273,7 @@ Everything lives in `maestro.toml`.
 ```toml
 [project]
 name = "my-project"
-session_visibility = "committed"   # or "gitignored"
+session_visibility = "gitignored"  # or "committed"
 question_style = "async"           # or "sync"
 ai_tools = ["claude", "cursor"]
 response_capture = "artifacts"     # or "minimal", "all"
@@ -288,7 +288,7 @@ merge = "never"
 
 | Setting | Options | Effect |
 |---------|---------|--------|
-| `session_visibility` | `committed` / `gitignored` | Whether `.sessions/` is in git. Committed suits solo projects; gitignored suits teams where sessions are personal |
+| `session_visibility` | `gitignored` / `committed` | Whether `.sessions/` is in git. Gitignored (default) keeps working notes on your machine; committed suits solo projects that want the full history in the repo |
 | `question_style` | `async` / `sync` | `async` writes questions to a file you answer in your own time; `sync` asks in chat |
 | `ai_tools` | `claude`, `cursor`, `copilot`, `codex` | Which adapters get generated |
 | `response_capture` | `artifacts` / `minimal` / `all` | Files for work products only (default), for docs promotions and explore only, or for every response. `/md` saves anything on demand |

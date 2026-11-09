@@ -563,14 +563,14 @@ Controls whether `.sessions/` is committed to git or gitignored.
 
 | Setting | `.sessions/` | When to use |
 | ---------- | ---------------- | --------------------------- |
+| `"gitignored"` (default) | Gitignored | Sessions may hold client details or pasted logs; this machine only |
 | `"committed"` | In git | Solo projects, or teams that want session history in the repo |
-| `"gitignored"` | Gitignored | Teams where sessions are personal working material |
 
 Set in `maestro.toml`:
 
 ```toml
 [project]
-session_visibility = "committed"  # or "gitignored"
+session_visibility = "gitignored"  # or "committed"
 question_style = "async"          # or "sync"
 ai_tools = ["claude", "cursor"]   # installed adapters
 ```
