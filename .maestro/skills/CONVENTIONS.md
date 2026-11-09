@@ -32,11 +32,11 @@ Only protocols the model should be able to **offer** are skills (v0.5.0; superse
 | `mae-idea` | suggest | Offers "Park this as an idea?"; catches scope drift |
 | `mae-mock` (M05.09) | suggest | Writes HTML to `docs/02-specs/mock/` |
 
-Commands, never skills: `mae-poc`, `mae-plan`, `mae-do`, `mae-review`, `mae-run`, `mae-yolo`, `mae-pr`, `mae-init`, `mae-help`, `sync`, `status`, `decide`, `md`. Promotion trigger: anything typed 10+ times that the agent could have offered.
+Commands, never skills: `mae-poc`, `mae-plan`, `mae-do`, `mae-review`, `mae-run`, `mae-auto`, `mae-pr`, `mae-init`, `mae-help`, `sync`, `status`, `decide`, `md`. Promotion trigger: anything typed 10+ times that the agent could have offered.
 
 ## 3. State table (auto-trigger heuristic)
 
-The state probe and the state table live in `.maestro/commands/mae-help.md` (§ State probe, § State table) since M04.15 landed. They are not copied here. Fit checks (auto tier) compare the request with that table; suggest-tier gates use it the same way: if the request matches the expected next step, the proposal names it; if not, the proposal says which state the project is in. `/status`, `/mae-help`, and `/mae-yolo` all read the same probe.
+The state probe and the state table live in `.maestro/commands/mae-help.md` (§ State probe, § State table) since M04.15 landed. They are not copied here. Fit checks (auto tier) compare the request with that table; suggest-tier gates use it the same way: if the request matches the expected next step, the proposal names it; if not, the proposal says which state the project is in. `/status`, `/mae-help`, and `/mae-auto` all read the same probe.
 
 ## 4. Description pattern
 

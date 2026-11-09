@@ -215,7 +215,7 @@ Skills (the agent may offer them; they write nothing until you confirm, except `
 | `/mae-do [id\|milestone\|poc\|"…"]` | `mdo` | Execute; commits per task, verified README quickstart, reports running processes | code, status, report when substantial |
 | `/mae-review [path\|artifact]` | `mrv` | Findings by severity | report |
 | `/mae-pr [milestone]` | — | Push the current branch, open a draft PR (only when typed) | remote |
-| `/mae-run {a}..{b}`, `/mae-yolo [stop]` | — | Chain phases: one question round, artifacts straight to `docs/`, one keep/undo review, commits per `[git]` (documented, not advertised) | as the phases |
+| `/mae-run {a}..{b}`, `/mae-auto [stop]` | — | Chain phases: one question round, artifacts straight to `docs/`, one keep/undo review, commits per `[git]` (documented, not advertised) | as the phases |
 
 `/mae-req` is the pre-0.5.0 name of `/mae-requirements`, kept as a pointer for one release. `mds` used to mean architecture; it now means visual design.
 

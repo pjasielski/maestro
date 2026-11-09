@@ -106,7 +106,7 @@ It asks only blocking questions — stack, data source, deployment target — an
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 ```
 
-The installer asks five questions (session visibility, AI tools, how to ask you questions, when to commit, which responses to save as files), scaffolds `docs/`, and writes adapters for the tools you picked. **It never overwrites your files** — `HANDOFF.md`, `DECISIONS.md`, `CLAUDE.md`, and `maestro.toml` are preserved on reinstall.
+The installer asks one question — defaults (press Enter) or customize, which asks about session visibility, AI tools, how to ask you questions, when to commit and which responses to save as files — then scaffolds `docs/` and writes the tool adapters. **It never overwrites your files** — `HANDOFF.md`, `DECISIONS.md`, `CLAUDE.md`, and `maestro.toml` are preserved on reinstall.
 
 Upgrading from an earlier version, or want the framework files refreshed:
 
@@ -177,7 +177,7 @@ Once you know the flow, you can chain phases. A chain asks all its questions **o
 /mae-run requirements..plan              requirements → design (if UI) → architecture → roadmap, one interruption
 /mae-specs -> /mae-plan                  the same, written out
 /mae-run architecture..do M02            through to implementation of milestone M02
-/mae-yolo [stop]                         from wherever you are to `stop` (default: do)
+/mae-auto [stop]                         from wherever you are to `stop` (default: do)
 ```
 
 What a chain never does: skip explore, promote to `docs/` without your review, continue after a failed task, or push.

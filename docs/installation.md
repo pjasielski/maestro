@@ -41,9 +41,9 @@ cd /path/to/your-project
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 ```
 
-The installer asks five questions (session visibility, AI tools, question style, when to commit, which responses to save as files). Answer each and press Enter.
+The installer asks one question: use the defaults, or customize. Press Enter for the defaults. **Customize** asks five more (session visibility, AI tools, question style, when to commit, which responses to save as files).
 
-**Skip the questions (use defaults):**
+**Skip even that question (use defaults):**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash -s -- . --quick

@@ -56,7 +56,7 @@ if [ ! -f "$SCRIPT_DIR/MAESTRO.md" ] || [ ! -d "$SCRIPT_DIR/.maestro/commands" ]
   fi
 
   mkdir -p "$SOURCE_DIR/.maestro/commands"
-  for _cmd in mae-requirements mae-design mae-architecture mae-req mae-poc mae-plan mae-do mae-review mae-init mae-help mae-run mae-yolo mae-pr status decide sync md; do
+  for _cmd in mae-requirements mae-design mae-architecture mae-req mae-poc mae-plan mae-do mae-review mae-init mae-help mae-run mae-auto mae-pr status decide sync md; do
     if ! curl -fsSL "$MAESTRO_URL/.maestro/commands/$_cmd.md" -o "$SOURCE_DIR/.maestro/commands/$_cmd.md" 2>/dev/null; then
       echo "  Warning: failed to download $_cmd.md" >&2
       _DL_FAIL=$((_DL_FAIL + 1))
@@ -191,12 +191,26 @@ SETUP_CURSOR=true
 SETUP_COPILOT=true
 SETUP_CODEX=true
 
+# A fresh interactive install asks one question first: every setting has a working
+# default, so customizing is opt-in rather than five questions for everyone.
+if [ "$REINSTALL" = false ] && [ -z "$QUICK_MODE" ]; then
+  section "Setup"
+  MODE_CHOICE=$(ask_choice "How do you want to set up Maestro?" \
+    "Defaults (recommended) — change any of them later in maestro.toml" \
+    "Customize — answer 5 questions now")
+  [ "$MODE_CHOICE" = "2" ] || QUICK_MODE="--quick"
+  echo ""
+fi
+
 if [ "$QUICK_MODE" = "--force" ]; then
   echo "Force mode: overwriting all framework files (templates, adapters, MAESTRO.md, commands)."
   echo "Project files preserved: HANDOFF.md, DECISIONS.md, OPEN_QUESTIONS.md, WORKLOG.md, maestro.toml, CLAUDE.md"
   echo ""
 elif [ "$QUICK_MODE" = "--quick" ]; then
-  echo "Quick mode: all adapters, sessions committed, async questions."
+  _COMMIT_DEFAULT="commit after each task (never push)"
+  $IS_GIT || _COMMIT_DEFAULT="no commits (not a Git repo)"
+  echo "Defaults: all AI tool adapters, sessions committed, questions in files, $_COMMIT_DEFAULT, save work products only."
+  echo "Change any of them in maestro.toml."
 elif [ -n "$PRECONFIGURED_MODE" ]; then
   PROJECT_NAME="${PROJECT_NAME:-$(basename "$TARGET")}"
   SESSION_VISIBILITY="${SESSION_VISIBILITY:-committed}"
@@ -204,8 +218,6 @@ elif [ -n "$PRECONFIGURED_MODE" ]; then
   TOOLS="${TOOLS:-5}"
   echo "Preconfigured mode: $PROJECT_NAME"
 elif [ "$REINSTALL" = false ]; then
-  section "Setup"
-
   VIS_CHOICE=$(ask_choice "Session visibility:" \
     "Committed — sessions saved in git (solo projects, full audit trail)" \
     "Gitignored — sessions are personal working material (teams)")
@@ -368,7 +380,7 @@ echo "  Copied: .maestro/skills/ ($SKILLS)"
 # ─────────────────────────────────────────────
 
 _MIGRATED=0
-for _old in mae-prd.md mae-checkpoint.md mae-explore-lite.md mae-explore.md mae-scope.md mae-specs.md mae-idea.md; do
+for _old in mae-prd.md mae-checkpoint.md mae-explore-lite.md mae-explore.md mae-scope.md mae-specs.md mae-idea.md mae-yolo.md; do
   if [ -f "$TARGET/.maestro/commands/$_old" ]; then
     rm "$TARGET/.maestro/commands/$_old"
     echo "  Removed: .maestro/commands/$_old (renamed, or now a skill)"
@@ -382,7 +394,7 @@ for _old in prd.md sdd.md; do
     _MIGRATED=$((_MIGRATED + 1))
   fi
 done
-for _old in mae-prd.md mae-checkpoint.md mae-explore-lite.md mae-explore.md mae-scope.md mae-specs.md mae-idea.md; do
+for _old in mae-prd.md mae-checkpoint.md mae-explore-lite.md mae-explore.md mae-scope.md mae-specs.md mae-idea.md mae-yolo.md; do
   [ -f "$TARGET/.claude/commands/$_old" ] && rm "$TARGET/.claude/commands/$_old"
   [ -f "$TARGET/.cursor/commands/$_old" ] && rm "$TARGET/.cursor/commands/$_old"
 done
@@ -623,7 +635,7 @@ The user types a command name, with or without `/` (in Codex, without: `mae-help
 | mae-init | — | .maestro/commands/mae-init.md |
 | mae-help | — | .maestro/commands/mae-help.md |
 | mae-run | — | .maestro/commands/mae-run.md |
-| mae-yolo | — | .maestro/commands/mae-yolo.md |
+| mae-auto | — | .maestro/commands/mae-auto.md |
 | mae-pr | — | .maestro/commands/mae-pr.md |
 | status | — | .maestro/commands/status.md |
 | decide | — | .maestro/commands/decide.md |

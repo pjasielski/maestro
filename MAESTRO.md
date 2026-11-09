@@ -331,7 +331,7 @@ The same phases with the interruptions removed — **one question round at the f
 ```
 /mae-run requirements..plan                 REQUIREMENTS + DESIGN (if UI) + ARCHITECTURE + ROADMAP + tasks, interruptions → one
 /mae-specs -> /mae-plan                     same thing, explicit list
-/mae-yolo [stop]                            /mae-run {current}..{stop}; default stop is do; ⚠️ never skips explore
+/mae-auto [stop]                            /mae-run {current}..{stop}; default stop is do; ⚠️ never skips explore
 ```
 
 Rules that a chain cannot override: explore is never skipped; every `docs/` file it writes is kept or undone at the one review, and `do` runs only against kept specs; `do` stops on first failure; `[git]` is never loosened, nothing is pushed. Details: `.maestro/commands/mae-run.md`.
@@ -354,7 +354,7 @@ Rules that a chain cannot override: explore is never skipped; every `docs/` file
 | —  | Init         | `/mae-init`         | —      | Profile setup (run once at start); `upgrade` migrates a legacy layout |
 | —  | Help         | `/mae-help`         | —      | State-aware next step; `all` lists every command; `{command}` explains one |
 | —  | Chain        | `/mae-run`          | —      | `/mae-run {a}..{b}` or `/mae-x -> /mae-y` — phases in one pass, one question round, one review (documented, not advertised) |
-| —  | Chain        | `/mae-yolo`         | —      | `/mae-yolo [stop]` = `/mae-run {current}..{stop}`; never skips explore; commits per `[git]`; ⚠️ unattended between questions and review |
+| —  | Chain        | `/mae-auto`         | —      | `/mae-auto [stop]` = `/mae-run {current}..{stop}`; never skips explore; commits per `[git]`; ⚠️ unattended between questions and review |
 
 `/mae-req` is the pre-0.5.0 name: a pointer to `/mae-requirements`, removed in the next release. `mds` now means visual design (was architecture).
 

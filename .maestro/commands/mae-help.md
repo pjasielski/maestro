@@ -14,7 +14,7 @@ $ARGUMENTS — optional: `all`, or one command name (`mae-requirements`, `mrq`, 
 
 ## State probe (shared — defined here, nowhere else)
 
-The framework's one state reader. `/status` renders it as "where am I"; `/mae-help` renders it as "what do I do"; `/mae-yolo` uses it to find the current phase; skill fit checks and gates use it to decide whether to announce or stay quiet. Change it here; every other file points here.
+The framework's one state reader. `/status` renders it as "where am I"; `/mae-help` renders it as "what do I do"; `/mae-auto` uses it to find the current phase; skill fit checks and gates use it to decide whether to announce or stay quiet. Change it here; every other file points here.
 
 Existence checks, `grep`, and header lines only. Never read a canonical file in full to answer "what next".
 
@@ -78,7 +78,7 @@ Every command, grouped, one line each — command, alias, what it produces:
 - **Specify** — `mae-specs` (`msp`) → the missing spec parts · `mae-requirements` (`mrq`) → REQUIREMENTS.md · `mae-design` (`mds`) → DESIGN.md, visual system · `mae-architecture` (`mar`) → ARCHITECTURE.md · `mae-mock` → clickable HTML screens in `mock/` · `mae-scope` (`msc`) → scope-delta, applied on confirmation
 - **Plan and build** — `mae-plan` (`mpl`) → ROADMAP.md + tasks · `mae-do` (`mdo`) → executed task + report · `mae-review` (`mrv`) → findings · `mae-pr` → push + draft PR, only when typed
 - **Session** — `status` → where things stand · `decide` → DECISIONS.md row · `sync` → HANDOFF and ROADMAP updated · `md` → saves the last response · `mae-init` → profile, or `upgrade` for the old layout
-- **Chaining** — `mae-run`, `mae-yolo`, each with its one-line warning from its command file
+- **Chaining** — `mae-run`, `mae-auto`, each with its one-line warning from its command file
 
 End with: "`/mae-help {command}` for details."
 

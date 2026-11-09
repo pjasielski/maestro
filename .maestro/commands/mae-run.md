@@ -2,7 +2,7 @@
 
 Run several delivery phases in one pass: **one question round at the front, one review at the end.** Same commands, same artifacts, same rules — with the per-phase interruptions removed. A chain never changes what a command produces, only when it asks.
 
-Documented, not advertised: not in the quickstart; listed by `/mae-help all`. `/mae-yolo` is the momentum front door to the same engine.
+Documented, not advertised: not in the quickstart; listed by `/mae-help all`. `/mae-auto` is the momentum front door to the same engine.
 
 $ARGUMENTS — required: a range `{a}..{b}`, or an explicit list `/mae-x -> /mae-y -> /mae-z`. Anything after the range goes to the last phase as its argument.
 
