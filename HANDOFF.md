@@ -1,17 +1,79 @@
 # HANDOFF.md — Maestro Framework
 
 ## Current Status
-- **Phase:** bootstrap → packaging (v0.4.0 released; skills refactor next)
-- **Last worked on:** 2026-08-03 — v0.4.0 release: PoC track merged, roadmap renumbered, README rewritten (session 018, maestro-hq)
-- **Active branch:** `main`
-- **Version:** v0.4.0 (Milestone M03 complete — PoC workflow)
-- **Next priorities:** M04 skill-first refactor — start with M04.01 (spike: mae-explore as SKILL.md), then M04.02 frontmatter convention. Design work already done in `.sessions/015-skills/` (gitignored — `03-skills-files.md` holds the draft skill descriptions). Also queued: explore question pre-filling (M04.14), ADR migration (M04, lifecycle in M05).
-- **Blockers:** None
+- **Phase:** v0.5.0 released (2026-11-09); next milestone not started
+- **Last worked on:** 2026-11-09 — release: `/mae-yolo` → `/mae-auto` (D51), one-question installer (D52), merge to `main`, tag `v0.5.0` (`maestro-hq/.sessions/029-expansion/02-where-we-stand.md`). Before that: rc.2 hotfix after the Codex review (hq 025/03, H1–H12)
+- **Active branch:** `main` = `dev` at the v0.5.0 merge. Tags `v0.5.0-alpha.0` … `rc.2`, `v0.5.0`. Rollback = install from a tag (`MAESTRO_BRANCH=v0.5.0-rc.2`)
+- **Version:** v0.5.0 (CHANGELOG `[0.5.0]`)
+- **Done in v0.5.0:** P42.01 git policy, P42.02 response_capture, P42.05 quickstart + processes, P42.06 question pre-fill, P42.07 PoC graduation, P42.08 installer fixes, P42.09 layout & commands, P42.10 `/mae-idea`, P42.11 `/mae-pr`, M04.03 five skills (+ minimal M04.06 placement), M05.07a `--direct`, M05.09 `/mae-mock`; decisions D34–D45
+- **Next task:** kernel/pack split as the next milestone (user, hq 029): MAESTRO.md kernel (hq 026/04) + domain packs (IDEAS I-01, hq 027/02); the command registry goes inside it. Ahead of evals and the hq 028 review-step items
+- **Not in this release:** P42.03 artifact consolidation + `/md` two modes · P42.04 append-only state + review 018 fix-first 2 (Synced/Supersedes columns; fix-first 1 done in rc.2) · M04.13 definition of done (task file only) · M05.07a delta-file marks (not approved) · M04.17 `/mae-approve` (Q7) · M05.06/M05.08 canonical files + ADR folder · M05.13 parallel view · plugin install / `maestro` CLI · YAML workflows
+- **After v0.5.0 (from review 025):** trigger evals for the four other skills + a manual 4-tool smoke matrix (beta → verified) · P42.04 state ownership, HANDOFF as resume index · MAESTRO.md kernel ≤200 lines · legacy-path grep in CI · a command registry that generates installer lists, adapter tables and the help catalogue — before any new command (user decision)
+- **Known gaps:** trigger evals (CONVENTIONS §9.3–4) run only for `mae-explore`; Cursor, Copilot and Codex are beta (installed and pointer-checked, not run end to end); skill placement on Windows untested; `mae-explore` SKILL.md is 240 lines (target 150); upgraded projects keep their own CLAUDE.md, including the old "< 80 words" line, because the installer never edits it — remove that line by hand
+- **Where state is read:** the state probe and state table live in `.maestro/commands/mae-help.md`; `/status` and `/mae-auto` point at it (CONVENTIONS §3 too, in this repo). Change it there only.
+- **Blockers:** none. Q7 (`/mae-approve`) still open
+
+## Recent Changes (2026-09-27) — v0.5.0 (session 22-new-scope, maestro-hq)
+
+- **Layout (D34–D38):** `docs/02-specs/` (REQUIREMENTS, DESIGN = visual, ARCHITECTURE, `mock/`, or POC.md), `03-plan/`, on-demand `04`–`08`; `EXPLORE.md` synthesis; main-file split rule. Legacy projects: installer prints a hint, `/mae-init upgrade` migrates on confirmation
+- **Commands:** `/mae-specs` routes over `/mae-requirements`, `/mae-design` (visual, new meaning of `mds`), `/mae-architecture`; `/mae-req` is a one-release pointer. New: `/mae-mock`, `/mae-idea`, `/mae-pr`, `/mae-scope --direct`. `mae-explore-lite` removed
+- **Skills (D40, D41):** `mae-explore`, `mae-specs` (part protocols in `references/`), `mae-scope`, `mae-idea`, `mae-mock`; one copy each; installer copies them into `.claude/skills/` and `.agents/skills/`
+- **Behaviour:** `[git]` policy and commit convention in MAESTRO.md § Git Policy; work-product rule + `response_capture`; explore questions grouped Business / Technical with consequence-based pre-fill; `/mae-plan` plans from POC.md or requirements alone; `/mae-do` keeps a verified README quickstart and reports running processes
+- **Installer:** documented upgrade now downloads; missing `maestro.toml` keys appended after the section's last key; `issue.md` installed; old command copies and the old `design.md` template migrated. Clean-install test green from the pushed branch (fresh interactive, `--quick`, upgrade from v0.4.0, re-run without `--force`, `/mae-help` smoke); `/mae-mock` run end-to-end on a scratch project
+
+## Recent Changes (2026-09-19) — Sessions 018 + 019
+
+### Four commands built (019) — the F1/F4/F5 items from the September sprint, in their original order
+- **`/mae-help`** (M04.15): state probe (10 cheap checks) + state table; bare / `all` / `{command}`; suggests 3–4 commands, never all. Installer's closing output now starts with it. `/status` shares the probe
+- **`/mae-run {a}..{b}`**, `->` lists, **`/mae-yolo [stop]`** (M05.11): one question round at the front, one review after the last specifying phase, per-task commits inside `do`, never skips explore, stop on first failure. MAESTRO.md § Chaining — documented, not advertised
+- **`/mae-scope`** / `msc` (M05.07): intake → classify (additive / modifying / conflicting; size check → `/mae-explore` first) → `NN_scope-delta.md` (client-sendable, analysis only) → apply on confirmation across REQUIREMENTS, DESIGN, ROADMAP, tasks, DECISIONS; unapproved capabilities → HANDOFF § Deferred scope. Template `scope-delta.md`
+- **Dependency graph** (M04.18): `/mae-plan` emits `### Dependencies` Mermaid per milestone between `<!-- deps:M{MM} -->` markers and a `## Milestone Map`; `/status --graph` prints it. ROADMAP.md dogfooded for M04
+- None of the four has run on a real project yet; the first real chain and the first real scope change are the acceptance tests
+
+### Adversarial review of the instruction set (018)
+- `.sessions/018-framework-review/01-findings.md`: 40 findings — 12 contradictions, 11 rules with no operator, 8 token hotspots, 9 decisions (D22–D33) not yet reflected. Four blockers: PoC graduation fails on `mae-plan` prerequisites; "unsynced decisions" has no representation in DECISIONS.md; Decision Protection has no reader in Design/Implementation/Review; D30's read path is unapplied
+- Nothing was changed by the review; its § Fix first is queued into the Opus tier above
+
+## Recent Changes (2026-09-17) — Session 017-skill-spike
+
+First SKILL.md in the framework, plus the convention every other conversion follows. Report: `docs/04-implementation/M04.01-skill-spike-report.md`.
+
+### M04.01 spike (⏳ blocked on keyboard test)
+- `.maestro/skills/mae-explore/SKILL.md` canonical, `references/question-format.md` as supporting file; passes `uvx --from skills-ref agentskills validate`, also through the symlinks
+- Placement: `.claude/skills/` (Claude Code, Cursor legacy) and `.agents/skills/` (Codex, Cursor) as symlinks; installer mechanism is M04.06
+- Old command file and wrappers untouched until M04.03; possible `/mae-explore` name clash with `.claude/commands/` is test step 1
+- Trigger-eval kit reusable for all conversions: `docs/06-test/skill-trigger-eval/`
+
+### M04.02 convention (✅)
+- Tier lives in `metadata.maestro-tier` and is enforced by a body section per tier: fit check (auto), gate (suggest), guard (explicit). Suggest cannot be expressed in frontmatter at all
+- `UNCLEAR:` the reference validator rejects `disable-model-invocation` (and every Claude/Cursor-specific field). Working default: keep it on explicit skills, accept one validator line, whitelist in `maestro validate` (M06.01)
+- Codex needs `{skill}/agents/openai.yaml` with `allow_implicit_invocation: false` for explicit skills
+- Tier table extended to poc/help/scope/mock/run/yolo/approve/md (provisional until each is built)
+
+## Recent Changes (2026-08-21) — Session 22-new-scope (maestro-hq)
+
+Critique from two external developers plus accumulated own observations, scoped into the roadmap. Analysis: `maestro-hq/.sessions/22-new-scope/02-scope-analysis.md` + `03-responses.md`.
+
+### New: v0.4.2 behavior patch (6 items, all S) — sequenced BEFORE the skill conversion
+- Rationale: rewriting a command then converting it is one rewrite; converting then rewriting is two. `015-skills/03` flagged this dependency explicitly.
+- P42.01 `[git]` config + per-task commits · P42.02 `response_capture` three tiers + work-product rule · P42.03 artifact consolidation + `/md` two-mode · P42.04 append-only state + sync reconciliation · P42.05 README quickstart + running-process reporting · P42.06 explore pre-fill (was M04.14)
+
+### Added to M04
+- **M04.15 `/mae-help`** — state-aware next-step guidance. Build first in the milestone
+- M04.17 `/mae-approve` (triage-only) · M04.18 Mermaid dependency graph
+- M04.14 moved to P42.06; **M04.16 vacant** (aliases redistributed)
+
+### Added to M05
+- M05.08 canonical-file consolidation (4 root files → 1 + ADR folder) · M05.09 `/mae-mock` · M05.10 `/mae-approve` stamping · M05.11 `/mae-run` + `/mae-yolo` chaining · **M05.12 decision-gated naming session** · M05.13 parallel-work view (promoted from M10)
+
+### Two corrections to the record
+- **`milestone/m03-skill-first` contains nothing** — zero commits ahead of main, zero file diffs. It appears in `git branch --merged` only because its tip is an ancestor of main. Consistent with session 018's forensic finding that no `SKILL.md` was ever written. Do not reuse the branch name; create `milestone/m04-skill-first` fresh.
+- **`/mae-poc` produces only `POC.md`** — a condensed single-file spec, not REQUIREMENTS + DESIGN + ROADMAP. An earlier claim that it doubles as a "fast path to the full artifacts" was wrong; chaining (M05.11) is that path.
 
 ## Recent Changes (2026-08-03) — Session 018 (maestro-hq), v0.4.0
 
 ### PoC track shipped
-- `/mae-poc` (`mpoc`) → single-file spec at `docs/02-poc/POC.md`; `/mae-do poc` executes the milestone
+- `/mae-poc` (`mpoc`) → single-file spec at `docs/02-specs/POC.md`; `/mae-do poc` executes the milestone
 - `docs/00-reference/` — read-only source material, authoritative over inferences drawn from code
 - Built for a live client engagement (session 017, maestro-hq) and validated there before release
 
@@ -103,7 +165,7 @@
 
 ## Project Overview
 - **Name:** Maestro
-- **Description:** AI-assisted delivery framework. 7 delivery commands + 4 utility commands + 6 aliases. Sessions-first workflow, decision tracking, task management via markdown files.
+- **Description:** AI-assisted delivery framework. 8 delivery commands + 6 utility commands + 2 chaining commands + 8 aliases. Sessions-first workflow, decision tracking, task management via markdown files.
 - **Stack:** Markdown-first (commands as `.md` files), TOML config (`maestro.toml`), future CLI in Python
 - **Multi-tool:** Claude Code (`.claude/commands/`), Cursor (`.cursor/rules/` + `.cursor/commands/`), Codex (`.github/copilot-instructions.md`)
 
@@ -124,7 +186,7 @@
 | Cursor commands | `.cursor/commands/` for autocomplete | Matches Cursor's native slash command mechanism |
 
 ## Commands
-### Delivery (7)
+### Delivery (8)
 | Command | Alias | Purpose |
 |---------|-------|---------|
 | `/mae-init` | — | Profile setup after installation |
@@ -134,14 +196,18 @@
 | `/mae-plan` | `mpl` | Create/update ROADMAP, generate task files |
 | `/mae-do` | `mdo` | Execute tasks (planned, ad-hoc, or from file) |
 | `/mae-review` | `mrv` | Review code or artifacts |
+| `/mae-scope` | `msc` | Scope change: classify, impact analysis (scope-delta), apply on confirmation |
 
-### Utility (4)
+### Utility (5) + Chaining (2)
 | Command | Purpose |
 |---------|---------|
 | `/decide` | Record decision in audit trail |
 | `/sync` | End-of-session save — update HANDOFF, ROADMAP status, DECISIONS, checkpoint |
 | `/status` | Project overview + sub-commands (tasks, decisions, questions) |
 | `/md` | Save response to session file |
+| `/mae-help` | What to run now — state probe, 3–4 commands; `all`, `{command}` |
+| `/mae-run` | Chain phases `{a}..{b}` or `->` list: one question round, one review |
+| `/mae-yolo` | `/mae-run {current}..{stop}`; never skips explore; ⚠️ unattended |
 
 ## Key Files
 | File | Location |
@@ -150,11 +216,11 @@
 | Project config | `CLAUDE.md` |
 | Framework settings | `maestro.toml` |
 | Explore artifacts | `docs/01-explore/` |
-| Requirements | `docs/02-requirements/REQUIREMENTS.md` |
-| Design/Architecture | `docs/03-design/DESIGN.md` |
-| Roadmap | `docs/04-plan/ROADMAP.md` |
-| Tasks | `docs/04-plan/tasks/` |
-| Implementation reports | `docs/05-implementation/` |
+| Requirements | `docs/02-specs/REQUIREMENTS.md` |
+| Architecture | `docs/02-specs/ARCHITECTURE.md` |
+| Roadmap | `docs/03-plan/ROADMAP.md` |
+| Tasks | `docs/03-plan/tasks/` |
+| Implementation reports | `docs/04-implementation/` |
 | Templates | `.maestro/templates/` (requirements, design, explore, task, summary, report, roadmap) |
 | Framework commands | `.maestro/commands/` |
 | Claude Code adapters | `.claude/commands/` (wrappers + aliases) |

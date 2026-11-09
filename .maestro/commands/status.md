@@ -2,7 +2,7 @@
 
 Show current project state. Supports sub-commands for focused views.
 
-$ARGUMENTS — optional sub-command: tasks, decisions, questions
+$ARGUMENTS — optional sub-command: tasks, decisions, questions, or `--graph`
 
 ## Usage
 
@@ -11,18 +11,20 @@ $ARGUMENTS — optional sub-command: tasks, decisions, questions
 /status tasks        → task board
 /status decisions    → decision summary
 /status questions    → open questions
+/status --graph      → dependency graph (Mermaid) of the current milestone
 ```
 
 ## Behavior
 
 ### Overview (default)
 
-1. Read `HANDOFF.md` for current phase, blockers, recent changes
-2. Read `OPEN_QUESTIONS.md` and count questions by priority
-3. Read `WORKLOG.md` for last 3 entries
-4. Check `.sessions/` for the latest session folder
-5. Check `docs/04-plan/tasks/` for task counts by status
-6. Check `DECISIONS.md` for recent unsynced decisions
+State is read with the **state probe** in `.maestro/commands/mae-help.md` § State probe — existence checks, `grep`, and header lines only. `/status` renders it as "where am I"; `/mae-help` renders the same probe as "what do I do". Do not re-derive the probe here.
+
+In addition to the probe:
+1. `HANDOFF.md` § Current Status only — phase, blockers (header block, not the whole file)
+2. `OPEN_QUESTIONS.md` — count rows by priority
+3. `WORKLOG.md` — last 3 rows
+4. Task counts — the `**Status:**` header line of each file in `docs/03-plan/tasks/`, not the files
 
 Output:
 ```
@@ -43,7 +45,7 @@ RECENT ACTIVITY
 
 ### Tasks (/status tasks)
 
-Read all files in `docs/04-plan/tasks/`. Group by status:
+Read all files in `docs/03-plan/tasks/`. Group by status:
 
 ```
 TASK BOARD
@@ -99,7 +101,13 @@ RESOLVED RECENTLY (last 5)
   [{id}] {question} — resolved: {date}
 ```
 
+### Graph (/status --graph)
+
+Print the `### Dependencies` block of the current milestone — the milestone that holds the next unblocked task per the state probe — verbatim from ROADMAP.md (the text between `<!-- deps:M{MM} -->` and `<!-- /deps:M{MM} -->`). If the milestone has no block: "No dependency graph for M{MM} yet — run `/mae-plan M{MM}`." Nothing is generated here; `/mae-plan` owns the graph.
+
 ## Rules
+
+- State comes from the shared probe in `mae-help.md`; `/status` adds counts and recent activity, `/mae-help` adds the suggestion
 
 - Keep output concise — no decorative borders
 - Task/decision/question counts always shown in overview, even if zero

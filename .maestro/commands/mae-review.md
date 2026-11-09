@@ -2,11 +2,13 @@
 
 Review existing code or delivery artifacts for quality, consistency, and completeness.
 
+**Artifact** (MAESTRO.md § Artifact Capture): findings report (session).
+
 ## Arguments
 
 - `/mae-review` — review recent changes (git diff)
 - `/mae-review {path}` — review a specific file or directory
-- `/mae-review requirements` or `design` — review a delivery artifact by name
+- `/mae-review requirements`, `design` or `architecture` — review a delivery artifact by name
 
 ## Behavior
 
@@ -17,9 +19,10 @@ Review existing code or delivery artifacts for quality, consistency, and complet
    - Artifact name: review the delivery artifact
 2. **Load reference material:**
 
-   - For code: DESIGN.md (architecture), coding standards
+   - For code: ARCHITECTURE.md (architecture), coding standards
    - For requirements: explore artifacts, DECISIONS.md
-   - For design: REQUIREMENTS.md (does design match requirements?)
+   - For architecture: REQUIREMENTS.md (does the architecture match requirements?)
+   - For design: REQUIREMENTS.md, `docs/02-specs/mock/` (does the visual system cover the screens?)
 3. **Generate review** using `.maestro/templates/review.md` structure, findings categorized:
 
    - 🔴 **Critical** — must fix (security, correctness, data loss risk)
@@ -27,10 +30,10 @@ Review existing code or delivery artifacts for quality, consistency, and complet
    - 🟢 **Suggestion** — nice to have (style, naming, documentation)
 4. **Cross-reference** with canonical artifacts:
 
-   - Code matches DESIGN.md? Flag `DRIFT:` if not.
-   - DESIGN.md matches REQUIREMENTS.md? Flag `CONSISTENCY:` if not.
+   - Code matches ARCHITECTURE.md? Flag `DRIFT:` if not.
+   - ARCHITECTURE.md matches REQUIREMENTS.md? Flag `CONSISTENCY:` if not.
 5. **Save report** to session folder
-6. **On-demand folder:** If creating `docs/06-review/` for the first time, offer to create it.
+6. **On-demand folder:** If creating `docs/05-review/` for the first time, offer to create it.
 
 ## Output Behaviors
 

@@ -28,6 +28,16 @@
 
 ---
 
+## Milestone Map
+<!-- deps:map -->
+```mermaid
+graph LR
+  M01 --> M02
+```
+<!-- /deps:map -->
+
+---
+
 ## Milestone M01: {Theme} ({target version})
 
 {One-line description of this milestone's goal.}
@@ -38,6 +48,14 @@
 | M01.02 | **{Item name}** | P1 | M | M01.01 | ☐ todo | — | {source} |
 
 **Done when:** {One-line definition of done for this milestone.}
+
+### Dependencies
+<!-- deps:M01 -->
+```mermaid
+graph LR
+  M01_01["M01.01"] --> M01_02["M01.02"]
+```
+<!-- /deps:M01 -->
 
 ---
 

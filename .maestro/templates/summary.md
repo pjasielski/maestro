@@ -12,6 +12,9 @@
 ## Open Questions
 (new questions surfaced this session)
 
+## Running Processes
+(process · port · pid · stop command · left up on purpose / stopped)
+
 ## Files Generated
 (session files, numbered)
 

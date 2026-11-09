@@ -62,7 +62,7 @@ Priorities: MUST (PoC fails without it) / SHOULD (expected, cuttable under press
 | ----------------- | ------ | ---------- |
 | {statement}       | {what breaks} | {what you'd do} |
 
-Mark inferences you could not verify as `ASSUMPTION` and name the task that confirms them.
+Mark each row with the `/mae-explore` markers: `Pre-answered:` (derived, cheap to correct), `Pre-answered (assumed):` (judgement call — name the task that confirms it), `OPEN` (unanswered; state the working default).
 
 ## 6. Current State
 

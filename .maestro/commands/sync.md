@@ -8,8 +8,8 @@ Batch-update canonical project files based on accumulated decisions and progress
    - Current session's `_summary.md`
    - `DECISIONS.md` — identify entries not yet reflected in canonical files
    - `HANDOFF.md` for current state
-   - `docs/04-plan/ROADMAP.md` for task/milestone status
-   - `docs/04-plan/tasks/` for task status changes
+   - `docs/03-plan/ROADMAP.md` for task/milestone status
+   - `docs/03-plan/tasks/` for task status changes
 
 2. **Update HANDOFF.md:**
    - Current phase, status, recent changes
@@ -26,7 +26,7 @@ Batch-update canonical project files based on accumulated decisions and progress
    - Find all `✓` confirmed decisions in `_summary.md` not yet marked `[synced]`
 
 5. **Reconcile delivery artifacts (if decisions affect them):**
-   - REQUIREMENTS.md, DESIGN.md — flag if decisions invalidate content
+   - REQUIREMENTS.md, ARCHITECTURE.md — flag if decisions invalidate content
    - OPEN_QUESTIONS.md — resolve questions answered during session
 
 6. **Capture checkpoint (state snapshot):**
@@ -40,6 +40,10 @@ Batch-update canonical project files based on accumulated decisions and progress
 7. **Mark synced decisions** in `_summary.md` (append `[synced]` to ✓ items)
 
 8. **Update WORKLOG.md** — append entry logging the sync activity
+
+9. **Running processes:** for each entry in `_summary.md` § Running Processes, check whether the pid is still alive; report orphans with their stop command, and mark stopped ones
+
+10. **Git report** (MAESTRO.md § Git Policy): current branch, unpushed commits. A milestone completed this session with `pr` ≠ `off` and no PR description yet → write it. Push only if `push = "milestone"`; never otherwise
 
 ## Rules
 

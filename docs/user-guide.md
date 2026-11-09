@@ -8,107 +8,116 @@
 curl -fsSL https://raw.githubusercontent.com/pjasielski/maestro/main/install.sh | bash
 ```
 
-→ **[Full installation guide](installation.md)** — browser wizard, Cursor/Codex setup, team setup, troubleshooting
+→ **[Full installation guide](installation.md)** — upgrades, branches and tags, Cursor/Codex setup, team setup, troubleshooting
 
 ### First Steps
 
-1. **Edit `CLAUDE.md`** — Add your project name, tech stack, and any project-specific notes
-2. **Start a conversation** with Claude Code in your project directory
-3. Claude reads `CLAUDE.md` → `MAESTRO.md` and understands the framework
-4. Run `/mae-explore` to begin
+1. **Put source material** (client briefs, specs, transcripts, brand assets) in `docs/00-reference/`
+2. **Start a conversation** in your project directory. Your tool's adapter points the agent to `MAESTRO.md`, which reads `HANDOFF.md`: `CLAUDE.md` (Claude Code), `.cursor/rules/` (Cursor), `AGENTS.md` (Codex), `.github/copilot-instructions.md` (Copilot)
+3. Run `/mae-help` (Codex and Copilot: type `mae-help`) — it names the command to run now (on a new project, `/mae-explore`)
+4. Optional: add your project name and stack to `CLAUDE.md`, or to `AGENTS.md` outside the Maestro block
 
 ### Understanding the Structure
 
-After installation, you have three "zones":
-
 | Zone | Location | Purpose | Editable? |
 |------|----------|---------|-----------|
-| **Framework** | `MAESTRO.md`, `.maestro/commands/`, `.maestro/templates/` | Framework behavior and commands | Don't edit MAESTRO.md; customize templates |
-| **Delivery** | `docs/` | Confirmed, canonical artifacts | Only via promotion from sessions |
-| **Working** | `sessions/`, `notes/` | Drafts, analysis, working material | Freely editable |
+| **Framework** | `MAESTRO.md`, `.maestro/skills/`, `.maestro/commands/`, `.maestro/templates/` | Framework behaviour | Don't edit MAESTRO.md; customise templates |
+| **Delivery** | `docs/` | Confirmed, canonical artifacts | Through promotion from sessions, with review |
+| **Working** | `.sessions/` | Drafts, analysis, working material | Freely |
+
+A phase command is named after its folder: `/mae-explore` → `docs/01-explore/`, `/mae-specs` → `docs/02-specs/`, `/mae-plan` → `docs/03-plan/`.
 
 ---
 
 ## The Delivery Workflow
 
-**Maestro does not force a rigid sequence.** You can revisit any phase, skip phases, or run them in any order. Common patterns:
+**Maestro does not force a rigid sequence.** Revisit, skip, or reorder phases. Four common paths (the README draws them):
 
-- **Standard:** explore → prd → design → plan → do → review (full process)
-- **PoC-first:** explore (light) → do (PoC) → feedback → explore (refined) → prd → design → do
-- **Fast-track:** explore → design → do → review (skip formal PRD)
-- **Iterative:** explore → prd → do (MVP) → feedback → explore again → do
+- **Quick:** explore → do
+- **Client-first:** explore → mock → client feedback → poc or specs → plan → do
+- **PoC:** explore → poc → do poc → plan (M02 onward) if it works
+- **Full:** explore → specs → plan → do → review, with changes through scope
 
-Choose what fits your project. The phases below describe each tool, not a mandatory order.
+`/mae-help` answers "what now?" from what exists on disk. The phases below describe each tool, not a mandatory order.
 
 ### Phase 1: Explore
 
-**Goal:** Understand the project — business context, technical landscape, risks.
+**Goal:** understand the project — business context, technical landscape, risks.
 
 ```
 /mae-explore                    # Auto-explore what's available
 /mae-explore "payment system"   # Deep-dive into a specific area
 /mae-explore /path/to/notes.md  # Analyze a document or transcript
-/mae-explore ask                # Generate questions to deepen understanding
-/mae-explore ask client          # Questions packaged for client meetings
-/mae-explore doc                # Synthesize final explore report
+/mae-explore ask client         # Questions for a client meeting
+/mae-explore doc                # Synthesize docs/01-explore/EXPLORE.md
+/mae-explore I-07               # Explore a parked idea
 ```
 
-**First explore:** The agent scans for existing resources (README, docs/, data/, source code) and reports what it finds. It asks which resources to include before reading them. The first artifact always includes a questions section to drive deeper understanding.
+**First explore:** the agent reads `docs/00-reference/` first (authoritative on intent), lists other resources, and asks before reading large ones. Every artifact includes questions.
 
-**Simple project:** Run `/mae-explore` once or twice, then `/mae-explore doc`. Done.
+**Questions** are grouped Business / Technical. Technical ones the agent can answer are pre-filled for you to confirm (`Pre-answered:`, or `Pre-answered (assumed):` for judgement calls); business ones are never pre-filled (`OPEN — ask the client`). Multiple-choice questions label a working default; tick an option to answer. The file header counts what is pre-answered and what is open.
 
-**Complex project:** Run multiple explorations over several sessions — different topics, transcripts, stakeholder notes. Use `/mae-explore ask` to generate structured question documents that can be answered asynchronously (by you or a client). The agent tracks readiness and suggests when you're ready for the final report.
+**Synthesis:** `/mae-explore doc` writes `EXPLORE.md`, the one explore file every later command reads. Promote it when you're satisfied.
 
-**Readiness tracking:** After each explore, the agent updates a readiness indicator in `_summary.md` showing what's covered, what's missing, and whether you're ready for doc synthesis.
+**Ideas:** `/mae-idea "offline mode"` parks a maybe-later in `docs/01-explore/IDEAS.md` without interrupting you.
 
-**Promotion:** After `explore doc`, the agent asks if you want to promote to `docs/01-explore/`. Say yes when you're satisfied.
+### Phase 2: Specs
 
-### Phase 2: PRD (Requirements)
-
-**Goal:** Formalize what you're building.
+**Goal:** agree what to build, how it looks, and how it's built.
 
 ```
-/mae-req
+/mae-specs                       # Build whatever is missing, one question round, one review
+/mae-specs requirements          # = /mae-requirements (mrq) → REQUIREMENTS.md, what and why
+/mae-specs design                # = /mae-design (mds) → DESIGN.md, the visual system (UI projects)
+/mae-specs architecture          # = /mae-architecture (mar) → ARCHITECTURE.md, how it's built
+/mae-architecture auth-service   # One component → architecture/auth-service.md
+/mae-mock                        # Clickable HTML screens in docs/02-specs/mock/
 ```
 
-Reads your explore artifacts and generates a Product Requirements Document using `.maestro/templates/requirements.md`. The PRD is saved as a draft in your session — review it, request changes, then promote to `docs/02-requirements/REQUIREMENTS.md`.
+Bare `/mae-specs` builds only the missing parts: requirements, then design if there's a UI, then architecture. When everything exists it points you to `/mae-scope` for changes. One part is drafted in your session and promoted to `docs/02-specs/` after review. Several parts are written straight to `docs/02-specs/`, so each builds on the last, and one review at the end keeps or undoes them.
 
-**Template sections:** 7 core (always included) + 3 optional (constraints, release strategy, glossary — include when relevant).
+`/mae-mock` confirms the screen list in chat, then writes self-contained HTML you can send to a client. Gaps it exposes are listed as `GAP:` lines in `_screens.md`, which `/mae-requirements` and `/mae-poc` pick up. Once the client approves the mock, `/mae-design` extracts `DESIGN.md` from it.
 
-### Phase 3: Design
+**Large specs** split by the main-file rule: `ARCHITECTURE.md` stays the entry point and links `architecture/{component}.md`; commands open a sub-file only when a task touches it.
 
-**Goal:** Define the technical architecture.
+### PoC track
 
 ```
-/mae-design                      # Full solution design (reads PRD + explore report)
-/mae-design auth-service          # Detail a specific component
-/mae-design src/api/routes.py     # File-level spec
+/mae-poc          # One file: requirements + architecture + roadmap → docs/02-specs/POC.md
+/mae-do poc       # Execute the whole milestone
+/mae-plan         # If it works: plan M02 onward from POC.md
 ```
 
-Works top-down: full architecture first, then drill into components and files. The agent reads both the PRD and the explore report's technical sections for context. Before generating the SDD, it presents a technical questionnaire for decisions it can't make from available information (tech stack, architecture patterns, deployment model). The SDD is drafted in your session, then promoted to `docs/03-design/DESIGN.md`.
+### Phase 3: Plan
 
-If the design process reveals missing information, the agent suggests running additional explore commands to fill the gap.
-
-### Phase 4: Plan
-
-**Goal:** Break the design into tasks.
+**Goal:** break the specs into tasks.
 
 ```
 /mae-plan
 ```
 
-Reads the SDD and creates task files in `docs/04-plan/tasks/`. Each task is a markdown file — your Jira replacement. Tasks go directly to docs/ because they're meant to be immediately actionable.
+Reads ARCHITECTURE.md (or REQUIREMENTS.md alone, or POC.md) and writes `docs/03-plan/ROADMAP.md` and task files in `docs/03-plan/tasks/`, directly, because they're immediately actionable.
 
-### Execution: Do & Review
+### Execution: Do, Review, PR
 
 ```
 /mae-do                    # Smart suggestion: what to work on next
-/mae-do task-003           # Execute a specific planned task
+/mae-do M02.03             # Execute a planned task
+/mae-do M02                # Execute a whole milestone, stop on first failure
 /mae-do "add error handling to API"  # Ad-hoc task
 
 /mae-review                # Review uncommitted changes
-/mae-review src/api/       # Review a specific directory
-/mae-review sdd            # Review the SDD against the PRD
+/mae-review architecture   # Review ARCHITECTURE.md against REQUIREMENTS.md
+/mae-pr                    # Push the branch and open a draft PR
+```
+
+By default `/mae-do` commits after each task (`feat(M02.03): …` with a `Task:` trailer), never pushes, asks once per milestone about a branch, and writes a PR description to the session when a milestone completes. `/mae-pr` is the explicit push. All of it is set in `maestro.toml` `[git]`.
+
+### Changing scope
+
+```
+/mae-scope "client wants multi-currency"   # Impact analysis first, applied on confirmation
+/mae-scope --direct "…"                    # Additive changes applied straight away; conflicts still stop
 ```
 
 ---
@@ -117,13 +126,13 @@ Reads the SDD and creates task files in `docs/04-plan/tasks/`. Each task is a ma
 
 ### What Is a Session?
 
-A session is a working folder in `sessions/` (e.g., `sessions/002-api-design/`). It holds all artifacts from a stretch of related work: analysis files, drafts, reports, checkpoints.
+A session is a working folder in `.sessions/` (e.g., `.sessions/002-api-design/`). It holds all artifacts from a stretch of related work: analysis files, drafts, reports.
 
 Sessions are your **workbench** — messy, iterative, exploratory. Delivery is your **showcase** — clean, confirmed, canonical.
 
 ### Starting a Session
 
-When you start a new Claude Code conversation, the agent:
+When you start a new conversation, the agent:
 1. Reads `HANDOFF.md` and `MAESTRO.md`
 2. Checks for the latest session
 3. Greets you with a summary
@@ -135,7 +144,6 @@ If you start working without naming a session, the agent will ask: "Should I ope
 
 - `_summary.md` — Living summary of what happened (auto-updated)
 - `NN_description.md` — Numbered working artifacts (analysis, drafts, reports)
-- `checkpoints/` — Project state snapshots (via `/mae-checkpoint (removed — use sync)`)
 
 ---
 
@@ -144,7 +152,7 @@ If you start working without naming a session, the agent will ask: "Should I ope
 ### The Pipeline
 
 ```
-notes/ideas.md    →    OPEN_QUESTIONS.md    →    DECISIONS.md    →    Canonical files
+IDEAS.md / chat    →    OPEN_QUESTIONS.md    →    DECISIONS.md    →    Canonical files
 "what if?"              "should we?"              "we decided"         (via /sync)
 ```
 
@@ -176,38 +184,22 @@ Used in `_summary.md` to track lifecycle:
 /status questions    # Open questions by priority
 ```
 
-### Checkpoints
-
-Save named snapshots for progress tracking:
-
-```
-/mae-checkpoint (removed — use sync) pre-design       # Before starting design
-/mae-checkpoint (removed — use sync) sprint-1-end     # End of sprint
-/mae-checkpoint (removed — use sync) list             # See all checkpoints
-/mae-checkpoint (removed — use sync) compare pre-design sprint-1-end  # See what changed
-```
-
 ---
 
-## Solo vs Team Mode
+## Solo and Team Projects
 
-### Solo Mode (default)
+Two independent settings in `maestro.toml`:
 
-- Sessions and notes are committed to git
-- WORKLOG has no "Who" column
-- Good for personal projects and solo development
+- **`session_visibility`** — `"gitignored"` (default; working material stays on each machine, `docs/` is still shared) or `"committed"` (sessions in git, full audit trail)
+- **`[[team.members]]`** — define team members and team behaviour switches on: the agent asks who it's working with, WORKLOG gets a "Who" column, and `/sync` is how decisions reach everyone
 
-### Team Mode
-
-- Sessions and notes are gitignored (each person's working material stays local)
-- WORKLOG includes a "Who" column
-- Delivery artifacts are shared via git
-- Use `/sync` regularly to keep canonical files current
-
-Switch mode in `maestro.toml`:
 ```toml
 [project]
-mode = "team"
+session_visibility = "gitignored"
+
+[[team.members]]
+name = "Ana"
+role = "backend"
 ```
 
 ---
@@ -218,12 +210,12 @@ mode = "team"
 
 Templates in `.maestro/templates/` are starting points. Edit them to match your domain:
 - Add industry-specific sections to `requirements.md` (e.g., regulatory requirements)
-- Add compliance sections to `design.md`
+- Add compliance sections to `architecture.md`
 - Change the explore report structure in `explore.md`
 
 ### Adding Custom Commands
 
-Create a `.md` file in `.claude/commands/`:
+Create a `.md` file in `.maestro/commands/` and a one-line wrapper pointing to it in `.claude/commands/` (Claude Code) or `.cursor/commands/` (Cursor), like the installed ones:
 
 ```markdown
 # /mae-estimate — Effort Estimation
@@ -232,24 +224,24 @@ Generate effort estimates for planned tasks.
 
 ## Behavior
 
-1. Read task files in docs/04-plan/tasks/
+1. Read task files in docs/03-plan/tasks/
 2. For each task, estimate: time, complexity, risk
 3. Generate summary table
 4. Save report to session folder
 ```
 
-Name it `mae-estimate.md` and it becomes `/mae-estimate`.
+Name it `mae-estimate.md` and it becomes `/mae-estimate`. Codex and Copilot won't see it unless you add a row to the command table outside the Maestro block in `AGENTS.md` / `.github/copilot-instructions.md`.
 
 ### Extending Delivery Structure
 
 Add folders for project-specific needs:
 
 ```
-docs/05-implementation/ # Implementation reports from /mae-do
-docs/06-review/      # Formal review cycles
-docs/07-test/        # Test plans and strategies
-docs/08-deploy/      # Deployment configuration
-docs/09-maintenance/ # Bugs, tech debt, maintenance
+docs/04-implementation/ # Implementation reports from /mae-do
+docs/05-review/      # Formal review cycles
+docs/06-test/        # Test plans and strategies
+docs/07-deploy/      # Deployment configuration
+docs/08-maintenance/ # Bugs, tech debt, maintenance
 ```
 
 ---
